@@ -11,6 +11,10 @@ git branch <branch-name>
 ```
 git checkout <branch-name>
 ```
+## Install Composer
+```
+composer install
+```
 ## Run the Laravel Server
 ```
 php artisan serve
