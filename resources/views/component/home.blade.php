@@ -4,11 +4,11 @@
 <section class="container mx-auto h-screen px-8 flex items-center justify-start relative" id="home">
     <div class="w-1/2">
         <div class="text-left mx-18">
-            <h1 class="text-8xl heading title">E-wallet</h1>
-            <p class="text-lg my-4 subtitle">
+            <h1 class="text-8xl heading opacity-0 title">E-wallet</h1>
+            <p class="text-lg my-4 opacity-0 subtitle">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </p>
-            <div class="animate-button">
+            <div class="opacity-0 animate-button">
                 <button class="bg-fuchsia-300 hover:bg-fuchsia-400 transition-all duration-300 ease-in-out px-5 py-2 rounded-full text-xl">Learn More</button>
             </div>
         </div>
