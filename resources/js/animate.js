@@ -1,4 +1,4 @@
-import { animate } from "motion";
+import { animate, delay } from "motion";
 
 function animateOnScroll(selector, keyframes, baseOptions = {}) {
     const elements = document.querySelectorAll(selector);
@@ -41,4 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".team-title", { opacity: [0, 1], y: [50, 0] }, { duration: 1, delay: 0.5 });
 
     animateOnScroll(".card", { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
+
+    animateOnScroll(".form", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
 });

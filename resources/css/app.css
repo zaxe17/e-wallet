@@ -39,6 +39,8 @@ html {
     font-family: 'Raleway', sans-serif;
 }
 
+label,
+input,
 button,
 a,
 p {
