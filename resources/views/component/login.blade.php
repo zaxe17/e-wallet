@@ -3,11 +3,11 @@
 @section('content')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center gap-20 relative">
     <div class="w-1/3 text-center">
-        <h1 class="text-2xl leading-0">Welcome Back To</h1>
-        <h2 class="text-9xl mb-12 heading">E-wallet</h2>
-        <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        <h1 class="text-2xl leading-0 opacity-0 title">Welcome Back To</h1>
+        <h2 class="text-9xl mb-12 heading opacity-0 title">E-wallet</h2>
+        <p class="opacity-0 subtitle">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
-    <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-[6.8px] p-10 opacity-0 form">
+    <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-sm p-10 opacity-0 form">
         <h1 class="text-4xl mb-5 heading font-semibold">Sign in</h1>
         <form action="" method="post" id="accountForm" class="needs-validation" novalidate>
             @csrf
@@ -16,14 +16,14 @@
                     <div class="relative my-2 mx-0 flex flex-col">
                         <div class="border-b border-solid border-b-black">
                             <input type="text" id="" name="" placeholder="" class="peer w-full h-10 text-sm py-0 px-1 bg-transparent outline-none invalid:ring-0 valid:ring-0" required />
-                            <label for="" class="absolute top-1/2 left-1 transform -translate-y-1/2 text-sm text-black pointer-events-none transition-all duration-100 ease-in-out peer-focus:-top-1 peer-valid:-top-1">Email or Username</label>
+                            <label for="" class="absolute top-1/2 left-1 transform -translate-y-1/2 text-sm text-black font-semibold pointer-events-none transition-all duration-100 ease-in-out peer-focus:-top-1 peer-valid:-top-1">Email or Username</label>
                         </div>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your email or username.</span>
                     </div>
                     <div class="relative my-2 mx-0 flex flex-col">
                         <div class="border-b border-solid border-b-black">
                             <input type="text" id="" name="" placeholder="" class="peer w-full h-10 text-sm py-0 px-1 bg-transparent outline-none invalid:ring-0 valid:ring-0" required />
-                            <label for="" class="absolute top-1/2 left-1 transform -translate-y-1/2 text-sm text-black pointer-events-none transition-all duration-100 ease-in-out peer-focus:-top-1 peer-valid:-top-1">Password</label>
+                            <label for="" class="absolute top-1/2 left-1 transform -translate-y-1/2 text-sm text-black font-semibold pointer-events-none transition-all duration-100 ease-in-out peer-focus:-top-1 peer-valid:-top-1">Password</label>
                         </div>
                         <span class="text-red-500 mt-1 text-xs hidden error-msg">Enter your password.</span>
                     </div>
