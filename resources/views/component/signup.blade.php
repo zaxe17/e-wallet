@@ -2,7 +2,7 @@
 @section('title', 'Sign in')
 @section('content')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center relative">
-    <div class="w-1/2 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-[5.8px] p-10 opacity-0 form">
+    <div class="w-1/2 bg-[rgba(255,255,255,0.15)] rounded-2xl form-shadow backdrop-blur-sm border border-solid border-[rgba(255,255,255,0.25)] p-10 opacity-0 form">
         <h1 class="text-3xl mb-5 heading font-semibold">Account Information</h1>
         <form action="" method="post" id="accountForm" class="needs-validation" novalidate>
             @csrf
@@ -11,17 +11,17 @@
                 <div class="grid grid-cols-3 gap-2">
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">First Name</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your first name.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Middle Name</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none">
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none">
                         <span class="text-red-500 text-xs hidden error-msg">Enter your middle name.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Last Name</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your last name.</span>
                     </div>
                 </div>
@@ -29,13 +29,13 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Date of Birth</label>
-                        <input type="date" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="date" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your date of birth.</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col">
                             <label for="" class="text-sm font-medium">Age</label>
-                            <input type="number" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                            <input type="number" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                             <span class="text-red-500 text-xs hidden error-msg">Enter your age.</span>
                         </div>
                         <div class="flex flex-col">
@@ -43,11 +43,11 @@
                             <div class="flex items-center gap-2 h-full">
                                 <div class="flex-1">
                                     <input type="radio" id="male" name="sex" value="Male" class="peer hidden" required />
-                                    <label for="male" class="w-full py-1 flex justify-center items-center bg-white/20 input-shadow rounded-md transition-all duration-300 ease-in-out hover:bg-sky-600 hover:text-white peer-checked:bg-sky-600 peer-checked:text-white cursor-pointer text-sm">Male</label>
+                                    <label for="male" class="w-full py-1 flex justify-center items-center bg-white/30 backdrop-blur-[15px] input-shadow rounded-md transition-all duration-300 ease-in-out hover:bg-sky-600 hover:text-white peer-checked:bg-sky-600 peer-checked:text-white cursor-pointer text-sm">Male</label>
                                 </div>
                                 <div class="flex-1">
                                     <input type="radio" id="female" name="sex" value="Female" class="peer hidden" />
-                                    <label for="female" class="w-full py-1 flex justify-center items-center bg-white/20 input-shadow rounded-md transition-all duration-300 ease-in-out hover:bg-sky-600 hover:text-white peer-checked:bg-sky-600 peer-checked:text-white cursor-pointer text-sm">Female</label>
+                                    <label for="female" class="w-full py-1 flex justify-center items-center bg-white/30 backdrop-blur-[15px] input-shadow rounded-md transition-all duration-300 ease-in-out hover:bg-sky-600 hover:text-white peer-checked:bg-sky-600 peer-checked:text-white cursor-pointer text-sm">Female</label>
                                 </div>
                             </div>
                             <span class="text-red-500 text-xs hidden error-msg">Select your sex.</span>
@@ -58,22 +58,22 @@
                 <div class="grid grid-cols-4 gap-2">
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Citizenship</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your citizenship.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Ocupation</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your ocupation.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Username</label>
-                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your username.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Connected Bank</label>
-                        <select id="connected_bank" name="" class="w-full h-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <select id="connected_bank" name="" class="w-full h-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                             <option value="" disabled selected>Select Bank</option>
                             <option value="BDO Unibank, Inc.">BDO Unibank, Inc.</option>
                             <option value="Land Bank of the Philippines">Land Bank of the Philippines</option>
@@ -87,7 +87,7 @@
                             <option value="Union Bank of the Philippines (UnionBank)">Union Bank of the Philippines (UnionBank)</option>
                             <option value="Other">Other</option>
                         </select>
-                        <input type="text" id="other_bank" name="" placeholder="Please specify your bank" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none mt-2 hidden" />
+                        <input type="text" id="other_bank" name="" placeholder="Please specify your bank" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none mt-2 hidden" />
                         <span class="text-red-500 text-xs hidden error-msg">Enter your username.</span>
                     </div>
                 </div>
@@ -95,26 +95,26 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Phone Number</label>
-                        <input type="number" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="number" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your phone number.</span>
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">Email Address</label>
-                        <input type="email" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="email" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your email address.</span>
                     </div>
                 </div>
                 {{-- ADDRESS --}}
                 <div class="flex flex-col">
                     <label for="" class="text-sm font-medium">Address</label>
-                    <input type="text" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                    <input type="text" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                     <span class="text-red-500 text-xs hidden error-msg">Enter your address.</span>
                 </div>
                 {{-- ID TYPE, ID NUMBER --}}
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">ID Type</label>
-                        <select id="" name="" class="w-full h-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <select id="" name="" class="w-full h-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                             <option value="" disabled selected>Select ID type</option>
                             <option value="National ID">National ID</option>
                             <option value="Passport">Passport</option>
@@ -132,7 +132,7 @@
                     </div>
                     <div class="flex flex-col">
                         <label for="" class="text-sm font-medium">ID Number</label>
-                        <input type="number" id="" name="" placeholder="" class="w-full bg-white/20 rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="number" id="" name="" placeholder="" class="w-full bg-white/30 backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         <span class="text-red-500 text-xs hidden error-msg">Enter your ID number.</span>
                     </div>
                 </div>
