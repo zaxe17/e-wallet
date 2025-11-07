@@ -10,9 +10,9 @@ Route::get('/', function () {
 
 // FOR SIGNIN FUNCTIONS
 Route::group(['prefix' => 'signup'], function() {
-    Route::get('/', [SignUpController::class, 'signup'])->name('signupForm');
+    Route::resource('/', SignUpController::class)->names(['index' => 'signupForm']);
 });
 
 Route::group(['prefix' => 'login'], function() {
-    Route::get('/', [LoginController::class, 'login'])->name('loginForm');
+    Route::resource('/', LoginController::class)->names(['index' => 'loginForm']);
 });

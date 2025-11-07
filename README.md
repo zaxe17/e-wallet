@@ -19,7 +19,3 @@ composer install
 ```
 php artisan serve
 ```
-## Run Tailwind CSS
-```
-npm run dev
-```
