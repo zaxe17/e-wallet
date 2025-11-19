@@ -5,15 +5,23 @@ git clone https://github.com/zaxe17/e-wallet.git
 ```
 ## Create a New Branch
 ```
-git branch <branch-name>
+git branch <your-branch-name>
 ```
 ## Switch to Your Branch
 ```
-git checkout <branch-name>
+git checkout <your-branch-name>
 ```
 ## Install Composer
 ```
 composer install
+```
+## Generate Key
+```
+php artisan key:generate
+```
+## To run tailwind
+```
+npm run build
 ```
 ## Run the Laravel Server
 ```

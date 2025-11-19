@@ -1,10 +1,12 @@
 @extends('main')
-@section('title', 'Home')
+@section('title', 'Landing Page')
 @section('content')
+@include('component.navbar')
+@include('component.homebg')
 <section class="container mx-auto h-screen px-8 flex items-center justify-start relative" id="home">
     <div class="w-1/2">
         <div class="text-left mx-18">
-            <h1 class="text-8xl heading opacity-0 title">E-wallet</h1>
+            <h1 class="text-8xl lato opacity-0 title">E-wallet</h1>
             <p class="text-lg my-4 opacity-0 subtitle">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </p>
@@ -18,7 +20,7 @@
 <section class="container mx-auto h-screen px-8 flex items-center justify-end relative" id="about">
     <div class="w-1/2">
         <div class="text-left mx-18">
-            <h1 class="text-8xl heading about-title">About</h1>
+            <h1 class="text-8xl lato about-title">About</h1>
             <p class="text-lg my-4 about-subtitle">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </p>
@@ -32,7 +34,7 @@
 <section class="container mx-auto h-screen px-8 flex items-center justify-center relative" id="teams">
     <div class="w-full">
         <div class="mx-18 flex flex-col gap-3">
-            <h1 class="text-center text-8xl heading team-title">Teams</h1>
+            <h1 class="text-center text-8xl lato team-title">Teams</h1>
             <div class="grid grid-cols-5 w-full gap-3">
 
                 <div class="bg-fuchsia-100 card-border overflow-hidden card-shadow card" data-delay="0.3">

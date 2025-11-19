@@ -11,7 +11,7 @@ class SignupController extends Controller
      */
     public function index()
     {
-        return view('component.signup');
+        return view('pages.signup');
     }
 
     /**
