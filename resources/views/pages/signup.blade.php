@@ -1,9 +1,11 @@
 @extends('main')
 @section('title', 'Sign in')
 @section('content')
+@include('component.navbar')
+@include('component.homebg')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center relative">
     <div class="w-1/2 bg-[rgba(255,255,255,0.15)] rounded-2xl form-shadow backdrop-blur-sm border border-solid border-[rgba(255,255,255,0.25)] p-10 opacity-0 form">
-        <h1 class="text-3xl mb-5 heading font-semibold">Account Information</h1>
+        <h1 class="text-3xl mb-5 lato font-semibold">Account Information</h1>
         <form action="" method="post" id="accountForm" class="needs-validation" novalidate>
             @csrf
             <div class="flex flex-col gap-4">

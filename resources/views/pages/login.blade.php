@@ -1,14 +1,16 @@
 @extends('main')
 @section('title', 'Login')
 @section('content')
+@include('component.navbar')
+@include('component.homebg')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center gap-20 relative">
     <div class="w-1/2 text-center">
         <h1 class="text-xl leading-15 opacity-0 title">Welcome Back to</h1>
-        <h2 class="text-9xl mb-5 heading opacity-0 title">E-wallet</h2>
+        <h2 class="text-9xl mb-5 lato opacity-0 title">E-wallet</h2>
         <p class="opacity-0 subtitle">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
     <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-sm p-10 opacity-0 form">
-        <h1 class="text-4xl mb-5 heading font-semibold">Sign in</h1>
+        <h1 class="text-4xl mb-5 lato font-semibold">Sign in</h1>
         <form action="" method="post" id="accountForm" class="needs-validation flex flex-col gap-5" novalidate>
             @csrf
             <div class="flex flex-col gap-4">
