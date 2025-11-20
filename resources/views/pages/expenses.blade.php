@@ -1,5 +1,5 @@
 @extends('userpage')
-@section('title', 'Dashboard')
+@section('title', 'Expenses')
 @section('user_content')
 
 @endsection

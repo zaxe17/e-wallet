@@ -8,17 +8,6 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-        span.icon {
-            display: inline-block;
-            width: var(--size);
-            height: var(--size);
-            -webkit-mask: var(--svg) no-repeat center;
-            mask: var(--svg) no-repeat center;
-            -webkit-mask-size: contain;
-            mask-size: contain;
-        }
-    </style>
 </head>
 
 <body class="m-0 p-0 h-screen">
