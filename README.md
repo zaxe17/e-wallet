@@ -19,6 +19,10 @@ composer install
 ```
 php artisan key:generate
 ```
+## Migration
+```
+php artisan migrate
+```
 ## To run tailwind
 ```
 npm run build
