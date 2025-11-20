@@ -25,7 +25,7 @@ php artisan migrate
 ```
 ## To run tailwind
 ```
-npm run build
+npm run dev / npm run build
 ```
 ## Run the Laravel Server
 ```
