@@ -11,6 +11,10 @@ git branch <your-branch-name>
 ```
 git checkout <your-branch-name>
 ```
+## Install Vite
+```
+npm install vite laravel-vite-plugin --save-dev
+```
 ## Install Composer
 ```
 composer install
