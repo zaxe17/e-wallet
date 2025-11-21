@@ -11,6 +11,10 @@ git branch <your-branch-name>
 ```
 git checkout <your-branch-name>
 ```
+## Install Vite
+```
+npm install vite laravel-vite-plugin --save-dev
+```
 ## Install Composer
 ```
 composer install
@@ -19,9 +23,13 @@ composer install
 ```
 php artisan key:generate
 ```
+## Migration
+```
+php artisan migrate
+```
 ## To run tailwind
 ```
-npm run build
+npm run dev / npm run build
 ```
 ## Run the Laravel Server
 ```

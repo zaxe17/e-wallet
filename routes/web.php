@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EarningsController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\SignUpController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +23,17 @@ Route::group(['prefix' => 'login'], function() {
 });
 
 Route::group(['prefix' => 'dashboard'], function() {
-    Route::resource('/', DashboardController::class)->names(['index' => 'dashboard']);
+    Route::resource('/', DashboardController::class)->names(['index' => 'dashboard.index']);
+});
+
+Route::group(['prefix' => 'earnings'], function() {
+    Route::resource('/', EarningsController::class)->names(['index' => 'earnings.index']);
+});
+
+Route::group(['prefix' => 'expenses'], function() {
+    Route::resource('/', ExpensesController::class)->names(['index' => 'expenses.index']);
+});
+
+Route::group(['prefix' => 'savings'], function() {
+    Route::resource('/', SavingsController::class)->names(['index' => 'savings.index']);
 });
