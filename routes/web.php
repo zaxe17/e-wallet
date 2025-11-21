@@ -12,12 +12,13 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
-// FOR SIGNIN FUNCTIONS
 Route::group(['prefix' => 'signup'], function() {
-    Route::resource('/', SignUpController::class)->names(['index' => 'signupForm']);
+    Route::resource('/', SignUpController::class)->names([
+        'index' => 'signupForm',
+        'store' => 'signup.store'
+    ]);
 });
 
-// FOR LOGIN FUNCTIONS
 Route::group(['prefix' => 'login'], function() {
     Route::resource('/', LoginController::class)->names(['index' => 'loginForm']);
 });

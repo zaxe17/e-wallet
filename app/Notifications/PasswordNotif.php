@@ -7,48 +7,46 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PasswordNotif extends Notification
+class PasswordNotif extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    protected $password;
+    protected $username;
+    protected $fullName;
+
+    public function __construct($password, $username, $fullName)
     {
-        //
+        $this->password = $password;
+        $this->username = $username;
+        $this->fullName = $fullName;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('Welcome to E-wallet - Your Account Password')
+            ->greeting('Hello ' . $this->fullName . '!')
+            ->line('Welcome to E-wallet! Your account has been successfully created.')
+            ->line('Here are your login credentials:')
+            ->line('**Username:** ' . $this->username)
+            ->line('**Password:** ' . $this->password)
+            ->line('Please keep this information secure and do not share it with anyone.')
+            ->action('Login Now', url('/login'))
+            ->line('If you did not create this account, please contact our support team immediately.')
+            ->line('Thank you for choosing E-wallet!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'username' => $this->username,
+            'full_name' => $this->fullName,
         ];
     }
 }
