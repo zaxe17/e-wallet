@@ -29,6 +29,13 @@ function animateOnScroll(selector, keyframes, baseOptions = {}) {
     });
 }
 
+function closeMessage() {
+    const successMessage = document.getElementById('success-message');
+    const closeButton = document.getElementById('message-close');
+
+    animate(successMessage, { opacity: [1, 0], x: [0, -150] }, { duration: 1 });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".title", { opacity: [0, 1], x: [-50, 0] }, { duration: 1, delay: 0.5 });
     animateOnScroll(".subtitle", { opacity: [0, 1], x: [-50, 0] }, { duration: 1, delay: 1 });
@@ -46,4 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
     animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
+    
+    animateOnScroll(".success", { opacity: [0, 1], x: [-150, 0] }, { duration: 1 });
+
+    setTimeout(() => {
+        closeMessage();
+    }, 10000);
+
+    const closeButton = document.getElementById('message-close');
+    closeButton.addEventListener('click', closeMessage);
 });
