@@ -55,7 +55,7 @@
                 <button type="submit" class="w-full flex justify-center items-center bg-sky-600 hover:bg-sky-400 px-5 py-2 rounded-lg text-sm text-white hover:text-sky-800 font-semibold mt-5 transition-all duration-300 ease-in-out group">
                     <span class="icons bg-white group-hover:bg-sky-800 mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/login.svg');"></span>Login
                 </button>
-                <p>Don't have an account? <span class="cursor-pointer text-blue-700 font-medium underline"><a href="{{ route('signupForm') }}">Sign up</a></span></p>
+                <p>Don't have an account? <span class="cursor-pointer text-blue-700 font-medium underline"><a href="{{ route('signup.form') }}">Sign up</a></span></p>
             </div>
         </form>
     </div>

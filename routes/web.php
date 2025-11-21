@@ -13,28 +13,26 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'signup'], function() {
-    Route::resource('/', SignUpController::class)->names([
-        'index' => 'signupForm',
-        'store' => 'signup.store'
-    ]);
+    Route::get('/', [SignupController::class, 'index'])->name('signup.form');
+    Route::post('/', [SignupController::class, 'store'])->name('signup.store');
 });
 
 Route::group(['prefix' => 'login'], function() {
-    Route::resource('/', LoginController::class)->names(['index' => 'loginForm']);
+    Route::get('/', [LoginController::class, 'index'])->name('login.form');
 });
 
 Route::group(['prefix' => 'dashboard'], function() {
-    Route::resource('/', DashboardController::class)->names(['index' => 'dashboard.index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
 Route::group(['prefix' => 'earnings'], function() {
-    Route::resource('/', EarningsController::class)->names(['index' => 'earnings.index']);
+    Route::get('/', [EarningsController::class, 'index'])->name('earnings.index');
 });
 
 Route::group(['prefix' => 'expenses'], function() {
-    Route::resource('/', ExpensesController::class)->names(['index' => 'expenses.index']);
+    Route::get('/', [ExpensesController::class, 'index'])->name('expenses.index');
 });
 
 Route::group(['prefix' => 'savings'], function() {
-    Route::resource('/', SavingsController::class)->names(['index' => 'savings.index']);
+    Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
 });
