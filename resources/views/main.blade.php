@@ -18,75 +18,74 @@
 
 </html>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('accountForm');
-        const fields = form.querySelectorAll('input[required], select[required]');
-        let formSubmitted = false;
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('accountForm');
+    const fields = form.querySelectorAll('input[required], select[required]');
+    let formSubmitted = false;
 
-        function validateField(field) {
-            const parent = field.closest('.flex-col');
-            const errorMsg = parent.querySelector('.error-msg');
+    function validateField(field) {
+        const parent = field.closest('.flex-col');
+        const errorMsg = parent.querySelector('.error-msg');
 
-            let valid = false;
+        let valid = false;
 
-            if (field.type === 'radio') {
-                const name = field.name;
-                valid = form.querySelector(`input[name="${name}"]:checked`) !== null;
-            } else if (field.tagName.toLowerCase() === 'select') {
-                valid = field.value.trim() !== '';
-            } else {
-                valid = field.value.trim() !== '';
-            }
-
-            if (formSubmitted) {
-                if (!valid) {
-                    field.classList.add('ring-2', 'ring-red-500');
-                    field.classList.remove('ring-emerald-500');
-                    errorMsg?.classList.remove('hidden');
-                } else {
-                    field.classList.remove('ring-red-500');
-                    field.classList.add('ring-2', 'ring-emerald-500');
-                    errorMsg?.classList.add('hidden');
-                }
-            } else {
-                field.classList.remove('ring-red-500', 'ring-emerald-500');
-                errorMsg?.classList.add('hidden');
-            }
+        if (field.type === 'radio') {
+            const name = field.name;
+            valid = form.querySelector(`input[name="${name}"]:checked`) !== null;
+        } else if (field.tagName.toLowerCase() === 'select') {
+            valid = field.value.trim() !== '';
+        } else {
+            valid = field.value.trim() !== '';
         }
 
-        fields.forEach(field => {
-            if (field.type !== 'radio') {
-                field.addEventListener('input', () => validateField(field));
-                field.addEventListener('change', () => validateField(field));
+        if (formSubmitted) {
+            if (!valid) {
+                field.classList.add('ring-2', 'ring-red-500');
+                field.classList.remove('ring-emerald-500');
+                errorMsg?.classList.remove('hidden');
             } else {
-                const name = field.name;
-                const radios = form.querySelectorAll(`input[name="${name}"]`);
-                radios.forEach(r => r.addEventListener('change', () => validateField(field)));
+                field.classList.remove('ring-red-500');
+                field.classList.add('ring-2', 'ring-emerald-500');
+                errorMsg?.classList.add('hidden');
             }
-        });
+        } else {
+            field.classList.remove('ring-red-500', 'ring-emerald-500');
+            errorMsg?.classList.add('hidden');
+        }
+    }
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            formSubmitted = true;
-            fields.forEach(field => validateField(field));
-        });
+    fields.forEach(field => {
+        if (field.type !== 'radio') {
+            field.addEventListener('input', () => validateField(field));
+            field.addEventListener('change', () => validateField(field));
+        } else {
+            const name = field.name;
+            const radios = form.querySelectorAll(`input[name="${name}"]`);
+            radios.forEach(r => r.addEventListener('change', () => validateField(field)));
+        }
+    });
 
-        const bankSelect = document.getElementById('connected_bank');
-        const otherInput = document.getElementById('other_bank');
-
-        bankSelect.addEventListener('change', () => {
-            if (bankSelect.value === 'Other') {
-                otherInput.classList.remove('hidden');
-                otherInput.required = true;
-                bankSelect.removeAttribute('name');
-            } else {
-                otherInput.classList.add('hidden');
-                otherInput.required = false;
-                otherInput.value = '';
-                otherInput.removeAttribute('name');
-                bankSelect.setAttribute('name', 'connected_bank');
-            }
-        });
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        formSubmitted = true;
+        fields.forEach(field => validateField(field));
+    });
+});
+</script>
+ -->
+<script>
+    // Auto-calculate age from date of birth
+    document.getElementById('date_of_birth').addEventListener('change', function() {
+        const dob = new Date(this.value);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        
+        document.getElementById('age').value = age;
     });
 </script>

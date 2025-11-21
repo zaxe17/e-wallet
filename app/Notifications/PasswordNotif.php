@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -11,44 +10,35 @@ class PasswordNotif extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    public array $mailData;
+
+    public function __construct(array $mailData)
     {
-        //
+        $this->mailData = $mailData;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('Welcome to E-wallet - Your Account Password')
+            ->greeting('Hello ' . $this->mailData['name'] . '!')
+            ->line('Welcome to E-wallet! Your account has been successfully created.')
+            ->line('Here are your login credentials:')
+            ->line('Username: ' . $this->mailData['username'])
+            ->line('Password: ' . $this->mailData['password'])
+            ->line('Please keep this information secure and do not share it with anyone.')
+            ->action('Login Now', url('/login'))
+            ->line('If you did not create this account, please contact our support team immediately.')
+            ->line('Thank you for choosing E-wallet!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }
