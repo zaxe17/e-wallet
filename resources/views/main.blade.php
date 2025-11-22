@@ -75,17 +75,23 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
  -->
 <script>
-    // Auto-calculate age from date of birth
     document.getElementById('date_of_birth').addEventListener('change', function() {
         const dob = new Date(this.value);
         const today = new Date();
         let age = today.getFullYear() - dob.getFullYear();
         const monthDiff = today.getMonth() - dob.getMonth();
-        
+
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
             age--;
         }
-        
+
         document.getElementById('age').value = age;
     });
+
+    function capitalizeInput(input) {
+        // Split the value by space, capitalize the first letter of each word, and then join it back together
+        input.value = input.value.replace(/\b\w/g, function(char) {
+            return char.toUpperCase();
+        });
+    }
 </script>

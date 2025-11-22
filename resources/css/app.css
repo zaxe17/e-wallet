@@ -18,9 +18,16 @@
 }
 
 @font-face {
-    font-family: 'Lato';
+    font-family: 'Lato-bold';
     src: url('/public/fonts/Lato-Bold.ttf') format('truetype');
     font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lato-normal';
+    src: url('/public/fonts/Lato-Regular.ttf') format('truetype');
+    font-weight: 100;
     font-style: normal;
 }
 
@@ -35,8 +42,12 @@ html {
     scroll-behavior: smooth;
 }
 
-.lato {
-    font-family: 'Lato', sans-serif;
+.lato-bold {
+    font-family: 'Lato-bold', sans-serif;
+}
+
+.lato-normal {
+    font-family: 'Lato-normal', sans-serif;
 }
 
 label,

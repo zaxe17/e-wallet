@@ -55,7 +55,7 @@
     </div>
 
     @if(session('success'))
-    <div id="success-message" class="success fixed bottom-0 left-0 z-50 opacity-0">
+    <div id="success-message" class="success fixed bottom-0 left-0 m-4 z-50">
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded m-6 flex justify-center items-center gap-5">
             {{ session('success') }}
             <button id="message-close" class="group text-lg text-green-700 hover:text-green-500 flex justify-center items-center">

@@ -13,18 +13,18 @@
                 <div class="grid grid-cols-3 gap-2">
                     <div class="flex flex-col">
                         <label for="first_name" class="text-sm font-bold ml-1.5">First Name</label>
-                        <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="first_name" oninput="capitalizeInput(this)" name="first_name" value="{{ old('first_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         @error('first_name')
                         <span class="text-red-500 text-xs ml-1.5">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="flex flex-col">
                         <label for="middle_name" class="text-sm font-bold ml-1.5">Middle Name</label>
-                        <input type="text" id="middle_name" name="middle_name" value="{{ old('middle_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none">
+                        <input type="text" id="middle_name" oninput="capitalizeInput(this)" name="middle_name" value="{{ old('middle_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none">
                     </div>
                     <div class="flex flex-col">
                         <label for="last_name" class="text-sm font-bold ml-1.5">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="last_name" oninput="capitalizeInput(this)" name="last_name" value="{{ old('last_name') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         @error('last_name')
                         <span class="text-red-500 text-xs ml-1.5">{{ $message }}</span>
                         @enderror
@@ -67,11 +67,11 @@
                     </div>
                 </div>
 
-                {{-- CITIZENSHIP, OCCUPATION, USERNAME, CONNECTED_BANK --}}
+                {{-- CITIZENSHIP, USERNAME --}}
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col">
                         <label for="citizenship" class="text-sm font-bold ml-1.5">Citizenship</label>
-                        <input type="text" id="citizenship" name="citizenship" value="{{ old('citizenship') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                        <input type="text" id="citizenship" oninput="capitalizeInput(this)" name="citizenship" value="{{ old('citizenship') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                         @error('citizenship')
                         <span class="text-red-500 text-xs ml-1.5">{{ $message }}</span>
                         @enderror
@@ -88,7 +88,7 @@
                 {{-- ADDRESS --}}
                 <div class="flex flex-col">
                     <label for="address" class="text-sm font-bold ml-1.5">Address</label>
-                    <input type="text" id="address" name="address" value="{{ old('address') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
+                    <input type="text" id="address" oninput="capitalizeInput(this)" name="address" value="{{ old('address') }}" class="w-full h-8 bg-white/30 font-medium backdrop-blur-[15px] rounded-md input-shadow px-2 py-1 text-sm focus:outline-none" required>
                     @error('address')
                     <span class="text-red-500 text-xs ml-1.5">{{ $message }}</span>
                     @enderror
