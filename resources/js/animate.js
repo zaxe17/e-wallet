@@ -33,7 +33,7 @@ function closeMessage() {
     const successMessage = document.getElementById('success-message');
     const closeButton = document.getElementById('message-close');
 
-    animate(successMessage, { opacity: [1, 0], x: [0, -150] }, { duration: 1 });
+    animate(successMessage, { opacity: [1, 0], x: [0, -250] }, { duration: 1 });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -51,10 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".form", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
 
-    animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
-    animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
+    animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
+    animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 1 });
     
-    animateOnScroll(".success", { opacity: [0, 1], x: [-150, 0] }, { duration: 1 });
+    animateOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
 
     setTimeout(() => {
         closeMessage();
