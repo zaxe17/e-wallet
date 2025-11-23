@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-wallet - @yield('title')</title>
+    <title>PayNoy - @yield('title')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -94,4 +94,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return char.toUpperCase();
         });
     }
+</script>
+
+<script>
+    const wrapper = document.getElementById('tableWrapper');
+    const thead = document.getElementById('tableHead');
+
+    wrapper.addEventListener('scroll', () => {
+        if (wrapper.scrollTop > 0) {
+            thead.classList.add('bg-white', 'shadow-md'); // bg kapag nag-scroll
+        } else {
+            thead.classList.remove('bg-white', 'shadow-md'); // transparent ulit
+        }
+    });
 </script>

@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".form", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
 
-    animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
-    animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 1 });
+    animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
+    animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.6 });
     
     animateOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
 
