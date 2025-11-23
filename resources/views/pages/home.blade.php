@@ -6,7 +6,7 @@
 <section class="container mx-auto h-screen px-8 flex items-center justify-start relative" id="home">
     <div class="w-1/2">
         <div class="text-left mx-18">
-            <h1 class="text-8xl lato opacity-0 title">E-wallet</h1>
+            <h1 class="text-8xl lato opacity-0 title">PayNoy</h1>
             <p class="text-lg my-4 opacity-0 subtitle">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </p>

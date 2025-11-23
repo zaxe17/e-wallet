@@ -5,7 +5,8 @@
     @include('component.boxes', [
         'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
         'boxName' => 'Expenses',
-        'amount' => '40,000.00'
+        'amount' => '40,000.00',
+        'addButtonIcon' => ''
     ])
 
     <div class="grid grid-cols-3 gap-6">

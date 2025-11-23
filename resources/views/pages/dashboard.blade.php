@@ -5,7 +5,7 @@
 
 <div class="flex flex-col gap-6">
     <!-- Box -->
-    <div class="bg-transparent flex flex-col px-16 py-7 rounded-lg" style="box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;">
+    <div class="bg-transparent flex flex-col px-16 py-7 rounded-lg input-shadow">
         <!-- HEADER -->
         <div class="flex justify-start items-center gap-3">
             <span class="icon bg-[#488c42] transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/vaadin/wallet.svg'); --size: 20px; --icon-color: black;"></span>
@@ -22,23 +22,30 @@
 
     <!-- 3 BOXES -->
     <div class="grid grid-cols-3 gap-6">
-        @include('component.boxes', [
-            'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
-            'boxName' => 'Earnings',
-            'amount' => '10,000.00'
-        ])
-
-        @include('component.boxes', [
-            'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
-            'boxName' => 'Savings',
-            'amount' => '********'
-        ])
-
-        @include('component.boxes', [
-            'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
-            'boxName' => 'Expenses',
-            'amount' => '40,000.00'
-        ])
+        <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
+            @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
+                'boxName' => 'Earnings',
+                'amount' => '10,000.00',
+                'addButtonIcon' => ''
+            ])
+        </a>
+        <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('savings.index') }}">
+            @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
+                'boxName' => 'Savings',
+                'amount' => '********',
+                'addButtonIcon' => ''
+            ])
+        </a>
+        <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
+            @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
+                'boxName' => 'Expenses',
+                'amount' => '40,000.00',
+                'addButtonIcon' => ''
+            ])
+        </a>
     </div>
 </div>
 @endsection

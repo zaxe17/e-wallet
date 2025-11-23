@@ -6,7 +6,7 @@
 <section class="container mx-auto h-screen p-15 flex items-center justify-center gap-20 relative">
     <div class="w-1/2 text-center">
         <h1 class="text-xl leading-15 opacity-0 title">Welcome Back to</h1>
-        <h2 class="text-9xl mb-5 lato opacity-0 title">E-wallet</h2>
+        <h2 class="text-9xl mb-5 lato opacity-0 title">PayNoy</h2>
         <p class="opacity-0 subtitle">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
     <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-sm p-10 opacity-0 form">

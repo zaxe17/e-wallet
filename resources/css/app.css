@@ -38,8 +38,16 @@
     font-style: normal;
 }
 
+* {
+    font-family: 'Lato-normal', sans-serif;
+}
+
 html {
     scroll-behavior: smooth;
+}
+
+.title {
+    font-family: 'Lato-normal', sans-serif;
 }
 
 .lato-bold {
