@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".title", { opacity: [0, 1], x: [-50, 0] }, { duration: 1, delay: 0.5 });
     animateOnScroll(".subtitle", { opacity: [0, 1], x: [-50, 0] }, { duration: 1, delay: 1 });
     animateOnScroll(".animate-button", { opacity: [0, 1], x: [-50, 0] }, { duration: 1, delay: 1.5 });
-    
+
     animateOnScroll(".about-title", { opacity: [0, 1], x: [50, 0] }, { duration: 1 });
     animateOnScroll(".about-subtitle", { opacity: [0, 1], x: [50, 0] }, { duration: 1, delay: 0.5 });
     animateOnScroll(".about-button", { opacity: [0, 1], x: [50, 0] }, { duration: 1, delay: 1 });
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
     animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.6 });
-    
+
     animateOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
 
     setTimeout(() => {
@@ -61,5 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 10000);
 
     const closeButton = document.getElementById('message-close');
-    closeButton.addEventListener('click', closeMessage);
+    if (closeButton) {
+        closeButton.addEventListener('click', closeMessage);
+    }
 });

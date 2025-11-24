@@ -63,15 +63,6 @@
                     <span>Settings</span>
                 </a>
             </li>
-            <li class="">
-                <!-- nav-link -->
-                <a href="" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
-                    <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/material-symbols/logout.svg'); --size: 20px; --icon-color: white;"></span>
-                    <!-- nav-label -->
-                    <span>Logout</span>
-                </a>
-            </li>
         </ul>
     </nav>
 </aside>

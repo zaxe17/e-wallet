@@ -75,36 +75,42 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
  -->
 <script>
-    document.getElementById('date_of_birth').addEventListener('change', function() {
-        const dob = new Date(this.value);
-        const today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
+document.addEventListener('DOMContentLoaded', () => {
 
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
+    const dobInput = document.getElementById('date_of_birth');
+    const ageInput = document.getElementById('age');
 
-        document.getElementById('age').value = age;
-    });
+    if (dobInput && ageInput) {
+        dobInput.addEventListener('change', function () {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
 
-    function capitalizeInput(input) {
-        // Split the value by space, capitalize the first letter of each word, and then join it back together
-        input.value = input.value.replace(/\b\w/g, function(char) {
-            return char.toUpperCase();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            ageInput.value = age;
         });
     }
-</script>
 
-<script>
+    window.capitalizeInput = function(input) {
+        input.value = input.value.replace(/\b\w/g, char => char.toUpperCase());
+    };
+
     const wrapper = document.getElementById('tableWrapper');
     const thead = document.getElementById('tableHead');
 
-    wrapper.addEventListener('scroll', () => {
-        if (wrapper.scrollTop > 0) {
-            thead.classList.add('bg-white', 'shadow-md'); // bg kapag nag-scroll
-        } else {
-            thead.classList.remove('bg-white', 'shadow-md'); // transparent ulit
-        }
-    });
+    if (wrapper && thead) {
+        wrapper.addEventListener('scroll', () => {
+            if (wrapper.scrollTop > 0) {
+                thead.classList.add('bg-white', 'shadow-md');
+            } else {
+                thead.classList.remove('bg-white', 'shadow-md');
+            }
+        });
+    }
+
+});
 </script>
