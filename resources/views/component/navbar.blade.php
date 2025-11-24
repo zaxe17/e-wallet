@@ -1,7 +1,7 @@
 <header class="fixed top-0 left-0 w-full bg-fuchsia-100 nav-shadow z-50 text-sm flex justify-center">
     <div class="container flex justify-between items-center px-20 py-3">
         <div class="">
-            <p>E-wallet</p>
+            <p>PayNoy</p>
         </div>
         <nav>
             <ul class="flex flex-row gap-5">
