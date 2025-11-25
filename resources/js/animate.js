@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".card", { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
 
-    animateOnScroll(".form", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
+    animateOnScroll(".form-animation", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
 
     animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
     animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.6 });
