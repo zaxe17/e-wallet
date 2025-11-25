@@ -4,8 +4,8 @@
 @include('component.navbar')
 @include('component.homebg')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center relative">
-    <div class="w-1/2 bg-[rgba(255,255,255,0.15)] rounded-2xl form-shadow backdrop-blur-sm border border-solid border-[rgba(255,255,255,0.25)] p-10 opacity-0 form">
-        <h1 class="text-3xl mb-5 lato font-semibold">Account Information</h1>
+    <div class="w-1/2 bg-[rgba(255,255,255,0.15)] rounded-2xl form-shadow form-animation backdrop-blur-sm border border-solid border-[rgba(255,255,255,0.25)] p-10 opacity-0 form">
+        <h1 class="text-3xl mb-5 lato-bold font-semibold">Account Information</h1>
         <form action="{{ route('signup.store') }}" method="POST" id="accountForm" novalidate>
             @csrf
             <div class="flex flex-col gap-4">

@@ -75,42 +75,56 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
  -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
 
-    const dobInput = document.getElementById('date_of_birth');
-    const ageInput = document.getElementById('age');
+        const dobInput = document.getElementById('date_of_birth');
+        const ageInput = document.getElementById('age');
 
-    if (dobInput && ageInput) {
-        dobInput.addEventListener('change', function () {
-            const dob = new Date(this.value);
-            const today = new Date();
-            let age = today.getFullYear() - dob.getFullYear();
-            const monthDiff = today.getMonth() - dob.getMonth();
+        if (dobInput && ageInput) {
+            dobInput.addEventListener('change', function() {
+                const dob = new Date(this.value);
+                const today = new Date();
+                let age = today.getFullYear() - dob.getFullYear();
+                const monthDiff = today.getMonth() - dob.getMonth();
 
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-                age--;
-            }
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
 
-            ageInput.value = age;
-        });
-    }
+                ageInput.value = age;
+            });
+        }
 
-    window.capitalizeInput = function(input) {
-        input.value = input.value.replace(/\b\w/g, char => char.toUpperCase());
+        window.capitalizeInput = function(input) {
+            input.value = input.value.replace(/\b\w/g, char => char.toUpperCase());
+        };
+
+        const wrapper = document.getElementById('tableWrapper');
+        const thead = document.getElementById('tableHead');
+
+        if (wrapper && thead) {
+            wrapper.addEventListener('scroll', () => {
+                if (wrapper.scrollTop > 0) {
+                    thead.classList.add('bg-white', 'shadow-md');
+                } else {
+                    thead.classList.remove('bg-white', 'shadow-md');
+                }
+            });
+        }
+
+    });
+</script>
+
+<script>
+    const openBtn = document.getElementById('openModal');
+    const modal = document.getElementById('modalOverlay');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    openBtn.onclick = () => modal.classList.remove("hidden");
+
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
     };
 
-    const wrapper = document.getElementById('tableWrapper');
-    const thead = document.getElementById('tableHead');
-
-    if (wrapper && thead) {
-        wrapper.addEventListener('scroll', () => {
-            if (wrapper.scrollTop > 0) {
-                thead.classList.add('bg-white', 'shadow-md');
-            } else {
-                thead.classList.remove('bg-white', 'shadow-md');
-            }
-        });
-    }
-
-});
+    cancelBtn.onclick = () => modal.classList.add("hidden");
 </script>
