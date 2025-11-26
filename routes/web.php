@@ -19,7 +19,10 @@ Route::group(['prefix' => 'signup'], function() {
 
 Route::group(['prefix' => 'login'], function() {
     Route::get('/', [LoginController::class, 'index'])->name('login.form');
+    Route::post('/', [LoginController::class, 'store'])->name('login.store');
 });
+
+Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
 Route::group(['prefix' => 'dashboard'], function() {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -35,4 +38,5 @@ Route::group(['prefix' => 'expenses'], function() {
 
 Route::group(['prefix' => 'savings'], function() {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
+    Route::post('/', [SavingsController::class, 'store'])->name('savings.store');
 });

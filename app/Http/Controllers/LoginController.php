@@ -9,42 +9,47 @@ use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-    /**
-     * Display the login form.
-     */
     public function index()
     {
         return view('pages.login');
     }
 
-    /**
-     * Handle user login.
-     */
     public function store(Request $request)
     {
-        // Validate input
         $request->validate([
             'email_username' => 'required|string',
             'password' => 'required|string',
         ]);
 
         try {
-            // Find user by email or username
-            $user = DB::table('user')
-                ->where('email_address', $request->email_username)
-                ->orWhere('username', $request->email_username)
-                ->first();
+            $sql = "
+                SELECT * FROM user 
+                WHERE email_address = ? OR username = ?
+                LIMIT 1
+            ";
 
-            // Check if user exists and password is correct
-            if ($user && Hash::check($request->password, $user->password)) {
-                // Store user information in session
-                Session::put('user_id', $user->userid);
-                Session::put('username', $user->username);
-                Session::put('full_name', $user->full_name);
-                Session::put('email', $user->email_address);
+            $users = DB::select($sql, [
+                $request->email_username,
+                $request->email_username
+            ]);
 
-                return redirect()->route('dashboard.index')
-                    ->with('success', 'Welcome back, ' . $user->full_name . '!');
+            if (!empty($users)) {
+                $user = $users[0];
+
+                if (Hash::check($request->password, $user->password)) {
+                    // Store user information in session
+                    Session::put('user_id', $user->userid);
+                    Session::put('username', $user->username);
+                    Session::put('full_name', $user->full_name);
+                    Session::put('email', $user->email_address);
+
+                    return redirect()->route('dashboard.index')
+                        ->with('success', 'Welcome back, ' . $user->full_name . '!');
+                } else {
+                    return redirect()->back()
+                        ->with('error', 'Invalid email/username or password.')
+                        ->withInput($request->only('email_username'));
+                }
             } else {
                 return redirect()->back()
                     ->with('error', 'Invalid email/username or password.')
@@ -58,9 +63,6 @@ class LoginController extends Controller
         }
     }
 
-    /**
-     * Handle user logout.
-     */
     public function destroy()
     {
         Session::flush();

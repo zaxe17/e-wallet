@@ -120,11 +120,74 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('modalOverlay');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    openBtn.onclick = () => modal.classList.remove("hidden");
+    if (openBtn && modal && cancelBtn) {
+        openBtn.onclick = () => modal.classList.remove("hidden");
 
-    modal.onclick = (e) => {
-        if (e.target === modal) modal.classList.add("hidden");
-    };
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.classList.add("hidden");
+        };
 
-    cancelBtn.onclick = () => modal.classList.add("hidden");
+        cancelBtn.onclick = () => modal.classList.add("hidden");
+    }
+</script>
+
+<script>
+    function toggleSavingsVisibility() {
+        const amountElement = document.getElementById('savingsAmount');
+        const hiddenElement = document.getElementById('savingsHidden');
+        const toggleIcon = document.getElementById('toggleSavings');
+        
+        if (amountElement && hiddenElement && toggleIcon) {
+            if (amountElement.classList.contains('hidden')) {
+                // Show amount
+                amountElement.classList.remove('hidden');
+                hiddenElement.classList.add('hidden');
+                toggleIcon.style.setProperty('--svg', 'url("https://api.iconify.design/mdi/eye.svg")');
+            } else {
+                // Hide amount
+                amountElement.classList.add('hidden');
+                hiddenElement.classList.remove('hidden');
+                toggleIcon.style.setProperty('--svg', 'url("https://api.iconify.design/mdi/eye-off.svg")');
+            }
+        }
+    }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('addBtn');
+    const savingsForm = document.getElementById('savingsForm');
+    const pinModal = document.getElementById('pinModal');
+    const pinCancelBtn = document.getElementById('pinCancelBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    // When Add button is clicked, validate and show PIN modal
+    addBtn.addEventListener('click', function() {
+        // Validate required fields
+        const savingsAmount = document.getElementById('savings_amount');
+        
+        if (!savingsAmount.value) {
+            alert('Please enter the savings amount');
+            savingsAmount.focus();
+            return;
+        }
+
+        // Transfer data to hidden fields
+        document.getElementById('hidden_bank').value = document.getElementById('bank').value;
+        document.getElementById('hidden_date_of_save').value = document.getElementById('date_of_save').value;
+        document.getElementById('hidden_savings_amount').value = document.getElementById('savings_amount').value;
+        document.getElementById('hidden_description').value = document.getElementById('description').value;
+        document.getElementById('hidden_interest_rate').value = document.getElementById('interest_rate').value;
+
+        // Hide first modal and show PIN modal
+        modalOverlay.classList.add('hidden');
+        pinModal.classList.remove('hidden');
+    });
+
+    // Cancel PIN modal
+    pinCancelBtn.addEventListener('click', function() {
+        pinModal.classList.add('hidden');
+        modalOverlay.classList.remove('hidden');
+    });
+});
 </script>
