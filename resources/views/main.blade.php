@@ -17,63 +17,7 @@
 </body>
 
 </html>
-
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('accountForm');
-    const fields = form.querySelectorAll('input[required], select[required]');
-    let formSubmitted = false;
-
-    function validateField(field) {
-        const parent = field.closest('.flex-col');
-        const errorMsg = parent.querySelector('.error-msg');
-
-        let valid = false;
-
-        if (field.type === 'radio') {
-            const name = field.name;
-            valid = form.querySelector(`input[name="${name}"]:checked`) !== null;
-        } else if (field.tagName.toLowerCase() === 'select') {
-            valid = field.value.trim() !== '';
-        } else {
-            valid = field.value.trim() !== '';
-        }
-
-        if (formSubmitted) {
-            if (!valid) {
-                field.classList.add('ring-2', 'ring-red-500');
-                field.classList.remove('ring-emerald-500');
-                errorMsg?.classList.remove('hidden');
-            } else {
-                field.classList.remove('ring-red-500');
-                field.classList.add('ring-2', 'ring-emerald-500');
-                errorMsg?.classList.add('hidden');
-            }
-        } else {
-            field.classList.remove('ring-red-500', 'ring-emerald-500');
-            errorMsg?.classList.add('hidden');
-        }
-    }
-
-    fields.forEach(field => {
-        if (field.type !== 'radio') {
-            field.addEventListener('input', () => validateField(field));
-            field.addEventListener('change', () => validateField(field));
-        } else {
-            const name = field.name;
-            const radios = form.querySelectorAll(`input[name="${name}"]`);
-            radios.forEach(r => r.addEventListener('change', () => validateField(field)));
-        }
-    });
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        formSubmitted = true;
-        fields.forEach(field => validateField(field));
-    });
-});
-</script>
- -->
+<!-- SIGNUP -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 
@@ -115,28 +59,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 </script>
 
+<!-- MODAL OPEN -->
 <script>
-    const openBtn = document.getElementById('openModal');
     const modal = document.getElementById('modalOverlay');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    if (openBtn && modal && cancelBtn) {
-        openBtn.onclick = () => modal.classList.remove("hidden");
+    document.querySelectorAll('.openModalBtn').forEach(btn => {
+        btn.onclick = () => modal.classList.remove("hidden");
+    });
 
-        modal.onclick = (e) => {
-            if (e.target === modal) modal.classList.add("hidden");
-        };
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
+    };
 
-        cancelBtn.onclick = () => modal.classList.add("hidden");
-    }
+    cancelBtn.onclick = () => modal.classList.add("hidden");
 </script>
 
+<!-- EYE BUTTON -->
 <script>
     function toggleSavingsVisibility() {
         const amountElement = document.getElementById('savingsAmount');
         const hiddenElement = document.getElementById('savingsHidden');
         const toggleIcon = document.getElementById('toggleSavings');
-        
+
         if (amountElement && hiddenElement && toggleIcon) {
             if (amountElement.classList.contains('hidden')) {
                 // Show amount
@@ -154,40 +99,40 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addBtn = document.getElementById('addBtn');
-    const savingsForm = document.getElementById('savingsForm');
-    const pinModal = document.getElementById('pinModal');
-    const pinCancelBtn = document.getElementById('pinCancelBtn');
-    const modalOverlay = document.getElementById('modalOverlay');
+    document.addEventListener('DOMContentLoaded', function() {
+        const addBtn = document.getElementById('addBtn');
+        const addForm = document.getElementById('addForm');
+        const pinModal = document.getElementById('pinModal');
+        const pinCancelBtn = document.getElementById('pinCancelBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
 
-    // When Add button is clicked, validate and show PIN modal
-    addBtn.addEventListener('click', function() {
-        // Validate required fields
-        const savingsAmount = document.getElementById('savings_amount');
-        
-        if (!savingsAmount.value) {
-            alert('Please enter the savings amount');
-            savingsAmount.focus();
-            return;
-        }
+        // When Add button is clicked, validate and show PIN modal
+        addBtn.addEventListener('click', function() {
+            // Validate required fields
+            const savingsAmount = document.getElementById('savings_amount');
 
-        // Transfer data to hidden fields
-        document.getElementById('hidden_bank').value = document.getElementById('bank').value;
-        document.getElementById('hidden_date_of_save').value = document.getElementById('date_of_save').value;
-        document.getElementById('hidden_savings_amount').value = document.getElementById('savings_amount').value;
-        document.getElementById('hidden_description').value = document.getElementById('description').value;
-        document.getElementById('hidden_interest_rate').value = document.getElementById('interest_rate').value;
+            if (!savingsAmount.value) {
+                alert('Please enter the savings amount');
+                savingsAmount.focus();
+                return;
+            }
 
-        // Hide first modal and show PIN modal
-        modalOverlay.classList.add('hidden');
-        pinModal.classList.remove('hidden');
+            // Transfer data to hidden fields
+            document.getElementById('hidden_bank').value = document.getElementById('bank').value;
+            document.getElementById('hidden_date_of_save').value = document.getElementById('date_of_save').value;
+            document.getElementById('hidden_savings_amount').value = document.getElementById('savings_amount').value;
+            document.getElementById('hidden_description').value = document.getElementById('description').value;
+            document.getElementById('hidden_interest_rate').value = document.getElementById('interest_rate').value;
+
+            // Hide first modal and show PIN modal
+            modalOverlay.classList.add('hidden');
+            pinModal.classList.remove('hidden');
+        });
+
+        // Cancel PIN modal
+        pinCancelBtn.addEventListener('click', function() {
+            pinModal.classList.add('hidden');
+            modalOverlay.classList.remove('hidden');
+        });
     });
-
-    // Cancel PIN modal
-    pinCancelBtn.addEventListener('click', function() {
-        pinModal.classList.add('hidden');
-        modalOverlay.classList.remove('hidden');
-    });
-});
 </script>
