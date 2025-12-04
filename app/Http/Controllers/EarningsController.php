@@ -14,7 +14,7 @@ class EarningsController extends Controller
         $userId = Session::get('user_id');
 
         // Get the latest budget cycle for the user
-        $sql = "SELECT cycle_id, total_income FROM budget_cycles WHERE userid = ? ORDER BY start_date DESC LIMIT 1";
+        $sql = "SELECT cycle_id, total_income FROM budget_cycles WHERE userid = ? AND is_active = 1 ORDER BY start_date DESC LIMIT 1";
         $activeCycle = DB::select($sql, [$userId]);
 
         $totalEarnings = $activeCycle ? $activeCycle[0]->total_income : 0;
@@ -42,7 +42,7 @@ class EarningsController extends Controller
         ]);
 
         // Get latest cycle for the user
-        $sql = "SELECT cycle_id FROM budget_cycles WHERE userid = ? ORDER BY start_date DESC LIMIT 1";
+        $sql = "SELECT cycle_id FROM budget_cycles WHERE userid = ? AND is_active = 1 ORDER BY start_date DESC LIMIT 1";
         $activeCycle = DB::select($sql, [$userId]);
 
         if (!$activeCycle) {
@@ -94,7 +94,7 @@ class EarningsController extends Controller
         $userId = Session::get('user_id');
 
         // Verify ownership before deleting
-        $sql = "SELECT e.in_id FROM earnings e JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id WHERE e.in_id = ? AND bc.userid = ?";
+        $sql = "SELECT e.in_id FROM earnings e JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id WHERE e.in_id = ? AND bc.userid = ? AND bc.is_active = 1";
         $earnings = DB::select($sql, [$in_id, $userId]);
 
         if (!$earnings) {
