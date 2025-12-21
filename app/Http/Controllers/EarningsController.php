@@ -15,7 +15,7 @@ class EarningsController extends Controller
         $userId = Session::get('user_id');
         
         // Get total earnings using raw SQL
-        $totalSql = "SELECT IFNULL(SUM(amount), 0) as total_earnings FROM earnings WHERE userid = ?";
+        $totalSql = "SELECT IFNULL(SUM(amount), 0) as total_earnings FROM earnings WHERE in_id = ?";
         $totalResult = DB::select($totalSql, [$userId]);
         $totalEarnings = $totalResult[0]->total_earnings;
         
@@ -23,7 +23,7 @@ class EarningsController extends Controller
         $earningsSql = "
             SELECT in_id, income_source, date_received, amount 
             FROM earnings 
-            WHERE userid = ? 
+            WHERE in_id = ? 
             ORDER BY date_received DESC, in_id DESC
         ";
         $earnings = DB::select($earningsSql, [$userId]);

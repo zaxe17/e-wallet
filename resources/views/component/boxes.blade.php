@@ -22,6 +22,6 @@
             @endif
         </div>
         <!-- ADD BUTTON -->
-        <span class="openModalBtn icon bg-[#3a3a3a] transition-all duration-300 ease-in-out cursor-pointer" style="--svg: url('{{ $addButtonIcon }}'); --size: 40px; --icon-color: black;"></span>
+        <span class="openModalBtn icon bg-[#3a3a3a] transition-all duration-300 ease-in-out cursor-pointer" data-target="{{ $dataTarget }}" style="--svg: url('{{ $addButtonIcon }}'); --size: 40px; --icon-color: black;"></span>
     </div>
 </div>

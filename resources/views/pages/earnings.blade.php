@@ -6,7 +6,8 @@
     'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
     'boxName' => 'Earnings',
     'amount' => number_format($totalEarnings, 2),
-    'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg'
+    'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg',
+    'dataTarget' => 'modalNewEarnings'
     ])
 
     @include('component.table', [
@@ -17,7 +18,8 @@
 
 <!-- ADD MODAL -->
 @include('component.inputpopup', [
-'title' => 'Earnings',
+'title' => 'New Earnings',
+'targetBtn' => 'modalNewEarnings',
 'fields' => [
 ['label' => 'Date', 'type' => 'date', 'name' => ''],
 ['label' => 'Category', 'type' => 'text', 'name' => ''],

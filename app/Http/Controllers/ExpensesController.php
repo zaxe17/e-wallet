@@ -15,16 +15,16 @@ class ExpensesController extends Controller
         $userId = Session::get('user_id');
         
         // Get total expenses using raw SQL
-        $totalSql = "SELECT IFNULL(SUM(cashout_amount), 0) as total_expenses FROM expenses WHERE userid = ?";
+        $totalSql = "SELECT IFNULL(SUM(amount), 0) as total_expenses FROM expenses WHERE out_id = ?";
         $totalResult = DB::select($totalSql, [$userId]);
         $totalExpenses = $totalResult[0]->total_expenses;
         
         // Get all expenses records using raw SQL
         $expensesSql = "
-            SELECT out_id, category_expense, date_out, cashout_amount 
+            SELECT out_id, category, date_spent, amount 
             FROM expenses 
-            WHERE userid = ? 
-            ORDER BY date_out DESC, out_id DESC
+            WHERE out_id = ? 
+            ORDER BY date_spent DESC, out_id DESC
         ";
         $expenses = DB::select($expensesSql, [$userId]);
         

@@ -6,7 +6,8 @@
     'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
     'boxName' => 'Expenses',
     'amount' => number_format($totalExpenses, 2),
-    'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg'
+    'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg',
+    'dataTarget' => 'modalNewExpenses'
     ])
 
     @include('component.table', [
@@ -17,7 +18,8 @@
 
 <!-- ADD MODAL -->
 @include('component.inputpopup', [
-'title' => 'Expenses',
+'title' => 'New Expenses',
+'targetBtn' => 'modalNewExpenses',
 'fields' => [
 ['label' => 'Date', 'type' => 'date', 'name' => ''],
 ['label' => 'Category', 'type' => 'text', 'name' => ''],

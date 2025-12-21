@@ -18,7 +18,7 @@ class SignupController extends Controller
 
     private function generateUserId()
     {
-        $lastUser = DB::table('user')->orderBy('userid', 'desc')->first(); 
+        $lastUser = DB::table('user')->orderBy('userid', 'desc')->first();
         if (!$lastUser) return 'PN-000001';
         $num = intval(substr($lastUser->userid, 3)) + 1;
         return 'PN-' . str_pad($num, 6, '0', STR_PAD_LEFT);
@@ -47,28 +47,27 @@ class SignupController extends Controller
         $sex = $request->sex === 'Male' ? 'M' : 'F';
 
         $sql = "
-                INSERT INTO user 
-                (userid, full_name, date_of_birth, username, age, citizenship, address, phone_number, 
-                 email_address, password, sex, budget, budget_status)
-                VALUES 
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ";
+            INSERT INTO user
+            (userid, full_name, date_of_birth, username, age, citizenship, address, phone_number, email_address, password, sex, payday_cutoff, date_registered)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ";
 
-            $inserted = DB::insert($sql, [
-                $userId,
-                $fullName,
-                $request->date_of_birth,
-                $request->username,
-                $request->age,
-                $request->citizenship,
-                $request->address,
-                $request->phone_number,
-                $request->email_address,
-                $hashedPassword,
-                $sex,
-                0,
-                'Active'
-            ]);
+        $inserted = DB::insert($sql, [
+            $userId,
+            $fullName,
+            $request->date_of_birth,
+            $request->username,
+            $request->age,
+            $request->citizenship,
+            $request->address,
+            $request->phone_number,
+            $request->email_address,
+            $hashedPassword,
+            $sex,
+            $request->payday_cutoff ?? 0,
+            now()
+        ]);
 
         if (!$inserted) {
             Log::error("Failed to insert user into database via raw SQL for user ID: {$userId}");

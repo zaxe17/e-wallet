@@ -8,41 +8,54 @@ use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $navtitle = 'Dashboard';
-        
+
         // Get user_id from session
         $userId = Session::get('user_id');
-        
+
         // Get user information
-        $userSql = "SELECT full_name, budget FROM user WHERE userid = ?";
+        $userSql = "SELECT full_name, payday_cutoff FROM `user` WHERE userid = ?";
         $users = DB::select($userSql, [$userId]);
-        $user = !empty($users) ? $users[0] : null;
-        
-        // Get total earnings using raw SQL
-        $earningSql = "SELECT IFNULL(SUM(amount), 0) as total_earnings FROM earnings WHERE userid = ?";
+        $user = $users[0] ?? null;
+
+        // Get total earnings
+        $earningSql = "
+            SELECT IFNULL(SUM(amount), 0) AS total_earnings
+            FROM earnings
+            WHERE in_id = ?
+        ";
         $earnings = DB::select($earningSql, [$userId]);
-        $totalEarnings = $earnings[0]->total_earnings;
-        
-        // Get total expenses using raw SQL
-        $expenseSql = "SELECT IFNULL(SUM(cashout_amount), 0) as total_expenses FROM expenses WHERE userid = ?";
+        $totalEarnings = $earnings[0]->total_earnings ?? 0;
+
+        // Get total expenses
+        $expenseSql = "
+            SELECT IFNULL(SUM(amount), 0) AS total_expenses
+            FROM expenses
+            WHERE out_id = ?
+        ";
         $expenses = DB::select($expenseSql, [$userId]);
-        $totalExpenses = $expenses[0]->total_expenses;
-        
-        // Get total savings INCLUDING interest earned using raw SQL
-        $savingsSql = "SELECT IFNULL(SUM(savings_amount + interest_earned), 0) as total_savings FROM savings WHERE userid = ?";
+        $totalExpenses = $expenses[0]->total_expenses ?? 0;
+
+        // Get total savings (including interest)
+        $savingsSql = "
+            SELECT IFNULL(SUM(savings_amount + interest_earned), 0) AS total_savings
+            FROM savings
+            WHERE userid = ?
+        ";
         $savings = DB::select($savingsSql, [$userId]);
-        $totalSavings = $savings[0]->total_savings;
-        
+        $totalSavings = $savings[0]->total_savings ?? 0;
+
         // Calculate remaining budget
         $remainingBudget = $totalEarnings - $totalExpenses;
-        
+
         return view('pages.dashboard', compact(
-            'navtitle', 
-            'user', 
-            'totalEarnings', 
-            'totalExpenses', 
-            'totalSavings', 
+            'navtitle',
+            'user',
+            'totalEarnings',
+            'totalExpenses',
+            'totalSavings',
             'remainingBudget'
         ));
     }

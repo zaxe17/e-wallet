@@ -27,29 +27,35 @@
 
     <!-- 3 BOXES -->
     <div class="grid grid-cols-3 gap-6">
+        <!-- EARNINGS -->
         <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
             @include('component.boxes', [
             'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
             'boxName' => 'Earnings',
             'amount' => number_format($totalEarnings, 2),
             'addButtonIcon' => '',
+            'dataTarget' => ''
             ])
         </a>
-        <a href="{{ route('savings.index') }}" class="block transition-all duration-300 ease-in-out hover:scale-105">
+        <!-- SAVINGS -->
+        <a class="openPinModalBtn block transition-all duration-300 ease-in-out hover:scale-105">
             @include('component.boxes', [
             'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
             'boxName' => 'Savings',
             'amount' => number_format($totalSavings, 2),
             'addButtonIcon' => '',
-            'viewButton' => ''
+            'viewButton' => '',
+            'dataTarget' => ''
             ])
         </a>
+        <!-- EXPENSES -->
         <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
             @include('component.boxes', [
             'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
             'boxName' => 'Expenses',
             'amount' => number_format($totalExpenses, 2),
             'addButtonIcon' => '',
+            'dataTarget' => ''
             ])
         </a>
     </div>
