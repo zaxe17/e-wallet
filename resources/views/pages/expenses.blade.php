@@ -19,6 +19,7 @@
 <!-- ADD MODAL -->
 @include('component.inputpopup', [
 'title' => 'New Expenses',
+'routesName' => '',
 'targetBtn' => 'modalNewExpenses',
 'fields' => [
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_spent'],

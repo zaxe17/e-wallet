@@ -74,6 +74,7 @@
 <!-- ADD NEW SAVINGS -->
 @include('component.inputpopup', [
 'title' => 'New Savings',
+'routesName' => '',
 'targetBtn' => 'modalNewSavings',
 'fields' => [
 ['label' => 'Bank', 'type' => 'text', 'name' => 'bank'],
@@ -87,6 +88,7 @@
 <!-- ADD AMOUNT -->
 @include('component.inputpopup', [
 'title' => 'Amount',
+'routesName' => '',
 'targetBtn' => 'modalAmount',
 'fields' => [
 ['label' => 'Bank', 'type' => 'text', 'name' => ''],

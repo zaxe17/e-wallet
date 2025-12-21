@@ -19,6 +19,7 @@
 <!-- ADD MODAL -->
 @include('component.inputpopup', [
 'title' => 'New Earnings',
+'routesName' => '',
 'targetBtn' => 'modalNewEarnings',
 'fields' => [
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_received'],
