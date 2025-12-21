@@ -21,9 +21,9 @@
 'title' => 'New Expenses',
 'targetBtn' => 'modalNewExpenses',
 'fields' => [
-['label' => 'Date', 'type' => 'date', 'name' => ''],
-['label' => 'Category', 'type' => 'text', 'name' => ''],
-['label' => 'Amount', 'type' => 'number', 'name' => ''],
+['label' => 'Date', 'type' => 'date', 'name' => 'date_spent'],
+['label' => 'Category', 'type' => 'text', 'name' => 'category'],
+['label' => 'Amount', 'type' => 'number', 'name' => 'amount'],
 ]
 ])
 @endsection

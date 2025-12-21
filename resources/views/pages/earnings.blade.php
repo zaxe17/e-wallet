@@ -21,9 +21,9 @@
 'title' => 'New Earnings',
 'targetBtn' => 'modalNewEarnings',
 'fields' => [
-['label' => 'Date', 'type' => 'date', 'name' => ''],
-['label' => 'Category', 'type' => 'text', 'name' => ''],
-['label' => 'Amount', 'type' => 'number', 'name' => ''],
+['label' => 'Date', 'type' => 'date', 'name' => 'date_received'],
+['label' => 'Category', 'type' => 'text', 'name' => 'income_source'],
+['label' => 'Amount', 'type' => 'number', 'name' => 'amount'],
 ]
 ])
 @endsection
