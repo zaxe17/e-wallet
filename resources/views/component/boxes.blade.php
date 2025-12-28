@@ -1,4 +1,4 @@
-<div class="bg-transparent flex flex-col px-12 py-6 rounded-lg input-shadow">
+<div class="background input-shadow opacity-0 bg-transparent flex flex-col px-12 py-6 rounded-lg">
     <!-- HEADER -->
     <div class="flex justify-start items-center gap-3">
         <span class="icon bg-[#ffa93f] transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('{{ $iconUrl }}'); --size: 24px; --icon-color: black;"></span>

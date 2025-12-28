@@ -10,11 +10,12 @@
         </div>
 
         @include('component.dashboardnav')
-        @include('component.pin')
 
         <div class="relative container h-screen mx-auto px-14">
             @yield('user_content')
         </div>
+
+        @include('component.pin')
     </div>
 </div>
 @endsection

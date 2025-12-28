@@ -8,26 +8,30 @@ use Illuminate\Support\Facades\Session;
 
 class EarningsController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $navtitle = 'Earnings';
-        
-        // Get user_id from session
         $userId = Session::get('user_id');
-        
-        // Get total earnings using raw SQL
-        $totalSql = "SELECT IFNULL(SUM(amount), 0) as total_earnings FROM earnings WHERE in_id = ?";
-        $totalResult = DB::select($totalSql, [$userId]);
-        $totalEarnings = $totalResult[0]->total_earnings;
-        
-        // Get all earnings records using raw SQL
-        $earningsSql = "
-            SELECT in_id, income_source, date_received, amount 
-            FROM earnings 
-            WHERE in_id = ? 
-            ORDER BY date_received DESC, in_id DESC
+
+        $totalSql = "
+            SELECT IFNULL(SUM(e.amount), 0) AS total_earnings
+            FROM earnings e
+            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+            WHERE bc.userid = ?
         ";
-        $earnings = DB::select($earningsSql, [$userId]);
         
+        $totalEarnings = DB::select($totalSql, [$userId])[0]->total_earnings;
+
+        $earningsSql = "
+            SELECT e.in_id, e.income_source, e.amount, e.date_received
+            FROM earnings e
+            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+            WHERE bc.userid = ?
+            ORDER BY e.date_received DESC
+        ";
+
+        $earnings = DB::select($earningsSql, [$userId]);
+
         return view('pages.earnings', compact('navtitle', 'totalEarnings', 'earnings'));
     }
 }

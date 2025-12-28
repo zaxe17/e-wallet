@@ -7,6 +7,9 @@
     <title>PayNoy - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
