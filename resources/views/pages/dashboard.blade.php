@@ -4,14 +4,14 @@
 <h1 class="text-3xl mb-14 lato-normal">Hello, {{ $user ? explode(' ', $user->full_name)[0] : 'User' }}!</h1>
 
 <div class="flex flex-col gap-6">
-    <!-- Box -->
-    <div class="bg-transparent flex flex-col px-16 py-7 rounded-lg input-shadow">
-        <!-- HEADER -->
+    {{-- Box --}}
+    <!-- <div class="bg-transparent flex flex-col px-16 py-7 rounded-lg input-shadow">
+        {{-- HEADER --}}
         <div class="flex justify-start items-center gap-3">
             <span class="icon bg-[#488c42] transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/vaadin/wallet.svg'); --size: 20px; --icon-color: black;"></span>
             <p class="font-extrabold text-2xl lato-normal">Remaining Budget for the Month</p>
         </div>
-        <!-- OUTPUT BOX -->
+        {{-- OUTPUT BOX --}}
         <div class="bg-white my-4 rounded-sm px-8">
             <div class="text-3xl pt-7 flex items-center justify-start gap-2 lato-bold">
                 <span class="icon bg-black transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/pepicons-pop/peso.svg'); --size: 30px; --icon-color: black;"></span>
@@ -21,48 +21,78 @@
                 {{ number_format($totalEarnings, 0) }} - {{ number_format($totalExpenses, 0) }}
             </div>
         </div>
-        <!-- SUB-HEADING -->
+        {{-- SUB-HEADING --}}
         <p class="text-sm font-light lato-normal">It's a good idea to save this in your account!</p>
+    </div> -->
+
+    <div class="flex justify-center items-start gap-6">
+        <div class="w-1/2 flex flex-col items-center">
+            <div class="mb-2 text-lg">
+                <select name="" id="">
+                    @foreach($monthList as $m)
+                    <option value="{{ $m }}" {{ $m == $currentMonth ? 'selected' : '' }}>
+                        {{ $m }}
+                    </option>
+                    @endforeach
+                </select>
+                <span> Spending Overview</span>
+            </div>
+            <div class="w-full">
+                <canvas id="lineChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <div class="w-1/2 flex flex-col items-center">
+            <p class="mb-2 text-lg font-semibold">Nigga Nigga Nigga</p>
+            <div class="w-full">
+                <canvas id="donutChart" class="w-full h-64"></canvas>
+            </div>
+        </div>
     </div>
 
-    <!-- 3 BOXES -->
+
+    {{-- 3 BOXES --}}
     <div class="grid grid-cols-3 gap-6">
-        <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
-            @include('component.boxes', [
-            'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
-            'boxName' => 'Earnings',
-            'amount' => number_format($totalEarnings, 2),
-            'addButtonIcon' => ''
-            ])
-        </a>
-        <a href="{{ route('savings.index') }}" class="block transition-all duration-300 ease-in-out hover:scale-105">
-            <div class="bg-transparent flex flex-col px-12 py-6 rounded-lg input-shadow">
-                <!-- HEADER -->
-                <div class="flex justify-start items-center gap-3">
-                    <span class="icon bg-[#ffa93f] transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/tdesign/saving-pot-filled.svg'); --size: 24px; --icon-color: black;"></span>
-                    <p class="font-extrabold text-2xl lato-normal">Savings</p>
-                    <!-- EYE TOGGLE BUTTON -->
-                    <span id="toggleSavings" class="icon bg-[#3a3a3a] transition-all duration-300 ease-in-out cursor-pointer" style="--svg: url('https://api.iconify.design/mdi/eye-off.svg'); --size: 24px; --icon-color: black;" onclick="event.preventDefault(); event.stopPropagation(); toggleSavingsVisibility();"></span>
-                </div>
-                <!-- OUTPUT BOX -->
-                <div class="bg-white my-4 rounded-sm px-7 py-2.5 flex items-center justify-between">
-                    <div class="text-2xl flex items-center justify-start gap-2 lato-bold font-bold">
-                        <!-- AMOUNT -->
-                        <span class="icon bg-black transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/pepicons-pop/peso.svg'); --size: 24px; --icon-color: black;"></span>
-                        <span id="savingsAmount" class="hidden">{{ number_format($totalSavings, 2) }}</span>
-                        <span id="savingsHidden">********</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-        <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
-            @include('component.boxes', [
-            'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
-            'boxName' => 'Expenses',
-            'amount' => number_format($totalExpenses, 2),
-            'addButtonIcon' => ''
-            ])
-        </a>
+        {{-- EARNINGS --}}
+        <div class="boxes opacity-0" data-delay="0.3">
+            <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
+                @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
+                'boxName' => 'Earnings',
+                'amount' => number_format($totalEarnings, 2),
+                'addButtonIcon' => '',
+                'dataTarget' => ''
+                ])
+            </a>
+        </div>
+        {{-- SAVINGS --}}
+        <div class="boxes opacity-0" data-delay="0.6">
+            <a class="openPinModalBtn block transition-all duration-300 ease-in-out hover:scale-105">
+                @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
+                'boxName' => 'Savings',
+                'amount' => number_format($totalSavings, 2),
+                'addButtonIcon' => '',
+                'viewButton' => '',
+                'dataTarget' => ''
+                ])
+            </a>
+        </div>
+        {{-- EXPENSES --}}
+        <div class="boxes opacity-0" data-delay="0.9">
+            <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
+                @include('component.boxes', [
+                'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
+                'boxName' => 'Expenses',
+                'amount' => number_format($totalExpenses, 2),
+                'addButtonIcon' => '',
+                'dataTarget' => ''
+                ])
+            </a>
+        </div>
+
+
+
     </div>
 </div>
 @endsection

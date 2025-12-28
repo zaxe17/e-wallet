@@ -2,48 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $navtitle = 'Dashboard';
-        
-        // Get user_id from session
         $userId = Session::get('user_id');
-        
-        // Get user information
-        $userSql = "SELECT full_name, budget FROM user WHERE userid = ?";
-        $users = DB::select($userSql, [$userId]);
-        $user = !empty($users) ? $users[0] : null;
-        
-        // Get total earnings using raw SQL
-        $earningSql = "SELECT IFNULL(SUM(amount), 0) as total_earnings FROM earnings WHERE userid = ?";
-        $earnings = DB::select($earningSql, [$userId]);
-        $totalEarnings = $earnings[0]->total_earnings;
-        
-        // Get total expenses using raw SQL
-        $expenseSql = "SELECT IFNULL(SUM(cashout_amount), 0) as total_expenses FROM expenses WHERE userid = ?";
-        $expenses = DB::select($expenseSql, [$userId]);
-        $totalExpenses = $expenses[0]->total_expenses;
-        
-        // Get total savings INCLUDING interest earned using raw SQL
-        $savingsSql = "SELECT IFNULL(SUM(savings_amount + interest_earned), 0) as total_savings FROM savings WHERE userid = ?";
-        $savings = DB::select($savingsSql, [$userId]);
-        $totalSavings = $savings[0]->total_savings;
-        
-        // Calculate remaining budget
+
+        $user = $this->getUserInfo($userId);
+        $totalEarnings = $this->getTotalEarnings($userId);
+        $totalExpenses = $this->getTotalExpenses($userId);
+        $totalSavings  = $this->getTotalSavings($userId);
+        $monthList  = $this->months();
+        $currentMonth = date('F');
+
         $remainingBudget = $totalEarnings - $totalExpenses;
-        
+
         return view('pages.dashboard', compact(
-            'navtitle', 
-            'user', 
-            'totalEarnings', 
-            'totalExpenses', 
-            'totalSavings', 
-            'remainingBudget'
+            'navtitle',
+            'user',
+            'totalEarnings',
+            'totalExpenses',
+            'totalSavings',
+            'remainingBudget',
+            'monthList',
+            'currentMonth'
         ));
+    }
+
+    private function getUserInfo($userId)
+    {
+        $sql = "SELECT full_name, payday_cutoff FROM `user` WHERE userid = ?";
+        $result = DB::select($sql, [$userId]);
+
+        return $result[0] ?? null;
+    }
+
+    private function getTotalEarnings($userId)
+    {
+        $sql = "
+            SELECT total_income AS total_earnings
+            FROM budget_cycles
+            WHERE userid = ?
+        ";
+
+        return DB::select($sql, [$userId])[0]->total_earnings ?? 0;
+    }
+
+    private function getTotalExpenses($userId)
+    {
+        $sql = "
+            SELECT total_expense AS total_expenses
+            FROM budget_cycles
+            WHERE userid = ?
+        ";
+
+        return DB::select($sql, [$userId])[0]->total_expenses ?? 0;
+    }
+
+    private function getTotalSavings($userId)
+    {
+        $sql = "
+            SELECT total_savings AS total_savings
+            FROM budget_cycles
+            WHERE userid = ?
+        ";
+
+        return DB::select($sql, [$userId])[0]->total_savings ?? 0;
+    }
+
+    private function months()
+    {
+        $months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        return $months;
     }
 }

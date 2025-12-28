@@ -40,3 +40,5 @@ Route::group(['prefix' => 'savings'], function() {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
     Route::post('/', [SavingsController::class, 'store'])->name('savings.store');
 });
+
+Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);

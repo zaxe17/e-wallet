@@ -56,6 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
 
+    animateOnScroll(".boxes", { opacity: [0, 1], y: [25, 0] }, { duration: 0.3 });
+
+    animateOnScroll(".table-row", { opacity: [0, 1] }, { duration: 0.5 });
+
+    animateOnScroll(".background", { opacity: [0, 1] }, { duration:0.3 });
+
     setTimeout(() => {
         closeMessage();
     }, 10000);
