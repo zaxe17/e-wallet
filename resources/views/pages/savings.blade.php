@@ -36,7 +36,7 @@
     ])
 
     <div class="flex flex-col gap-3 h-[55vh]">
-        <p class="text-xl font-bold lato-normal">Breakdown</p>
+        <p class="show text-xl font-bold lato-normal" data-delay="0.3">Breakdown</p>
         <!-- SCROLLABLE -->
         <div class="h-full overflow-y-auto p-3">
             <div class="grid grid-cols-3 gap-6">

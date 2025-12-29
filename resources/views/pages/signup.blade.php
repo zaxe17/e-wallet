@@ -5,7 +5,7 @@
 @include('component.homebg')
 <section class="container mx-auto h-screen p-15 flex items-center justify-center relative">
     <div class="w-1/2 bg-[rgba(255,255,255,0.15)] rounded-2xl form-shadow form-animation backdrop-blur-sm border border-solid border-[rgba(255,255,255,0.25)] p-10 opacity-0 form">
-        <h1 class="text-3xl mb-5 lato-bold font-semibold">Account Information</h1>
+        <h1 class="text-3xl text-[#4A5A4D] mb-5 lato-bold font-semibold">Account Information</h1>
         <form action="{{ route('signup.store') }}" method="POST" id="accountForm" novalidate>
             @csrf
             <div class="flex flex-col gap-4">
@@ -114,8 +114,8 @@
 
                 {{-- SUBMIT BUTTON --}}
                 <div class="flex justify-center">
-                    <button type="submit" class="cursor-pointer w-1/5 flex justify-center items-center bg-sky-600 hover:bg-sky-400 px-5 py-2 rounded-full text-sm text-white hover:text-sky-800 font-semibold mt-5 transition-all duration-300 ease-in-out group">
-                        <span class="icons bg-white group-hover:bg-sky-800 mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/lucide/save.svg');"></span>Save
+                    <button type="submit" class="cursor-pointer w-1/5 flex justify-center items-center bg-[#7FB89A] hover:bg-[#6AA887] px-5 py-2 rounded-full text-sm text-[#0F2F1F] hover:text-[#FFFFFF] font-semibold mt-5 transition-all duration-300 ease-in-out group">
+                        <span class="icons bg-[#0F2F1F] group-hover:bg-[#FFFFFF] mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/lucide/save.svg');"></span>Save
                     </button>
                 </div>
             </div>

@@ -26,7 +26,7 @@
     </div> -->
 
     <div class="flex justify-center items-start gap-6">
-        <div class="w-1/2 flex flex-col items-center">
+        <div class="show w-1/2 flex flex-col items-center opacity-0" data-delay="0.3">
             <div class="mb-2 text-lg">
                 <select name="" id="">
                     @foreach($monthList as $m)
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="w-1/2 flex flex-col items-center">
+        <div class="show w-1/2 flex flex-col items-center opacity-0" data-delay="0.6">
             <p class="mb-2 text-lg font-semibold">Nigga Nigga Nigga</p>
             <div class="w-full">
                 <canvas id="donutChart" class="w-full h-64"></canvas>
@@ -54,7 +54,7 @@
     {{-- 3 BOXES --}}
     <div class="grid grid-cols-3 gap-6">
         {{-- EARNINGS --}}
-        <div class="boxes opacity-0" data-delay="0.3">
+        <div class="up opacity-0" data-delay="0.9">
             <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
@@ -66,7 +66,7 @@
             </a>
         </div>
         {{-- SAVINGS --}}
-        <div class="boxes opacity-0" data-delay="0.6">
+        <div class="up opacity-0" data-delay="1.2">
             <a class="openPinModalBtn block transition-all duration-300 ease-in-out hover:scale-105">
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
@@ -79,7 +79,7 @@
             </a>
         </div>
         {{-- EXPENSES --}}
-        <div class="boxes opacity-0" data-delay="0.9">
+        <div class="up opacity-0" data-delay="1.5">
             <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',

@@ -14,9 +14,9 @@ class ExpensesController extends Controller
         $userId = Session::get('user_id');
 
         $totalSql = "
-            SELECT IFNULL(SUM(e.amount), 0) as total_expenses FROM expenses e
-            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
-            WHERE bc.userid = ?
+            SELECT total_expense AS total_expenses
+            FROM budget_cycles
+            WHERE userid = ?
         ";
 
         $totalResult = DB::select($totalSql, [$userId]);

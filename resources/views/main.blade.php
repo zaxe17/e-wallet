@@ -14,7 +14,7 @@
 
 </head>
 
-<body class="m-0 p-0 h-screen">
+<body class="m-0 p-0 h-screen selection:bg-green-200">
 
     @yield('content')
 
