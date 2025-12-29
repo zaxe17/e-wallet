@@ -14,10 +14,9 @@ class EarningsController extends Controller
         $userId = Session::get('user_id');
 
         $totalSql = "
-            SELECT IFNULL(SUM(e.amount), 0) AS total_earnings
-            FROM earnings e
-            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
-            WHERE bc.userid = ?
+            SELECT total_income AS total_earnings
+            FROM budget_cycles
+            WHERE userid = ?
         ";
         
         $totalEarnings = DB::select($totalSql, [$userId])[0]->total_earnings;

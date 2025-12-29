@@ -1,4 +1,4 @@
-<div class="background opacity-0 flex flex-col gap-3">
+<div class="show opacity-0 flex flex-col gap-3" data-delay="0.3">
     <p class="text-xl font-bold lato-normal">Transaction History</p>
 
     <!-- HISTORY TABLE -->

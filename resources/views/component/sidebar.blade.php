@@ -33,7 +33,7 @@
             </li>
             <li class="">
                 <!-- nav-link -->
-                <a class="openPinModalBtn group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a class="{{ trim($__env->yieldContent('title')) !== 'Savings' ? 'openPinModalBtn' : '' }} group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
                     <!-- nav-icon -->
                     <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/tdesign/saving-pot.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
@@ -56,7 +56,7 @@
             <!-- nav-item -->
             <li class="">
                 <!-- nav-link -->
-                <a href="" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('settings.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
                     <!-- nav-icon -->
                     <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/lucide/settings.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->

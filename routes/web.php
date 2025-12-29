@@ -5,6 +5,7 @@ use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SavingsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SignUpController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,10 @@ Route::group(['prefix' => 'expenses'], function() {
 Route::group(['prefix' => 'savings'], function() {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
     Route::post('/', [SavingsController::class, 'store'])->name('savings.store');
+});
+
+Route::group(['prefix' => 'settings'], function() {
+    Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
 });
 
 Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);
