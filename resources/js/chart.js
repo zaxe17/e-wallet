@@ -7,9 +7,9 @@ const lineLabels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 const lineValues = new Array(daysInMonth).fill(null);
 
 // put value on days index + 1 = day just example
-lineValues[8] = 1500;
-lineValues[15] = 1000;
-lineValues[23] = 1500;
+lineValues[2] = 4;
+lineValues[3] = 40;
+lineValues[4] = 42;
 
 const initialValues = lineValues.map(v => v !== null ? 0 : null);
 
@@ -23,8 +23,8 @@ const lineChart = new Chart(lineCtx, {
             borderColor: '#3b82f6',
             backgroundColor: 'rgba(59,130,246,0.15)',
             borderWidth: 2,
-            tension: 0.4,
-            fill: true,
+            tension: 0,
+            fill: false,
             spanGaps: true
         }]
     },
@@ -34,6 +34,12 @@ const lineChart = new Chart(lineCtx, {
         animation: {
             duration: 1600,
             easing: 'easeOutQuart'
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                min: 0
+            }
         },
         plugins: {
             legend: { display: false },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\ExpensesController;
@@ -44,6 +45,9 @@ Route::group(['prefix' => 'savings'], function() {
 
 Route::group(['prefix' => 'settings'], function() {
     Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/', [SettingsController::class, 'save'])->name('settings.save');
 });
 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);
+
