@@ -1,4 +1,4 @@
-import { animate, delay } from "motion";
+import { animate, delay, scale } from "motion";
 
 function animateOnScroll(selector, keyframes, baseOptions = {}) {
     const elements = document.querySelectorAll(selector);
@@ -13,7 +13,8 @@ function animateOnScroll(selector, keyframes, baseOptions = {}) {
 
                 const options = {
                     ...baseOptions,
-                    delay
+                    delay,
+                    easing: 'ease-in'
                 };
 
                 animate(el, keyframes, options);
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".show", { opacity: [0, 1] }, { duration: 0.5 });
 
-
+    animateOnScroll(".openModal", { opacity: [0, 1] }, { duration: 0.3 });
 
 
 
@@ -62,7 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".table-row", { opacity: [0, 1] }, { duration: 0.5 });
 
+    animateOnScroll(".line", { opacity: [0, 1], width: ['0%', '100%'] }, { duration: 1 });
+
     
+
+
     setTimeout(() => {
         closeMessage();
     }, 10000);

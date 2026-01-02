@@ -261,3 +261,38 @@
         pinModal.classList.add("hidden"); // Close the modal
     };
 </script>
+
+<script>
+    const form = document.getElementById('settingsForm');
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    const inputs = form.querySelectorAll('input');
+
+    const originalValues = {};
+
+    inputs.forEach(input => {
+        originalValues[input.name] = input.value;
+    });
+
+    editBtn.addEventListener('click', () => {
+        inputs.forEach(input => {
+            input.removeAttribute('readonly');
+        });
+
+        editBtn.classList.add('hidden');
+        saveBtn.classList.remove('hidden');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        inputs.forEach(input => {
+            input.value = originalValues[input.name];
+
+            input.setAttribute('readonly', true);
+        });
+
+        saveBtn.classList.add('hidden');
+        editBtn.classList.remove('hidden');
+    });
+</script>

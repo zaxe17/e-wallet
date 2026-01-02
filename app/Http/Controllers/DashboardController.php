@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $totalEarnings = $this->getTotalEarnings($userId);
         $totalExpenses = $this->getTotalExpenses($userId);
         $totalSavings  = $this->getTotalSavings($userId);
-        $monthList  = $this->months();
+        $monthList  = $this->currentMonth();
         $currentMonth = date('F');
 
         $remainingBudget = $totalEarnings - $totalExpenses;
@@ -74,13 +74,8 @@ class DashboardController extends Controller
         return DB::select($sql, [$userId])[0]->total_savings ?? 0;
     }
 
-    private function months()
+    private function currentMonth()
     {
-        $months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-
-        return $months;
+        return date('F'); // e.g. "December"
     }
 }
