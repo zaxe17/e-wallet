@@ -29,9 +29,34 @@ class ExpensesController extends Controller
             WHERE bc.userid = ?
             ORDER BY date_spent DESC, out_id DESC
         ";
-        
+
         $expenses = DB::select($expensesSql, [$userId]);
 
         return view('pages.expenses', compact('navtitle', 'totalExpenses', 'expenses'));
+    }
+
+    public function deleteExpenses($out_id)
+    {
+        $userId = Session::get('user_id');
+
+        $expenses = DB::select("
+            SELECT e.cycle_id
+            FROM expenses e
+            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+            WHERE e.out_id = ? AND bc.userid = ?
+        ", [$out_id, $userId]);
+
+        if (!$expenses) {
+            return redirect()->route('expenses.index')->with('error', 'Expenses record not found.');
+        }
+
+        $cycle_id = $expenses[0]->cycle_id;
+
+        DB::delete("
+            DELETE FROM expenses
+            WHERE out_id = ? AND cycle_id = ?
+        ", [$out_id, $cycle_id]);
+
+        return redirect()->route('expenses.index')->with('success', 'Expenses record deleted.');
     }
 }

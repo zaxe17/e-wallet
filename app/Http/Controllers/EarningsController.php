@@ -18,7 +18,7 @@ class EarningsController extends Controller
             FROM budget_cycles
             WHERE userid = ?
         ";
-        
+
         $totalEarnings = DB::select($totalSql, [$userId])[0]->total_earnings;
 
         $earningsSql = "
@@ -32,5 +32,30 @@ class EarningsController extends Controller
         $earnings = DB::select($earningsSql, [$userId]);
 
         return view('pages.earnings', compact('navtitle', 'totalEarnings', 'earnings'));
+    }
+
+    public function deleteEarnings($in_id)
+    {
+        $userId = Session::get('user_id');
+
+        $earnings = DB::select("
+            SELECT e.cycle_id
+            FROM earnings e
+            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+            WHERE e.in_id = ? AND bc.userid = ?
+        ", [$in_id, $userId]);
+
+        if (!$earnings) {
+            return redirect()->route('earnings.index')->with('error', 'Earnings record not found.');
+        }
+
+        $cycle_id = $earnings[0]->cycle_id;
+
+        DB::delete("
+            DELETE FROM earnings
+            WHERE in_id = ? AND cycle_id = ?
+        ", [$in_id, $cycle_id]);
+
+        return redirect()->route('earnings.index')->with('success', 'Earnings record deleted.');
     }
 }
