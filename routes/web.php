@@ -30,11 +30,13 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 Route::group(['prefix' => 'earnings'], function () {
     Route::get('/', [EarningsController::class, 'index'])->name('earnings.index');
+    Route::post('/', [EarningsController::class, 'store'])->name('earnings.store');
     Route::delete('/delete/{in_id}', [EarningsController::class, 'deleteEarnings'])->name('earnings.delete');
 });
 
 Route::group(['prefix' => 'expenses'], function () {
     Route::get('/', [ExpensesController::class, 'index'])->name('expenses.index');
+    Route::post('/store', [ExpensesController::class, 'store'])->name('expenses.store');
     Route::delete('/delete/{out_id}', [ExpensesController::class, 'deleteExpenses'])->name('expenses.delete');
 });
 

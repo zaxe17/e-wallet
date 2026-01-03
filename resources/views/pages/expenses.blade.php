@@ -19,12 +19,12 @@
 <!-- ADD MODAL -->
 @include('component.inputpopup', [
 'title' => 'New Expenses',
-'routesName' => '',
+'routesName' => 'expenses.store',
 'targetBtn' => 'modalNewExpenses',
 'fields' => [
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_spent'],
 ['label' => 'Category', 'type' => 'text', 'name' => 'category'],
-['label' => 'Amount', 'type' => 'number', 'name' => 'amount'],
+['label' => 'Amount', 'type' => 'number', 'name' => 'amount', 'step' => '0.01'],
 ]
 ])
 @endsection
