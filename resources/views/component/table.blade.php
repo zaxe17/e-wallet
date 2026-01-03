@@ -30,8 +30,14 @@
                     <td class="py-2 cursor-pointer">
                         <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/lucide/edit.svg'); --size: 20px;"></span>
                     </td>
-                    <td class="pr-4 py-2 cursor-pointer">
-                        <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/weui/delete-filled.svg'); --size: 20px;"></span>
+                    <td class="pr-4 py-2">
+                        <form action="{{ route('earnings.delete', $earning->in_id) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="cursor-pointer">
+                                <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/weui/delete-filled.svg'); --size: 20px;"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -47,8 +53,14 @@
                     <td class="py-2 cursor-pointer">
                         <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/lucide/edit.svg'); --size: 20px;"></span>
                     </td>
-                    <td class="pr-4 py-2 cursor-pointer">
-                        <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/weui/delete-filled.svg'); --size: 20px;"></span>
+                    <td class="pr-4 py-2">
+                        <form action="{{ route('expenses.delete', $expense->out_id) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="cursor-pointer">
+                                <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/weui/delete-filled.svg'); --size: 20px;"></span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -65,5 +77,4 @@
             </tbody>
         </table>
     </div>
-
 </div>
