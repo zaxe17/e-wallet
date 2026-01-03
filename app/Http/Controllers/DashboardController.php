@@ -13,13 +13,17 @@ class DashboardController extends Controller
         $userId = Session::get('user_id');
 
         $user = $this->getUserInfo($userId);
-        $totalEarnings = $this->getTotalEarnings($userId);
-        $totalExpenses = $this->getTotalExpenses($userId);
-        $totalSavings  = $this->getTotalSavings($userId);
-        $monthList  = $this->currentMonth();
+        $activeCycle = $this->getActiveBudgetCycle($userId);
+        
+        $totalEarnings = $activeCycle->total_income ?? 0;
+        $totalExpenses = $activeCycle->total_expense ?? 0;
+        $totalSavings = $activeCycle->total_savings ?? 0;
+        $remainingBudget = $activeCycle->remaining_budget ?? 0;
+        
+        $monthList = $this->currentMonth();
         $currentMonth = date('F');
-
-        $remainingBudget = $totalEarnings - $totalExpenses;
+        
+        $chartData = $this->getChartData($userId);
 
         return view('pages.dashboard', compact(
             'navtitle',
@@ -29,7 +33,8 @@ class DashboardController extends Controller
             'totalSavings',
             'remainingBudget',
             'monthList',
-            'currentMonth'
+            'currentMonth',
+            'chartData'
         ));
     }
 
@@ -41,41 +46,44 @@ class DashboardController extends Controller
         return $result[0] ?? null;
     }
 
-    private function getTotalEarnings($userId)
+    private function getActiveBudgetCycle($userId)
     {
         $sql = "
-            SELECT total_income AS total_earnings
+            SELECT 
+                cycle_id,
+                cycle_name,
+                total_income,
+                total_expense,
+                total_savings,
+                remaining_budget
             FROM budget_cycles
-            WHERE userid = ?
+            WHERE userid = ? AND is_active = 1
+            LIMIT 1
         ";
 
-        return DB::select($sql, [$userId])[0]->total_earnings ?? 0;
+        return DB::select($sql, [$userId])[0] ?? null;
     }
-
-    private function getTotalExpenses($userId)
+    
+    private function getChartData($userId)
     {
         $sql = "
-            SELECT total_expense AS total_expenses
+            SELECT 
+                cycle_name,
+                total_income,
+                total_expense,
+                total_savings,
+                remaining_budget
             FROM budget_cycles
             WHERE userid = ?
+            ORDER BY start_date ASC
+            LIMIT 12
         ";
-
-        return DB::select($sql, [$userId])[0]->total_expenses ?? 0;
-    }
-
-    private function getTotalSavings($userId)
-    {
-        $sql = "
-            SELECT total_savings AS total_savings
-            FROM budget_cycles
-            WHERE userid = ?
-        ";
-
-        return DB::select($sql, [$userId])[0]->total_savings ?? 0;
+        
+        return DB::select($sql, [$userId]);
     }
 
     private function currentMonth()
     {
-        return date('F'); // e.g. "December"
+        return date('F');
     }
 }

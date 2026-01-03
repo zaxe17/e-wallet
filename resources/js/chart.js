@@ -36,9 +36,32 @@ const lineChart = new Chart(lineCtx, {
             easing: 'easeOutQuart'
         },
         scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Days',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                }
+            },
             y: {
                 beginAtZero: true,
-                min: 0
+                min: 0,
+                title: {
+                    display: true,
+                    text: 'Budget (in thousands)',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value + 'k';
+                    }
+                }
             }
         },
         plugins: {
@@ -50,7 +73,7 @@ const lineChart = new Chart(lineCtx, {
                         return `Day ${day}`;
                     },
                     label: function (context) {
-                        return `${context.dataset.label} ${context.parsed.y}`;
+                        return `${context.dataset.label} ${context.parsed.y}k`;
                     }
                 }
             }

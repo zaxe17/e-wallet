@@ -8,11 +8,10 @@
         <h1 class="text-xl lato-bold border border-b-[#485349] border-transparent border-solid w-full">This {{ $monthList }}</h1>
         <div class="w-full flex flex-col items-center">
             <div class="w-full">
-                <canvas id="lineChart" class="w-full h-64"></canvas>
+                <canvas id="lineChart" class="w-full h-64" data-chart='@json($chartData)'></canvas>
             </div>
         </div>
     </div>
-
 
     {{-- 3 BOXES --}}
     <div class="grid grid-cols-3 gap-6">
@@ -22,7 +21,7 @@
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
                 'boxName' => 'Earnings',
-                'amount' => number_format($totalEarnings, 2),
+                'amount' => number_format($totalEarnings ?? 0, 2),
                 'addButtonIcon' => '',
                 'dataTarget' => ''
                 ])
@@ -34,7 +33,7 @@
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
                 'boxName' => 'Savings',
-                'amount' => number_format($totalSavings, 2),
+                'amount' => number_format($totalSavings ?? 0, 2),
                 'addButtonIcon' => '',
                 'viewButton' => '',
                 'dataTarget' => ''
@@ -47,7 +46,7 @@
                 @include('component.boxes', [
                 'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
                 'boxName' => 'Expenses',
-                'amount' => number_format($totalExpenses, 2),
+                'amount' => number_format($totalExpenses ?? 0, 2),
                 'addButtonIcon' => '',
                 'dataTarget' => ''
                 ])
