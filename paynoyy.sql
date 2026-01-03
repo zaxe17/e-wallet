@@ -301,6 +301,58 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE TRIGGER trg_delete_savings_convert_to_expense
+AFTER DELETE ON savings
+FOR EACH ROW
+BEGIN
+    DECLARE v_active_cycle_id VARCHAR(12);
+
+    SELECT cycle_id INTO v_active_cycle_id
+    FROM budget_cycles
+    WHERE userid = OLD.userid AND is_active = 1
+    LIMIT 1;
+
+    IF v_active_cycle_id IS NOT NULL AND OLD.savings_amount > 0 THEN
+        
+        UPDATE budget_cycles
+        SET total_savings = total_savings - OLD.savings_amount
+        WHERE cycle_id = v_active_cycle_id;
+
+        INSERT INTO expenses (out_id, cycle_id, category, amount, date_spent)
+        VALUES ('', v_active_cycle_id, CONCAT('Deleted: ', OLD.bank), OLD.savings_amount, CURDATE());
+
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER trg_delete_income
+AFTER DELETE ON earnings
+FOR EACH ROW
+BEGIN
+    UPDATE budget_cycles 
+    SET total_income = total_income - OLD.amount 
+    WHERE cycle_id = OLD.cycle_id;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trg_delete_expense
+AFTER DELETE ON expenses
+FOR EACH ROW
+BEGIN
+    UPDATE budget_cycles 
+    SET total_expense = total_expense - OLD.amount 
+    WHERE cycle_id = OLD.cycle_id;
+END$$
+
+DELIMITER ;
+
 -- INSERT INTO user (userid, full_name, date_of_birth, username, citizenship, address, phone_number, email_address, password, sex, payday_cutoff) 
 -- VALUES (NULL, 'Kelia Audrey', '2005-05-15', 'kasgamayo', 'FILIPINO', 'Quezon City', '09393534330', 'kagamayo@gmail.com', '1234', 'F', 31);
 
