@@ -262,6 +262,7 @@
     };
 </script>
 
+<!-- SETTINGS -->
 <script>
     const form = document.getElementById('settingsForm');
     const editBtn = document.getElementById('editBtn');
@@ -294,5 +295,52 @@
 
         saveBtn.classList.add('hidden');
         editBtn.classList.remove('hidden');
+    });
+</script>
+
+<!-- WIDRAWAL AND DEPOSIT -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const depositForm = document.getElementById("depositForm");
+        const withdrawalForm = document.getElementById("withdrawalForm");
+
+        const depositBtn = document.getElementById("depositBtn");
+        const withdrawalBtn = document.getElementById("withdrawalBtn");
+
+        // Initially show Deposit form and hide Withdrawal form
+        depositForm.classList.remove("hidden");
+        withdrawalForm.classList.add("hidden");
+
+        // Initially set Deposit button to active
+        depositBtn.classList.add("bg-[#485349]");
+        depositBtn.classList.add("text-white");
+
+        depositBtn.addEventListener("click", function() {
+            if (depositForm.classList.contains("hidden")) {
+                depositForm.classList.remove("hidden");
+                withdrawalForm.classList.add("hidden");
+            }
+
+            depositBtn.classList.add("bg-[#485349]");
+            depositBtn.classList.add("text-white");
+
+            withdrawalBtn.classList.remove("bg-[#485349]");
+            withdrawalBtn.classList.remove("text-white");
+            withdrawalBtn.classList.add("text-[#485349]");
+        });
+
+        withdrawalBtn.addEventListener("click", function() {
+            if (withdrawalForm.classList.contains("hidden")) {
+                withdrawalForm.classList.remove("hidden");
+                depositForm.classList.add("hidden");
+            }
+
+            withdrawalBtn.classList.add("bg-[#485349]");
+            withdrawalBtn.classList.add("text-white");
+
+            depositBtn.classList.remove("bg-[#485349]");
+            depositBtn.classList.remove("text-white");
+            depositBtn.classList.add("text-[#485349]");
+        });
     });
 </script>

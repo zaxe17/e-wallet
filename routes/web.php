@@ -30,7 +30,7 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 Route::group(['prefix' => 'earnings'], function () {
     Route::get('/', [EarningsController::class, 'index'])->name('earnings.index');
-    Route::post('/', [EarningsController::class, 'store'])->name('earnings.store');
+    Route::post('/store', [EarningsController::class, 'store'])->name('earnings.store');
     Route::delete('/delete/{in_id}', [EarningsController::class, 'deleteEarnings'])->name('earnings.delete');
 });
 
@@ -42,7 +42,7 @@ Route::group(['prefix' => 'expenses'], function () {
 
 Route::group(['prefix' => 'savings'], function () {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
-    Route::post('/', [SavingsController::class, 'store'])->name('savings.store');
+    Route::post('/store', [SavingsController::class, 'store'])->name('savings.store');
 });
 
 Route::group(['prefix' => 'settings'], function () {

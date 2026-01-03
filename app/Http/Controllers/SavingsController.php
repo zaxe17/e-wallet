@@ -57,70 +57,64 @@ class SavingsController extends Controller
             'savings_amount' => 'required|numeric|min:0',
             'date_of_save' => 'required|date',
             'interest_rate' => 'nullable|numeric|min:0',
-            'passkey' => 'required|digits:4'
         ]);
 
-        // Get user_id from session
         $userId = Session::get('user_id');
 
-        // Verify user exists
-        $userCheckSql = "SELECT userid FROM user WHERE userid = ?";
+        $userCheckSql = "SELECT passkey FROM savings WHERE userid = ?";
         $userResult = DB::select($userCheckSql, [$userId]);
 
         if (empty($userResult)) {
             return redirect()->back()->with('error', 'User not found');
         }
 
+        $userPasskey = $userResult[0]->passkey;
+
         try {
-            // Check if savings record with same bank exists (regardless of description)
             $existingSql = "
-                SELECT savingsno, savings_amount, interest_rate, description 
-                FROM savings 
-                WHERE userid = ? AND bank = ?
-                LIMIT 1
-            ";
+            SELECT savingsno, savings_amount, interest_rate, description 
+            FROM savings 
+            WHERE userid = ? AND bank = ?
+            LIMIT 1
+        ";
 
             $bankValue = $request->bank ?? '';
-
             $existingRecord = DB::select($existingSql, [$userId, $bankValue]);
 
             if (!empty($existingRecord)) {
-                // Update existing record - add to the current amount
                 $newAmount = $existingRecord[0]->savings_amount + $request->savings_amount;
 
-                // Combine descriptions if different
                 $newDescription = $existingRecord[0]->description;
                 if ($request->description && $request->description != $existingRecord[0]->description) {
                     $newDescription = $existingRecord[0]->description . ', ' . $request->description;
                 }
 
                 $updateSql = "
-                    UPDATE savings 
-                    SET savings_amount = ?, 
-                        date_of_save = ?, 
-                        interest_rate = ?,
-                        description = ?,
-                        passkey = ?
-                    WHERE savingsno = ? AND userid = ?
-                ";
+                UPDATE savings 
+                SET savings_amount = ?, 
+                    date_of_save = ?, 
+                    interest_rate = ?,
+                    description = ?,
+                    passkey = ? 
+                WHERE savingsno = ? AND userid = ?
+            ";
 
                 DB::update($updateSql, [
                     $newAmount,
                     $request->date_of_save,
                     $request->interest_rate ?? $existingRecord[0]->interest_rate,
                     $newDescription,
-                    $request->passkey,
+                    $userPasskey,
                     $existingRecord[0]->savingsno,
                     $userId
                 ]);
 
                 return redirect()->route('savings.index')->with('success', 'Savings updated successfully. New amount: ₱' . number_format($newAmount, 2));
             } else {
-                // Insert new savings record
                 $insertSql = "
-                    INSERT INTO savings (userid, bank, description, savings_amount, date_of_save, interest_rate, passkey) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                ";
+                INSERT INTO savings (userid, bank, description, savings_amount, date_of_save, interest_rate, passkey) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ";
 
                 DB::insert($insertSql, [
                     $userId,
@@ -129,7 +123,7 @@ class SavingsController extends Controller
                     $request->savings_amount,
                     $request->date_of_save,
                     $request->interest_rate ?? 0,
-                    $request->passkey
+                    $userPasskey
                 ]);
 
                 return redirect()->route('savings.index')->with('success', 'New savings account created successfully');
@@ -154,7 +148,7 @@ class SavingsController extends Controller
             "SELECT passkey FROM savings WHERE userid = ? ORDER BY date_of_save DESC LIMIT 1",
             [$userId]  // Passing the userId as a parameter
         );
-        
+
         // Check if the stored passkey exists
         if ($storedPasskey && isset($storedPasskey->passkey)) {
             // Ensure both values are of the same type (string comparison)

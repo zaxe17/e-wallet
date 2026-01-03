@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".line", { opacity: [0, 1], width: ['0%', '100%'] }, { duration: 1 });
 
     
-
+    
 
     setTimeout(() => {
         closeMessage();

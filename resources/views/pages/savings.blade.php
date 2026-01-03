@@ -1,30 +1,6 @@
 @extends('userpage')
 @section('title', 'Savings')
 @section('user_content')
-
-<!-- Success/Error Messages -->
-@if(session('success'))
-<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-    <span class="block sm:inline">{{ session('success') }}</span>
-</div>
-@endif
-
-@if(session('error'))
-<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-    <span class="block sm:inline">{{ session('error') }}</span>
-</div>
-@endif
-
-@if($errors->any())
-<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
 <div class="flex flex-col gap-6">
     @include('component.boxes', [
     'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
@@ -42,7 +18,7 @@
             <div class="grid grid-cols-3 gap-6">
                 @foreach($savings as $saving)
                 <!-- SAVINGS BOX -->
-                <div class="boxes opacity-0" data-delay="{{ $loop->iteration * 0.3 }}">
+                <div class="boxes opacity-0" data-delay="{{ $loop->iteration * 0.2 }}">
                     <div class="bg-white/30 h-70 backdrop-blur-3xl rounded-xl input-shadow p-6 flex flex-col gap-3.5 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105">
                         <div class="bg-[#f5f5f5] px-7 py-3 flex items-center justify-between rounded-lg">
                             <div class="flex items-center gap-2 text-lg font-bold">
@@ -65,7 +41,7 @@
                 @endforeach
 
                 <!-- ADD NEW SAVINGS -->
-                <div class="boxes opacity-0" data-delay="{{ (count($savings) + 1) * 0.3 }}">
+                <div class="boxes opacity-0">
                     <div class="openModalBtn bg-white/30 h-70 backdrop-blur-3xl rounded-xl input-shadow flex justify-center items-center py-16 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105" data-target="modalNewSavings">
                         <span class="icon bg-[#b4b4b4] transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/lets-icons/add-duotone.svg'); --size: 135px; --icon-color: black;"></span>
                     </div>
@@ -78,7 +54,7 @@
 <!-- ADD NEW SAVINGS -->
 @include('component.inputpopup', [
 'title' => 'New Savings',
-'routesName' => '',
+'routesName' => 'savings.store',
 'targetBtn' => 'modalNewSavings',
 'fields' => [
 ['label' => 'Bank', 'type' => 'text', 'name' => 'bank'],
@@ -89,17 +65,9 @@
 ]
 ])
 
-<!-- ADD AMOUNT -->
-@include('component.inputpopup', [
+@include('component.savingsdepwith', [
 'title' => 'Amount',
 'routesName' => '',
-'targetBtn' => 'modalAmount',
-'fields' => [
-['label' => 'Bank', 'type' => 'text', 'name' => ''],
-['label' => 'Date', 'type' => 'date', 'name' => ''],
-['label' => 'Savings Amount', 'type' => 'number', 'name' => ''],
-['label' => 'Category', 'type' => 'text', 'name' => ''],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => ''],
-]
+'targetBtn' => 'modalAmount'
 ])
 @endsection
