@@ -65,13 +65,13 @@
             <div class="show opacity-0 flex justify-end" data-delay="1.2">
                 <div id="saveBtn" class="hidden">
                     <div class="flex items-center gap-2">
-                        <button type="submit" class="flex items-center text-sm text-white px-7 py-1.5 rounded-lg bg-[#488c42] cursor-pointer">
-                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/cancel.svg');"></span>
-                            Save
-                        </button>
                         <button type="button" id="cancelBtn" class="flex items-center text-sm text-white px-6 py-1.5 rounded-lg bg-[#6B7C99] cursor-pointer">
                             <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/save-as.svg');"></span>
                             Cancel
+                        </button>
+                        <button type="submit" class="flex items-center text-sm text-white px-7 py-1.5 rounded-lg bg-[#488c42] cursor-pointer">
+                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/cancel.svg');"></span>
+                            Save
                         </button>
                     </div>
                 </div>
@@ -123,6 +123,4 @@
         </form>
     </div>
 </div>
-
-@include('component.messagepopup')
 @endsection

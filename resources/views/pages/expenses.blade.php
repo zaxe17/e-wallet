@@ -22,9 +22,9 @@
 'routesName' => 'expenses.store',
 'targetBtn' => 'modalNewExpenses',
 'fields' => [
-['label' => 'Date', 'type' => 'date', 'name' => 'date_spent'],
-['label' => 'Category', 'type' => 'text', 'name' => 'category'],
-['label' => 'Amount', 'type' => 'number', 'name' => 'amount', 'step' => '0.01'],
+['label' => 'Date', 'type' => 'date', 'name' => 'date_spent', 'value' => date('Y-m-d')],
+['label' => 'Category', 'type' => 'text', 'name' => 'category', 'value' => ''],
+['label' => 'Amount', 'type' => 'number', 'name' => 'amount', 'step' => '0.01', 'value' => ''],
 ]
 ])
 @endsection

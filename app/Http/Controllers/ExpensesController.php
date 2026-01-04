@@ -64,7 +64,29 @@ class ExpensesController extends Controller
             VALUES (?, ?, ?, ?)
         ", [$cycle_id, $request->category, $request->amount, $request->date_spent]);
 
-        return redirect()->route('expenses.index')->with('success', 'Expense added successfully.');
+        return redirect()->route('expenses.index')->with('success', 'Added successfully.');
+    }
+
+    public function updateExpenses(Request $request, $out_id)
+    {
+        // validation
+        $request->validate([
+            'category' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
+        ]);
+
+        DB::update(
+            "UPDATE expenses 
+            SET category = ?, amount = ?
+            WHERE out_id = ?",
+            [
+                $request->category,
+                $request->amount,
+                $out_id
+            ]
+        );
+
+        return redirect()->route('expenses.index')->with('success', 'Updated successfully.');
     }
 
     public function deleteExpenses($out_id)
@@ -89,6 +111,6 @@ class ExpensesController extends Controller
             WHERE out_id = ? AND cycle_id = ?
         ", [$out_id, $cycle_id]);
 
-        return redirect()->route('expenses.index')->with('success', 'Expenses record deleted.');
+        return redirect()->route('expenses.index')->with('success', 'Deleted successfully.');
     }
 }

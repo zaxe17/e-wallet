@@ -15,6 +15,6 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/login')->with('success', 'Logged out successfully');
+        return redirect('/login');
     }
 }

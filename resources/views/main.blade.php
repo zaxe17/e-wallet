@@ -189,7 +189,7 @@
             updateBoxes();
 
             if (pin.length === maxLength) {
-                submitPin(); // Call the submitPin function when the pin is full
+                submitPin(); // Call submitPin when pin is full
             }
         }
     }
@@ -205,30 +205,26 @@
         const enteredPin = pin.join('');
         console.log('Entered PIN:', enteredPin);
 
-        // Sending the entered PIN to the backend for validation
         fetch('/validate-passkey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content // CSRF token
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify({
                     passkey: enteredPin
                 })
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to validate PIN');
-                }
+                if (!response.ok) throw new Error('Failed to validate PIN');
                 return response.json();
             })
             .then(data => {
                 if (data.valid) {
-                    // Redirect to savings page if PIN is valid
                     window.location.href = '/savings';
                 } else {
                     alert('Invalid PIN. Please try again.');
-                    pin = []; // Reset the PIN input
+                    pin = [];
                     updateBoxes();
                 }
             })
@@ -237,6 +233,7 @@
                 alert('An error occurred. Please try again.');
             });
 
+        // reset after a short delay
         setTimeout(() => {
             pin = [];
             updateBoxes();
@@ -244,22 +241,42 @@
         }, 300);
     }
 
-    // Open the PIN modal when the button is clicked
+    // Open modal buttons
     document.querySelectorAll('.openPinModalBtn').forEach(btn => {
         btn.onclick = () => pinModal.classList.remove("hidden");
     });
 
-    // Close the modal when clicking outside the modal content
+    // Close modal by clicking outside content
     pinModal.onclick = (e) => {
         if (e.target === pinModal) pinModal.classList.add("hidden");
     };
 
-    // Cancel function to reset PIN and close the modal
+    // Cancel button
     cancelPinBtn.onclick = () => {
-        pin = []; // Clear the PIN input
-        updateBoxes(); // Reset the displayed boxes
-        pinModal.classList.add("hidden"); // Close the modal
+        pin = [];
+        updateBoxes();
+        pinModal.classList.add("hidden");
     };
+
+    // --- KEYBOARD SUPPORT ---
+    document.addEventListener('keydown', (e) => {
+        if (pinModal.classList.contains('hidden')) return; // only active when modal open
+
+        // Allow digits 0-9
+        if (e.key >= '0' && e.key <= '9') {
+            addDigit(e.key);
+        }
+
+        // Backspace to remove last digit
+        if (e.key === 'Backspace') {
+            removeDigit();
+        }
+
+        // Enter to submit if full
+        if (e.key === 'Enter' && pin.length === maxLength) {
+            submitPin();
+        }
+    });
 </script>
 
 <!-- SETTINGS -->
@@ -342,5 +359,78 @@
             depositBtn.classList.remove("text-white");
             depositBtn.classList.add("text-[#485349]");
         });
+    });
+</script>
+
+<!-- INPUT FOR TABLES -->
+<script>
+    document.addEventListener("click", (e) => {
+        const editBtn = e.target.closest(".edit-btn");
+        const cancelBtn = e.target.closest(".cancel-btn");
+
+        if (!editBtn && !cancelBtn) return;
+
+        const row = e.target.closest("tr");
+
+        if (editBtn) {
+            toggleEdit(row, true);
+        }
+
+        if (cancelBtn) {
+            resetRow(row);
+            toggleEdit(row, false);
+        }
+    });
+
+    function toggleEdit(row, editing) {
+        row.querySelectorAll(".text").forEach(el =>
+            el.classList.toggle("hidden", editing)
+        );
+
+        row.querySelectorAll(".input").forEach(el =>
+            el.classList.toggle("hidden", !editing)
+        );
+
+        row.querySelector(".edit-btn").classList.toggle("hidden", editing);
+        row.querySelector(".save-btn").classList.toggle("hidden", !editing);
+        row.querySelector(".cancel-btn").classList.toggle("hidden", !editing);
+    }
+
+    function resetRow(row) {
+        row.querySelectorAll(".input").forEach(input => {
+            input.value = input.defaultValue;
+        });
+    }
+</script>
+
+<!-- CONFIRMATION FOR DELETING RECORD -->
+<script>
+    // Modal elements
+    const deleteModal = document.getElementById('deleteModal');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    let formToDelete = null; // store the form that triggered delete
+
+    // When clicking a delete button in table
+    document.querySelectorAll('.deleteBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            formToDelete = btn.closest('form'); // store the correct form
+            deleteModal.classList.remove('hidden'); // show modal
+        });
+    });
+
+    // Cancel button
+    cancelDeleteBtn.addEventListener('click', () => {
+        formToDelete = null;
+        deleteModal.classList.add('hidden');
+    });
+
+    // Confirm button
+    confirmDeleteBtn.addEventListener('click', () => {
+        if (formToDelete) {
+            formToDelete.submit(); // submit the correct form
+        }
     });
 </script>
