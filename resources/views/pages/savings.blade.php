@@ -18,7 +18,7 @@
             <div class="grid grid-cols-3 gap-6">
                 @foreach($savings as $saving)
                 <!-- SAVINGS BOX -->
-                <div class="boxes opacity-0" data-delay="{{ $loop->iteration * 0.2 }}">
+                <div class="savings opacity-0" data-delay="{{ $loop->iteration * 0.3 }}">
                     <div class="bg-white/30 h-70 backdrop-blur-3xl rounded-xl input-shadow p-6 flex flex-col gap-3.5 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105">
                         <div class="bg-[#f5f5f5] px-7 py-3 flex items-center justify-between rounded-lg">
                             <div class="flex items-center gap-2 text-lg font-bold">
@@ -41,7 +41,7 @@
                 @endforeach
 
                 <!-- ADD NEW SAVINGS -->
-                <div class="boxes opacity-0">
+                <div class="savings opacity-0">
                     <div class="openModalBtn bg-white/30 h-70 backdrop-blur-3xl rounded-xl input-shadow flex justify-center items-center py-16 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105" data-target="modalNewSavings">
                         <span class="icon bg-[#b4b4b4] transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/lets-icons/add-duotone.svg'); --size: 135px; --icon-color: black;"></span>
                     </div>
@@ -57,11 +57,11 @@
 'routesName' => 'savings.store',
 'targetBtn' => 'modalNewSavings',
 'fields' => [
-['label' => 'Bank', 'type' => 'text', 'name' => 'bank'],
-['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save'],
-['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount'],
-['label' => 'Category', 'type' => 'text', 'name' => 'description'],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate'],
+['label' => 'Bank', 'type' => 'text', 'name' => 'bank', 'value' => ''],
+['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => date('Y-m-d')],
+['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => ''],
+['label' => 'Category', 'type' => 'text', 'name' => 'description', 'value' => ''],
+['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => ''],
 ]
 ])
 

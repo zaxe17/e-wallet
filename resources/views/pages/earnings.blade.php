@@ -22,9 +22,9 @@
     'routesName' => 'earnings.store',
     'targetBtn' => 'modalNewEarnings',
     'fields' => [
-        ['label' => 'Date Received', 'type' => 'date', 'name' => 'date_received', 'required' => true],
-        ['label' => 'Income Source', 'type' => 'text', 'name' => 'income_source', 'required' => true],
-        ['label' => 'Amount', 'type' => 'number', 'name' => 'amount', 'step' => '0.01', 'required' => true],
+        ['label' => 'Date Received', 'type' => 'date', 'name' => 'date_received', 'value' => date('Y-m-d'), 'required' => true],
+        ['label' => 'Income Source', 'type' => 'text', 'name' => 'income_source', 'value' => '', 'required' => true],
+        ['label' => 'Amount', 'type' => 'number', 'name' => 'amount', 'step' => '0.01', 'value' => '', 'required' => true],
     ]
 ])
 @endsection

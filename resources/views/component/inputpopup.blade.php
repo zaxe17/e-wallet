@@ -7,8 +7,28 @@
                 @csrf
                 @foreach ($fields as $field)
                 <div class="flex justify-between items-center gap-16">
-                    <label for="{{ $field['name'] }}" class="text-xl lato-normal font-semibold">{{ $field['label'] }}</label>
-                    <input oninput="capitalizeInput(this)" type="{{ $field['type'] }}" name="{{ $field['name'] }}" id="{{ $field['name'] }}" class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none" {{ isset($field['required']) && $field['required'] ? 'required' : '' }} {{ isset($field['step']) ? 'step=' . $field['step'] : '' }}>
+                    <label for="{{ $field['name'] }}"
+                        class="text-xl lato-normal font-semibold">
+                        {{ $field['label'] }}
+                    </label>
+
+                    <input
+                        type="{{ $field['type'] }}"
+                        name="{{ $field['name'] }}"
+                        id="{{ $field['name'] }}"
+                        value="{{ $field['value'] }}"
+
+                        @if($field['name']==='interest_rate' )
+                        inputmode="decimal"
+                        pattern="^[0-9]+(\.[0-9]{1,2})?$"
+                        @else
+                        oninput="capitalizeInput(this)"
+                        @endif
+
+                        class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none"
+
+                        {{ isset($field['required']) && $field['required'] ? 'required' : '' }}
+                        {{ isset($field['step']) ? 'step=' . $field['step'] : '' }}>
                 </div>
                 @endforeach
 

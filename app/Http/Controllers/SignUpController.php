@@ -16,78 +16,116 @@ class SignupController extends Controller
         return view('pages.signup');
     }
 
-    private function generateUserId()
-    {
-        $lastUser = DB::table('user')->orderBy('userid', 'desc')->first();
-        if (!$lastUser) return 'PN-000001';
-        $num = intval(substr($lastUser->userid, 3)) + 1;
-        return 'PN-' . str_pad($num, 6, '0', STR_PAD_LEFT);
-    }
-
     public function store(Request $request)
     {
         $request->validate([
-            'first_name' => 'required|string|max:40',
-            'middle_name' => 'nullable|string|max:40',
-            'last_name' => 'required|string|max:40',
-            'date_of_birth' => 'required|date|before:today',
-            'age' => 'required|integer|min:18|max:120',
-            'sex' => 'required|in:Male,Female',
-            'citizenship' => 'required|string|max:15',
-            'username' => 'required|string|max:15|unique:user,username',
-            'phone_number' => 'required|string|max:15|unique:user,phone_number',
-            'email_address' => 'required|email|max:30|unique:user,email_address',
-            'address' => 'required|string|max:100',
+            'first_name'     => 'required|string|max:40',
+            'middle_name'    => 'nullable|string|max:40',
+            'last_name'      => 'required|string|max:40',
+            'date_of_birth'  => 'required|date|before:today',
+            'age'            => 'required|integer|min:18|max:120',
+            'sex'            => 'required|in:Male,Female',
+            'citizenship'    => 'required|string|max:15',
+            'username'       => 'required|string|max:15|unique:user,username',
+            'phone_number'   => 'required|string|max:15|unique:user,phone_number',
+            'email_address'  => 'required|email|max:30|unique:user,email_address',
+            'address'        => 'required|string|max:100',
         ]);
 
-        $userId = $this->generateUserId();
-        $password = $this->generateSecurePassword();
-        $hashedPassword = Hash::make($password);
-        $fullName = trim($request->first_name . ' ' . ($request->middle_name ? $request->middle_name . ' ' : '') . $request->last_name);
-        $sex = $request->sex === 'Male' ? 'M' : 'F';
-
-        $sql = "
-            INSERT INTO user
-            (userid, full_name, date_of_birth, username, age, citizenship, address, phone_number, email_address, password, sex, payday_cutoff, date_registered)
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ";
-
-        $inserted = DB::insert($sql, [
-            $userId,
-            $fullName,
-            $request->date_of_birth,
-            $request->username,
-            $request->age,
-            $request->citizenship,
-            $request->address,
-            $request->phone_number,
-            $request->email_address,
-            $hashedPassword,
-            $sex,
-            $request->payday_cutoff ?? 0,
-            now()
-        ]);
-
-        if (!$inserted) {
-            Log::error("Failed to insert user into database via raw SQL for user ID: {$userId}");
-        }
-
-        $mailData = [
-            'name' => $fullName,
-            'username' => $request->username,
-            'password' => $password,
-        ];
+        DB::beginTransaction();
 
         try {
-            Notification::route('mail', $request->email_address)
-                ->notify(new PasswordNotif($mailData));
-            Log::info("Password email sent successfully to {$request->email_address}");
-        } catch (\Exception $e) {
-            Log::warning("Failed to send email to {$request->email_address}: " . $e->getMessage());
-        }
+            $userId   = $this->generateUserId();
+            $password = $this->generateSecurePassword();
 
-        return redirect()->route('login.form')->with('success', 'Account created successfully! Check your email for the password.');
+            $fullName = trim(
+                $request->first_name . ' ' .
+                ($request->middle_name ? $request->middle_name . ' ' : '') .
+                $request->last_name
+            );
+
+            $sex     = $request->sex === 'Male' ? 'M' : 'F';
+            $passkey = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+
+            DB::insert("
+                INSERT INTO user
+                (userid, full_name, date_of_birth, username, age, citizenship,
+                 address, phone_number, email_address, password, passkey, sex, date_registered)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ", [
+                $userId,
+                $fullName,
+                $request->date_of_birth,
+                $request->username,
+                $request->age,
+                $request->citizenship,
+                $request->address,
+                $request->phone_number,
+                $request->email_address,
+                Hash::make($password),
+                $passkey,
+                $sex,
+                now()
+            ]);
+
+            // ✅ CREATE INITIAL BUDGET CYCLE
+            $this->createInitialBudgetCycle($userId);
+
+            DB::commit();
+
+            // SEND EMAIL
+            Notification::route('mail', $request->email_address)
+                ->notify(new PasswordNotif([
+                    'name'     => $fullName,
+                    'username' => $request->username,
+                    'password' => $password,
+                ]));
+
+            return redirect()
+                ->route('login.form')
+                ->with('success', 'Account created successfully! Check your email.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Signup failed: ' . $e->getMessage());
+
+            return back()->with('error', 'Registration failed.');
+        }
+    }
+
+    private function generateUserId()
+    {
+        $last = DB::table('user')->orderBy('userid', 'desc')->first();
+        if (!$last) return 'PN-000001';
+
+        $num = intval(substr($last->userid, 3)) + 1;
+        return 'PN-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+    }
+
+    private function generateCycleId()
+    {
+        $last = DB::table('budget_cycles')->orderBy('cycle_id', 'desc')->first();
+        if (!$last) return 'CYC-000001';
+
+        $num = intval(substr($last->cycle_id, 4)) + 1;
+        return 'CYC-' . str_pad($num, 6, '0', STR_PAD_LEFT);
+    }
+
+    private function createInitialBudgetCycle($userId)
+    {
+        DB::insert("
+            INSERT INTO budget_cycles
+            (cycle_id, userid, start_date, end_date, cycle_name,
+             total_income, total_expense, total_savings,
+             budget_remarks, is_active, rollover_amount)
+            VALUES (?, ?, ?, ?, ?, 0, 0, 0, NULL, 1, 0)
+        ", [
+            $this->generateCycleId(),
+            $userId,
+            now()->startOfMonth()->toDateString(),
+            now()->endOfMonth()->toDateString(),
+            now()->format('F Y')
+        ]);
     }
 
     private function generateSecurePassword($length = 10)

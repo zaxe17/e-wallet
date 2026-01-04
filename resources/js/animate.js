@@ -30,6 +30,38 @@ function animateOnScroll(selector, keyframes, baseOptions = {}) {
     });
 }
 
+function animateOnceOnScroll(selector, keyframes, baseOptions = {}) {
+    const elements = document.querySelectorAll(selector);
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+
+            const el = entry.target;
+
+            // READ data-delay
+            const delayAttr = el.getAttribute("data-delay");
+            const delay = delayAttr
+                ? parseFloat(delayAttr)
+                : baseOptions.delay || 0;
+
+            animate(el, keyframes, {
+                ...baseOptions,
+                delay,
+                easing: "ease-in"
+            });
+
+            // animate once only
+            obs.unobserve(el);
+        });
+    }, { threshold: 0.3 });
+
+    elements.forEach(el => {
+        el.style.opacity = 0;
+        observer.observe(el);
+    });
+}
+
 function closeMessage() {
     const successMessage = document.getElementById('success-message');
     const closeButton = document.getElementById('message-close');
@@ -48,8 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".openModal", { opacity: [0, 1] }, { duration: 0.3 });
 
-
-
     animateOnScroll(".card", { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
 
     animateOnScroll(".form-animation", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
@@ -57,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
     animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.6 });
 
-    animateOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
+    animateOnceOnScroll(".success", { opacity: [0, 1], x: [-250, 0] }, { duration: 1 });
 
     animateOnScroll(".boxes", { opacity: [0, 1], y: [25, 0] }, { duration: 0.3 });
 
@@ -65,8 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".line", { opacity: [0, 1], width: ['0%', '100%'] }, { duration: 1 });
 
-    
-    
+    animateOnceOnScroll(".savings", { opacity: [0, 1], y: [50, 0] }, { duration: 0.5 });
 
     setTimeout(() => {
         closeMessage();

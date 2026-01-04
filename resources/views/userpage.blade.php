@@ -18,4 +18,7 @@
         @include('component.pin')
     </div>
 </div>
+
+@include('component.messagepopup')
+@include('component.confirmation')
 @endsection

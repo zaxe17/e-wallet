@@ -328,7 +328,7 @@ END$$
 
 DELIMITER ;
 
-
+-- DELETE
 DELIMITER $$
 CREATE TRIGGER trg_delete_income
 AFTER DELETE ON earnings
@@ -348,6 +348,33 @@ FOR EACH ROW
 BEGIN
     UPDATE budget_cycles 
     SET total_expense = total_expense - OLD.amount 
+    WHERE cycle_id = OLD.cycle_id;
+END$$
+
+DELIMITER ;
+
+-- EDIT / UPDATE
+DELIMITER $$
+
+CREATE TRIGGER trg_income_edit
+AFTER UPDATE ON earnings
+FOR EACH ROW
+BEGIN
+    UPDATE budget_cycles 
+    SET total_income = total_income - OLD.amount + NEW.amount
+    WHERE cycle_id = OLD.cycle_id;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_expense_edit
+AFTER UPDATE ON expenses
+FOR EACH ROW
+BEGIN
+    UPDATE budget_cycles 
+    SET total_expense = total_expense - OLD.amount + NEW.amount
     WHERE cycle_id = OLD.cycle_id;
 END$$
 

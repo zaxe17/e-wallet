@@ -62,11 +62,4 @@ class LoginController extends Controller
                 ->withInput($request->only('email_username'));
         }
     }
-
-    public function destroy()
-    {
-        Session::flush();
-        return redirect()->route('loginForm')
-            ->with('success', 'You have been logged out successfully.');
-    }
 }

@@ -12,35 +12,34 @@ class SavingsController extends Controller
     public function index()
     {
         $navtitle = 'Savings';
-
-        // Get user_id from session
         $userId = Session::get('user_id');
 
-        // Get total savings INCLUDING interest earned using raw SQL
-        $totalSql = "SELECT IFNULL(SUM(savings_amount + interest_earned), 0) as total_savings FROM savings WHERE userid = ?";
-        $totalResult = DB::select($totalSql, [$userId]);
-        $totalSavings = $totalResult[0]->total_savings;
+        // TOTAL SAVINGS (INCLUDING INTEREST)
+        $totalSql = "
+            SELECT IFNULL(SUM(savings_amount + interest_earned), 0) AS total_savings
+            FROM savings
+            WHERE userid = ?
+        ";
+        $totalSavings = DB::selectOne($totalSql, [$userId])->total_savings ?? 0;
 
-        // Get all savings records grouped by bank with combined amounts INCLUDING interest
+        // GROUPED SAVINGS BY BANK
         $savingsSql = "
             SELECT 
-                MIN(savingsno) as savingsno,
+                MIN(savingsno) AS savingsno,
                 bank,
-                GROUP_CONCAT(description SEPARATOR ', ') as description,
-                SUM(savings_amount) as savings_amount,
-                MAX(date_of_save) as date_of_save,
-                ROUND(SUM(interest_earned), 2) as interest_earned,
-                ROUND(AVG(interest_rate), 2) as interest_rate,
-                ROUND(SUM(savings_amount + interest_earned), 2) as total_with_interest,
-                MIN(passkey) as passkey
-            FROM savings 
-            WHERE userid = ? 
+                GROUP_CONCAT(description SEPARATOR ', ') AS description,
+                SUM(savings_amount) AS savings_amount,
+                MAX(date_of_save) AS date_of_save,
+                ROUND(SUM(interest_earned), 2) AS interest_earned,
+                ROUND(AVG(interest_rate), 2) AS interest_rate,
+                ROUND(SUM(savings_amount + interest_earned), 2) AS total_with_interest
+            FROM savings
+            WHERE userid = ?
             GROUP BY bank
             ORDER BY date_of_save DESC
         ";
         $savings = DB::select($savingsSql, [$userId]);
 
-        // Add no-cache headers to ensure fresh data
         return response()
             ->view('pages.savings', compact('navtitle', 'totalSavings', 'savings'))
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
@@ -50,7 +49,6 @@ class SavingsController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'bank' => 'nullable|string|max:20',
             'description' => 'nullable|string|max:30',
@@ -61,113 +59,80 @@ class SavingsController extends Controller
 
         $userId = Session::get('user_id');
 
-        $userCheckSql = "SELECT passkey FROM savings WHERE userid = ?";
-        $userResult = DB::select($userCheckSql, [$userId]);
-
-        if (empty($userResult)) {
-            return redirect()->back()->with('error', 'User not found');
-        }
-
-        $userPasskey = $userResult[0]->passkey;
-
         try {
-            $existingSql = "
-            SELECT savingsno, savings_amount, interest_rate, description 
-            FROM savings 
-            WHERE userid = ? AND bank = ?
-            LIMIT 1
-        ";
+            $existing = DB::selectOne("
+                SELECT savingsno, savings_amount, interest_rate, description
+                FROM savings
+                WHERE userid = ? AND bank = ?
+                LIMIT 1
+            ", [$userId, $request->bank ?? '']);
 
-            $bankValue = $request->bank ?? '';
-            $existingRecord = DB::select($existingSql, [$userId, $bankValue]);
+            if ($existing) {
+                $newAmount = $existing->savings_amount + $request->savings_amount;
 
-            if (!empty($existingRecord)) {
-                $newAmount = $existingRecord[0]->savings_amount + $request->savings_amount;
-
-                $newDescription = $existingRecord[0]->description;
-                if ($request->description && $request->description != $existingRecord[0]->description) {
-                    $newDescription = $existingRecord[0]->description . ', ' . $request->description;
+                $newDescription = $existing->description;
+                if ($request->description && $request->description !== $existing->description) {
+                    $newDescription .= ', ' . $request->description;
                 }
 
-                $updateSql = "
-                UPDATE savings 
-                SET savings_amount = ?, 
-                    date_of_save = ?, 
-                    interest_rate = ?,
-                    description = ?,
-                    passkey = ? 
-                WHERE savingsno = ? AND userid = ?
-            ";
-
-                DB::update($updateSql, [
+                DB::update("
+                    UPDATE savings
+                    SET savings_amount = ?,
+                        date_of_save = ?,
+                        interest_rate = ?,
+                        description = ?
+                    WHERE savingsno = ? AND userid = ?
+                ", [
                     $newAmount,
                     $request->date_of_save,
-                    $request->interest_rate ?? $existingRecord[0]->interest_rate,
+                    $request->interest_rate ?? $existing->interest_rate,
                     $newDescription,
-                    $userPasskey,
-                    $existingRecord[0]->savingsno,
+                    $existing->savingsno,
                     $userId
                 ]);
 
-                return redirect()->route('savings.index')->with('success', 'Savings updated successfully. New amount: ₱' . number_format($newAmount, 2));
-            } else {
-                $insertSql = "
-                INSERT INTO savings (userid, bank, description, savings_amount, date_of_save, interest_rate, passkey) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ";
-
-                DB::insert($insertSql, [
-                    $userId,
-                    $request->bank,
-                    $request->description,
-                    $request->savings_amount,
-                    $request->date_of_save,
-                    $request->interest_rate ?? 0,
-                    $userPasskey
-                ]);
-
-                return redirect()->route('savings.index')->with('success', 'New savings account created successfully');
+                return redirect()
+                    ->route('savings.index')
+                    ->with('success', 'Savings updated. New amount: ₱' . number_format($newAmount, 2));
             }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to add savings: ' . $e->getMessage());
+
+            DB::insert("
+                INSERT INTO savings
+                (userid, bank, description, savings_amount, date_of_save, interest_rate)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ", [
+                $userId,
+                $request->bank,
+                $request->description,
+                $request->savings_amount,
+                $request->date_of_save,
+                $request->interest_rate ?? 0
+            ]);
+
+            return redirect()
+                ->route('savings.index')
+                ->with('success', 'Added successfully.');
+
+        } catch (\Throwable $e) {
+            Log::error('Savings error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to save savings.');
         }
     }
 
     public function validatePasskey(Request $request)
     {
-        // Retrieve the entered passkey and user ID
         $enteredPasskey = trim($request->input('passkey'));
         $userId = Session::get('user_id');
 
-        // Log entered passkey and user ID for debugging
-        Log::info('Entered Passkey: ' . $enteredPasskey);
-        Log::info('User ID from session: ' . $userId);
-
-        // Retrieve the stored passkey for the user
-        $storedPasskey = DB::selectOne(
-            "SELECT passkey FROM savings WHERE userid = ? ORDER BY date_of_save DESC LIMIT 1",
-            [$userId]  // Passing the userId as a parameter
+        $stored = DB::selectOne(
+            "SELECT passkey FROM user WHERE userid = ? LIMIT 1",
+            [$userId]
         );
 
-        // Check if the stored passkey exists
-        if ($storedPasskey && isset($storedPasskey->passkey)) {
-            // Ensure both values are of the same type (string comparison)
-            $storedPasskeyValue = (string) $storedPasskey->passkey;
-
-            // Log the passkey being compared
-            Log::info('Stored Passkey for User ' . $userId . ': ' . $storedPasskeyValue);
-
-            // Check if the entered passkey matches the stored passkey
-            if ($enteredPasskey === $storedPasskeyValue) {
-                Log::info('Passkey match found for User ' . $userId);
-                return response()->json(['valid' => true]);
-            } else {
-                Log::info('Invalid passkey entered for User ' . $userId);
-                return response()->json(['valid' => false]);
-            }
-        } else {
-            Log::info('No passkey found for User ' . $userId);
-            return response()->json(['valid' => false]);
+        if ($stored && (string)$stored->passkey === $enteredPasskey) {
+            return response()->json(['valid' => true]);
         }
+
+        return response()->json(['valid' => false]);
     }
 }
