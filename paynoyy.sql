@@ -13,8 +13,8 @@ CREATE TABLE user (
     phone_number VARCHAR(15) NOT NULL,
     email_address VARCHAR(30) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    passkey INT NULL,
     sex CHAR(1) NOT NULL CHECK (sex IN ('M','F')),
-    payday_cutoff INT NOT NULL DEFAULT 30,
     date_registered DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -70,7 +70,6 @@ CREATE TABLE savings (
     userid VARCHAR(12) NOT NULL,
     bank VARCHAR(20) NOT NULL,
     description VARCHAR(30) NULL,
-    passkey INT NOT NULL,
     savings_amount DECIMAL(10,2) NOT NULL DEFAULT 0, 
     interest_rate FLOAT DEFAULT 0,
     date_of_save DATE DEFAULT (CURDATE()), 
@@ -221,8 +220,25 @@ BEGIN
             WHERE cycle_id = v_active_cycle_id;
         END IF;
     END IF;
-
 END $$
+
+CREATE TRIGGER trg_insert_savings
+AFTER INSERT ON savings
+FOR EACH ROW
+BEGIN
+    DECLARE v_active_cycle_id VARCHAR(12);
+
+    SELECT cycle_id INTO v_active_cycle_id
+    FROM budget_cycles
+    WHERE userid = NEW.userid AND is_active = 1
+    LIMIT 1;
+
+    IF NEW.savings_amount > 0 AND v_active_cycle_id IS NOT NULL THEN
+        UPDATE budget_cycles
+        SET total_savings = total_savings + NEW.savings_amount
+        WHERE cycle_id = v_active_cycle_id;
+    END IF;
+END$$
 
 -- PROCEDURES
 CREATE PROCEDURE AddSavingsTransaction (
@@ -230,7 +246,6 @@ CREATE PROCEDURE AddSavingsTransaction (
     IN p_bank_name VARCHAR(20),
     IN p_amount DECIMAL(10,2),
     IN p_trans_type VARCHAR(10),
-    IN p_passkey INT,
     IN p_interest FLOAT,
     IN p_description VARCHAR(30)
 )
@@ -243,11 +258,10 @@ BEGIN
     LIMIT 1;
 
     IF v_savingsno IS NULL THEN
-        INSERT INTO savings (userid, bank, passkey, savings_amount, interest_rate, description)
+        INSERT INTO savings (userid, bank, savings_amount, interest_rate, description)
         VALUES (
             p_userid, 
-            p_bank_name, 
-            p_passkey, 
+            p_bank_name,
             0, 
             p_interest, 
             IFNULL(p_description, CONCAT(p_bank_name, ' Account'))
@@ -393,11 +407,11 @@ INSERT INTO expenses (out_id, cycle_id, category, amount)
 VALUES (NULL, 'CYC-000001', 'PC', 20000);
 
 CALL AddSavingsTransaction(
-    'PN-000001', 'BDO', 10000, 'DEPOSIT', 1234, 0.23, NULL
+    'PN-000001', 'BDO', 10000, 'DEPOSIT', 0.23, NULL
 );
 
 CALL AddSavingsTransaction(
-    'PN-000001', 'BDO', 5000, 'WITHDRAWAL', 1234, 0.23, NULL
+    'PN-000001', 'BDO', 5000, 'WITHDRAWAL', 0.23, NULL
 );
 
 CALL AddSavingsTransaction(

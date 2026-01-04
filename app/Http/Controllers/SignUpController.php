@@ -69,7 +69,7 @@ class SignupController extends Controller
             ]);
 
             // ✅ CREATE INITIAL BUDGET CYCLE
-            $this->createInitialBudgetCycle($userId);
+            // $this->createInitialBudgetCycle($userId);
 
             DB::commit();
 
@@ -102,7 +102,7 @@ class SignupController extends Controller
         return 'PN-' . str_pad($num, 6, '0', STR_PAD_LEFT);
     }
 
-    private function generateCycleId()
+    /* private function generateCycleId()
     {
         $last = DB::table('budget_cycles')->orderBy('cycle_id', 'desc')->first();
         if (!$last) return 'CYC-000001';
@@ -126,7 +126,7 @@ class SignupController extends Controller
             now()->endOfMonth()->toDateString(),
             now()->format('F Y')
         ]);
-    }
+    } */
 
     private function generateSecurePassword($length = 10)
     {

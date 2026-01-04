@@ -16,7 +16,7 @@ class ExpensesController extends Controller
         $totalSql = "
             SELECT total_expense AS total_expenses
             FROM budget_cycles
-            WHERE userid = ?
+            WHERE userid = ?  AND is_active = 1
         ";
 
         $totalResult = DB::select($totalSql, [$userId]);
@@ -26,7 +26,7 @@ class ExpensesController extends Controller
             SELECT e.out_id, e.category, e.date_spent, e.amount 
             FROM expenses e
             JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
-            WHERE bc.userid = ?
+            WHERE bc.userid = ?  AND bc.is_active = 1
             ORDER BY date_spent DESC, out_id DESC
         ";
 
@@ -97,7 +97,7 @@ class ExpensesController extends Controller
             SELECT e.cycle_id, e.amount
             FROM expenses e
             JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
-            WHERE e.out_id = ? AND bc.userid = ?
+            WHERE e.out_id = ? AND bc.userid = ? AND bc.is_active = 1
         ", [$out_id, $userId]);
 
         if (!$expenses) {
