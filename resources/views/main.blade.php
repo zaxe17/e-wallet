@@ -205,7 +205,7 @@
         const enteredPin = pin.join('');
         console.log('Entered PIN:', enteredPin);
 
-        fetch('/validate-passkey', {
+        fetch('/savings/validate-passkey', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -277,6 +277,74 @@
             submitPin();
         }
     });
+</script>
+
+<!-- SAVE PIN -->
+<script>
+    const savePinModal = document.getElementById('savePin');
+    const savePinInput = document.getElementById('savePinInput');
+    const savePinTitle = document.getElementById('savePinTitle');
+
+    let firstSavePin = null;
+    let isConfirmingSavePin = false;
+
+    savePinInput.addEventListener('input', () => {
+        const value = savePinInput.value.replace(/\D/g, '');
+
+        savePinInput.value = value;
+
+        if (value.length !== 4) return;
+
+        // FIRST ENTRY
+        if (!isConfirmingSavePin) {
+            firstSavePin = value;
+            isConfirmingSavePin = true;
+            savePinInput.value = '';
+            savePinTitle.textContent = 'Confirm your passkey';
+            return;
+        }
+
+        // CONFIRMATION
+        if (value !== firstSavePin) {
+            alert('Passkey does not match. Try again.');
+            firstSavePin = null;
+            isConfirmingSavePin = false;
+            savePinInput.value = '';
+            savePinTitle.textContent = 'Enter your passkey';
+            return;
+        }
+
+        // SAVE TO DB
+        fetch('/savings/save-passkey', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ passkey: value })
+        })
+        .then(() => location.reload());
+    });
+
+    // auto focus kapag lumabas
+    const observer = new MutationObserver(() => {
+        if (!savePinModal.classList.contains('hidden')) {
+            savePinInput.focus();
+        }
+    });
+
+    observer.observe(savePinModal, { attributes: true });
+</script>
+
+<!-- CHECK PASSKEY IF NULL TO SHOW THE SAVE PASSKEY -->
+<script>
+    fetch('/savings/check-passkey')
+        .then(res => res.json())
+        .then(data => {
+            if (data.is_null) {
+                document.getElementById('savePin').classList.remove('hidden');
+            }
+        });
 </script>
 
 <!-- SETTINGS -->

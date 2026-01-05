@@ -21,4 +21,5 @@
 
 @include('component.messagepopup')
 @include('component.confirmation')
+@include('component.passkey')
 @endsection

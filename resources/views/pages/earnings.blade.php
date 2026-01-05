@@ -5,7 +5,7 @@
     @include('component.boxes', [
         'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
         'boxName' => 'Total Earnings',
-        'amount' => number_format($totalEarnings, 2),
+        'amount' => number_format($totalEarnings, 0),
         'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg',
         'dataTarget' => 'modalNewEarnings'
     ])

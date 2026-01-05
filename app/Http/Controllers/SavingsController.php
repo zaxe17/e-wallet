@@ -112,7 +112,6 @@ class SavingsController extends Controller
             return redirect()
                 ->route('savings.index')
                 ->with('success', 'Added successfully.');
-
         } catch (\Throwable $e) {
             Log::error('Savings error: ' . $e->getMessage());
             return back()->with('error', 'Failed to save savings.');
@@ -134,5 +133,31 @@ class SavingsController extends Controller
         }
 
         return response()->json(['valid' => false]);
+    }
+
+    public function checkPasskey()
+    {
+        $user = DB::selectOne(
+            "SELECT passkey FROM user WHERE userid = ?",
+            [Session::get('user_id')]
+        );
+
+        return response()->json([
+            'is_null' => is_null($user?->passkey)
+        ]);
+    }
+
+    public function savePasskey(Request $request)
+    {
+        $request->validate([
+            'passkey' => 'required|digits:4'
+        ]);
+
+        DB::update(
+            "UPDATE user SET passkey = ? WHERE userid = ?",
+            [$request->passkey, Session::get('user_id')]
+        );
+
+        return response()->json(['saved' => true]);
     }
 }
