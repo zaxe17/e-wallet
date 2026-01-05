@@ -45,7 +45,7 @@ class SignupController extends Controller
             );
 
             $sex     = $request->sex === 'Male' ? 'M' : 'F';
-            $passkey = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+            // $passkey = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
 
             DB::insert("
                 INSERT INTO user
@@ -63,7 +63,8 @@ class SignupController extends Controller
                 $request->phone_number,
                 $request->email_address,
                 Hash::make($password),
-                $passkey,
+                // $passkey,
+                null,
                 $sex,
                 now()
             ]);

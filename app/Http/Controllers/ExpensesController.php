@@ -13,24 +13,17 @@ class ExpensesController extends Controller
         $navtitle = 'Expenses';
         $userId = Session::get('user_id');
 
-        $totalSql = "
-            SELECT total_expense AS total_expenses
-            FROM budget_cycles
-            WHERE userid = ?  AND is_active = 1
-        ";
+        $activeCycle = DB::selectOne(
+            "SELECT cycle_id, total_expense FROM budget_cycles WHERE userid = ? ORDER BY is_active DESC, start_date DESC LIMIT 1",
+            [$userId]
+        );
 
-        $totalResult = DB::select($totalSql, [$userId]);
-        $totalExpenses = $totalResult[0]->total_expenses ?? 0;
+        $totalExpenses = $activeCycle ? $activeCycle->total_expense : 0;
+        $cycleId = $activeCycle ? $activeCycle->cycle_id : null;
 
-        $expensesSql = "
-            SELECT e.out_id, e.category, e.date_spent, e.amount 
-            FROM expenses e
-            JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
-            WHERE bc.userid = ?  AND bc.is_active = 1
-            ORDER BY date_spent DESC, out_id DESC
-        ";
-
-        $expenses = DB::select($expensesSql, [$userId]);
+        $expenses = DB::select(
+            "SELECT e.out_id, e.category, e.date_spent, e.amount FROM expenses e JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id WHERE bc.userid = ? ORDER BY date_spent DESC, out_id DESC", [$userId]
+        );
 
         return view('pages.expenses', compact('navtitle', 'totalExpenses', 'expenses'));
     }

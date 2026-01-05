@@ -32,7 +32,7 @@ Route::group(['prefix' => 'earnings'], function () {
     Route::get('/', [EarningsController::class, 'index'])->name('earnings.index');
     Route::post('/store', [EarningsController::class, 'store'])->name('earnings.store');
     Route::put('/update/{in_id}', [EarningsController::class, 'updateEarnings'])
-    ->name('earnings.update');
+        ->name('earnings.update');
     Route::delete('/delete/{in_id}', [EarningsController::class, 'deleteEarnings'])->name('earnings.delete');
 });
 
@@ -40,13 +40,17 @@ Route::group(['prefix' => 'expenses'], function () {
     Route::get('/', [ExpensesController::class, 'index'])->name('expenses.index');
     Route::post('/store', [ExpensesController::class, 'store'])->name('expenses.store');
     Route::put('/update/{out_id}', [ExpensesController::class, 'updateExpenses'])
-    ->name('expenses.update');
+        ->name('expenses.update');
     Route::delete('/delete/{out_id}', [ExpensesController::class, 'deleteExpenses'])->name('expenses.delete');
 });
 
 Route::group(['prefix' => 'savings'], function () {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
     Route::post('/store', [SavingsController::class, 'store'])->name('savings.store');
+
+    Route::get('/check-passkey', [SavingsController::class, 'checkPasskey']);
+    Route::post('/save-passkey', [SavingsController::class, 'savePasskey']);
+    Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);
 });
 
 Route::group(['prefix' => 'settings'], function () {
@@ -55,4 +59,3 @@ Route::group(['prefix' => 'settings'], function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);

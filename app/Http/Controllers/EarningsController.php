@@ -13,22 +13,25 @@ class EarningsController extends Controller
         $navtitle = 'Earnings';
         $userId = Session::get('user_id');
 
-        // Get the latest budget cycle for the user
-        $sql = "SELECT cycle_id, total_income FROM budget_cycles WHERE userid = ? AND is_active = 1 ORDER BY start_date DESC LIMIT 1";
-        $activeCycle = DB::select($sql, [$userId]);
+        $activeCycle = DB::selectOne(
+            "SELECT cycle_id, total_income FROM budget_cycles WHERE userid = ? ORDER BY is_active DESC, start_date DESC LIMIT 1", [$userId]
+        );
 
-        $totalEarnings = $activeCycle ? $activeCycle[0]->total_income : 0;
-        $cycleId = $activeCycle ? $activeCycle[0]->cycle_id : null;
+        $totalEarnings = $activeCycle ? $activeCycle->total_income : 0;
+        $cycleId = $activeCycle ? $activeCycle->cycle_id : null;
 
-        // Get all earnings for the cycle
-        $earnings = [];
-        if ($cycleId) {
-            $sql = "SELECT in_id, income_source, amount, date_received FROM earnings WHERE cycle_id = ? ORDER BY date_received DESC";
-            $earnings = DB::select($sql, [$cycleId]);
-        }
+        $earnings = DB::select(
+            "SELECT e.in_id, e.income_source, e.amount, e.date_received, bc.cycle_name, bc.is_active FROM earnings e JOIN budget_cycles bc ON e.cycle_id = bc.cycle_id WHERE bc.userid = ? ORDER BY e.date_received DESC", [$userId]
+        );
 
-        return view('pages.earnings', compact('navtitle', 'totalEarnings', 'earnings', 'cycleId'));
+        return view('pages.earnings', compact(
+            'navtitle',
+            'totalEarnings',
+            'earnings',
+            'cycleId'
+        ));
     }
+
 
     public function store(Request $request)
     {

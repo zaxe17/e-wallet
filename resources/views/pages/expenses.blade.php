@@ -5,7 +5,7 @@
     @include('component.boxes', [
     'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
     'boxName' => 'Expenses',
-    'amount' => number_format($totalExpenses, 2),
+    'amount' => number_format($totalExpenses, 0),
     'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg',
     'dataTarget' => 'modalNewExpenses'
     ])
