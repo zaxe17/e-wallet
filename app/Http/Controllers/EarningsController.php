@@ -8,30 +8,78 @@ use Illuminate\Support\Facades\Session;
 
 class EarningsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $navtitle = 'Earnings';
         $userId = Session::get('user_id');
+        $monthData = $this->showTotalEarningsByMonth($request);
 
         $activeCycle = DB::selectOne(
-            "SELECT cycle_id, total_income FROM budget_cycles WHERE userid = ? ORDER BY is_active DESC, start_date DESC LIMIT 1", [$userId]
+            "SELECT cycle_id, total_income
+            FROM budget_cycles
+            WHERE userid = ?
+            ORDER BY is_active DESC, start_date DESC
+            LIMIT 1",
+            [$userId]
         );
 
-        $totalEarnings = $activeCycle ? $activeCycle->total_income : 0;
+        $totalEarnings = $monthData['totalEarnings'] ?? ($activeCycle ? $activeCycle->total_income : 0);
+
         $cycleId = $activeCycle ? $activeCycle->cycle_id : null;
 
         $earnings = DB::select(
-            "SELECT e.in_id, e.income_source, e.amount, e.date_received, bc.cycle_name, bc.is_active FROM earnings e JOIN budget_cycles bc ON e.cycle_id = bc.cycle_id WHERE bc.userid = ? ORDER BY e.date_received DESC", [$userId]
+            "SELECT e.in_id, e.income_source, e.amount, e.date_received,
+                bc.cycle_name, bc.is_active
+         FROM earnings e
+         JOIN budget_cycles bc ON e.cycle_id = bc.cycle_id
+         WHERE bc.userid = ?
+         ORDER BY e.date_received DESC",
+            [$userId]
         );
 
-        return view('pages.earnings', compact(
-            'navtitle',
-            'totalEarnings',
-            'earnings',
-            'cycleId'
-        ));
+        $earningsTable = collect($earnings)->map(fn($e) => [
+            'id'     => $e->in_id,
+            'date'   => $e->date_received,
+            'label'  => $e->income_source,
+            'amount' => $e->amount,
+            'type'   => 'income',
+            'update' => route('earnings.update', $e->in_id),
+            'delete' => route('earnings.delete', $e->in_id),
+        ]);
+
+        return view('pages.earnings', [
+            'navtitle' => $navtitle,
+            'totalEarnings' => $totalEarnings,
+            'earnings' => $earnings,
+            'earningsTable' => $earningsTable,
+            'cycleId' => $cycleId,
+            'months' => $monthData['months'],
+            'currentMonth' => $monthData['currentMonth'],
+        ]);
     }
 
+    private function showTotalEarningsByMonth(Request $request)
+    {
+        $userId = Session::get('user_id');
+        $months = $this->getMonths();
+        $currentMonth = $request->month ?? date('m');
+
+        $cycle = DB::selectOne(
+            "SELECT total_income
+         FROM budget_cycles
+         WHERE userid = ?
+         AND MONTH(start_date) = ?
+         ORDER BY start_date DESC
+         LIMIT 1",
+            [$userId, $currentMonth]
+        );
+
+        return [
+            'months' => $months,
+            'currentMonth' => $currentMonth,
+            'totalEarnings' => $cycle ? $cycle->total_income : 0,
+        ];
+    }
 
     public function store(Request $request)
     {
@@ -113,5 +161,23 @@ class EarningsController extends Controller
         }
 
         return redirect()->route('earnings.index')->with('success', 'Deleted successfully.');
+    }
+
+    private function getMonths()
+    {
+        return [
+            '01' => 'January',
+            '02' => 'February',
+            '03' => 'March',
+            '04' => 'April',
+            '05' => 'May',
+            '06' => 'June',
+            '07' => 'July',
+            '08' => 'August',
+            '09' => 'September',
+            '10' => 'October',
+            '11' => 'November',
+            '12' => 'December',
+        ];
     }
 }

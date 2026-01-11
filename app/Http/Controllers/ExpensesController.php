@@ -8,24 +8,76 @@ use Illuminate\Support\Facades\Session;
 
 class ExpensesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $navtitle = 'Expenses';
         $userId = Session::get('user_id');
+        $monthData = $this->showTotalExpensesByMonth($request);
 
         $activeCycle = DB::selectOne(
-            "SELECT cycle_id, total_expense FROM budget_cycles WHERE userid = ? ORDER BY is_active DESC, start_date DESC LIMIT 1",
+            "SELECT cycle_id, total_expense
+            FROM budget_cycles
+            WHERE userid = ?
+            ORDER BY is_active DESC, start_date DESC
+            LIMIT 1",
             [$userId]
         );
 
-        $totalExpenses = $activeCycle ? $activeCycle->total_expense : 0;
+        $totalExpenses = $monthData['totalExpenses']
+            ?? ($activeCycle ? $activeCycle->total_expense : 0);
+
         $cycleId = $activeCycle ? $activeCycle->cycle_id : null;
 
         $expenses = DB::select(
-            "SELECT e.out_id, e.category, e.date_spent, e.amount FROM expenses e JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id WHERE bc.userid = ? ORDER BY date_spent DESC, out_id DESC", [$userId]
+            "SELECT e.out_id, e.category, e.date_spent, e.amount
+         FROM expenses e
+         JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+         WHERE bc.userid = ?
+         ORDER BY e.date_spent DESC, e.out_id DESC",
+            [$userId]
         );
 
-        return view('pages.expenses', compact('navtitle', 'totalExpenses', 'expenses'));
+        $expensesTable = collect($expenses)->map(fn($e) => [
+            'id'     => $e->out_id,
+            'date'   => $e->date_spent,
+            'label'  => $e->category,
+            'amount' => $e->amount,
+            'type'   => 'expense',
+            'update' => route('expenses.update', $e->out_id),
+            'delete' => route('expenses.delete', $e->out_id),
+        ]);
+
+        return view('pages.expenses', [
+            'navtitle' => $navtitle,
+            'totalExpenses' => $totalExpenses,
+            'expenses' => $expenses,
+            'expensesTable' => $expensesTable,
+            'months' => $monthData['months'],
+            'currentMonth' => $monthData['currentMonth'],
+        ]);
+    }
+
+    private function showTotalExpensesByMonth(Request $request)
+    {
+        $userId = Session::get('user_id');
+        $months = $this->getMonths();
+        $currentMonth = $request->month ?? date('m');
+
+        $cycle = DB::selectOne(
+            "SELECT total_expense
+         FROM budget_cycles
+         WHERE userid = ?
+         AND MONTH(start_date) = ?
+         ORDER BY start_date DESC
+         LIMIT 1",
+            [$userId, $currentMonth]
+        );
+
+        return [
+            'months' => $months,
+            'currentMonth' => $currentMonth,
+            'totalExpenses' => $cycle ? $cycle->total_expense : 0,
+        ];
     }
 
     public function store(Request $request)
@@ -105,5 +157,23 @@ class ExpensesController extends Controller
         ", [$out_id, $cycle_id]);
 
         return redirect()->route('expenses.index')->with('success', 'Deleted successfully.');
+    }
+
+    private function getMonths()
+    {
+        return [
+            '01' => 'January',
+            '02' => 'February',
+            '03' => 'March',
+            '04' => 'April',
+            '05' => 'May',
+            '06' => 'June',
+            '07' => 'July',
+            '08' => 'August',
+            '09' => 'September',
+            '10' => 'October',
+            '11' => 'November',
+            '12' => 'December',
+        ];
     }
 }

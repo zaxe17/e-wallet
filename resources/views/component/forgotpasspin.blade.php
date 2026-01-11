@@ -5,7 +5,7 @@
 
             <form method="POST" action="{{ route($routesName) }}" class="flex flex-col gap-5">
                 @csrf
-                @foreach ($fields as $field)
+                @foreach ($fields as $index => $field)
                 <div class="flex justify-between items-center gap-16">
                     <label for="{{ $field['name'] }}"
                         class="text-xl lato-normal font-semibold">
@@ -16,7 +16,7 @@
                         type="{{ $field['type'] }}"
                         name="{{ $field['name'] }}"
                         id="{{ $field['name'] }}"
-                        value="{{ $field['value'] ?? date('Y-m-d') }}"
+                        value="{{ $field['value'] }}"
                         @if(!empty($field['readonly'])) readonly @endif
                         @if($field['name']==='interest_rate' )
                         inputmode="decimal"
@@ -28,6 +28,10 @@
                         {{ isset($field['required']) && $field['required'] ? 'required' : '' }}
                         {{ isset($field['step']) ? 'step=' . $field['step'] : '' }}>
                 </div>
+                
+                @if ($index === 0)
+                    <div class="w-full h-px bg-[#485349]/80 mx-auto my-4"></div>
+                @endif
                 @endforeach
 
                 <div class="flex justify-center items-center gap-9 mt-5">

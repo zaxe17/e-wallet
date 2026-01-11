@@ -10,7 +10,8 @@
                     <button id="cancelDeleteBtn" type="button" class="border-2 border-[#1F1F1F] text-[#1F1F1F] font-bold w-1/2 h-13 rounded-lg cursor-pointer">
                         Cancel
                     </button>
-                    <button id="confirmDeleteBtn" type="button" class="bg-[#FF3071] text-[#FFFFFF] font-bold w-1/2 h-13 rounded-lg cursor-pointer">
+                    <button id="confirmDeleteBtn" type="button" class="flex justify-center items-center gap-2 bg-[#FF3071] text-[#FFFFFF] font-bold w-1/2 h-13 rounded-lg cursor-pointer">
+                        <span class="icon bg-[#FFFFFF]" style="--svg: url('https://api.iconify.design/weui/delete-filled.svg'); --size: 20px;"></span>
                         Delete
                     </button>
                 </div>

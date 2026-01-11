@@ -316,14 +316,16 @@
 
         // SAVE TO DB
         fetch('/savings/save-passkey', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ passkey: value })
-        })
-        .then(() => location.reload());
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    passkey: value
+                })
+            })
+            .then(() => location.reload());
     });
 
     // auto focus kapag lumabas
@@ -333,7 +335,9 @@
         }
     });
 
-    observer.observe(savePinModal, { attributes: true });
+    observer.observe(savePinModal, {
+        attributes: true
+    });
 </script>
 
 <!-- CHECK PASSKEY IF NULL TO SHOW THE SAVE PASSKEY -->
@@ -386,47 +390,222 @@
 <!-- WIDRAWAL AND DEPOSIT -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const depositForm = document.getElementById("depositForm");
-        const withdrawalForm = document.getElementById("withdrawalForm");
 
-        const depositBtn = document.getElementById("depositBtn");
-        const withdrawalBtn = document.getElementById("withdrawalBtn");
+        // Toggle Deposit/Withdrawal forms
+        function setupModalTabs(modal) {
+            const depositForm = modal.querySelector("#depositForm");
+            const withdrawalForm = modal.querySelector("#withdrawalForm");
+            const depositBtn = modal.querySelector("#depositBtn");
+            const withdrawalBtn = modal.querySelector("#withdrawalBtn");
 
-        // Initially show Deposit form and hide Withdrawal form
-        depositForm.classList.remove("hidden");
-        withdrawalForm.classList.add("hidden");
+            if (!depositForm || !withdrawalForm || !depositBtn || !withdrawalBtn) return;
 
-        // Initially set Deposit button to active
-        depositBtn.classList.add("bg-[#485349]");
-        depositBtn.classList.add("text-white");
+            depositForm.classList.remove("hidden");
+            withdrawalForm.classList.add("hidden");
+            depositBtn.classList.add("bg-[#485349]", "text-white");
+            withdrawalBtn.classList.remove("bg-[#485349]", "text-white");
+            withdrawalBtn.classList.add("text-[#485349]");
 
-        depositBtn.addEventListener("click", function() {
-            if (depositForm.classList.contains("hidden")) {
+            depositBtn.addEventListener("click", () => {
                 depositForm.classList.remove("hidden");
                 withdrawalForm.classList.add("hidden");
-            }
 
-            depositBtn.classList.add("bg-[#485349]");
-            depositBtn.classList.add("text-white");
+                depositBtn.classList.add("bg-[#485349]", "text-white");
+                withdrawalBtn.classList.remove("bg-[#485349]", "text-white");
+                withdrawalBtn.classList.add("text-[#485349]");
+            });
 
-            withdrawalBtn.classList.remove("bg-[#485349]");
-            withdrawalBtn.classList.remove("text-white");
-            withdrawalBtn.classList.add("text-[#485349]");
-        });
-
-        withdrawalBtn.addEventListener("click", function() {
-            if (withdrawalForm.classList.contains("hidden")) {
+            withdrawalBtn.addEventListener("click", () => {
                 withdrawalForm.classList.remove("hidden");
                 depositForm.classList.add("hidden");
-            }
 
-            withdrawalBtn.classList.add("bg-[#485349]");
-            withdrawalBtn.classList.add("text-white");
+                withdrawalBtn.classList.add("bg-[#485349]", "text-white");
+                depositBtn.classList.remove("bg-[#485349]", "text-white");
+                depositBtn.classList.add("text-[#485349]");
+            });
+        }
 
-            depositBtn.classList.remove("bg-[#485349]");
-            depositBtn.classList.remove("text-white");
-            depositBtn.classList.add("text-[#485349]");
+        // Open modal & autofill deposit/withdrawal
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", function(e) {
+                e.stopPropagation();
+
+                const modal = document.getElementById(this.dataset.target);
+                if (!modal) return;
+
+                setupModalTabs(modal);
+
+                // Fill the forms
+                const data = {
+                    bank: this.dataset.bank || "",
+                    description: this.dataset.description || "",
+                    interest_rate: this.dataset.interest || "",
+                    date_of_save: this.dataset.date || "",
+                    savings_amount: this.dataset.amount || "",
+                    savingsno: this.dataset.savingsno || ""
+                };
+
+                modal.querySelectorAll("form").forEach(form => {
+                    form.querySelectorAll("input").forEach(input => {
+                        const name = input.getAttribute("name");
+                        if (data[name] !== undefined) {
+                            input.value = data[name];
+                        }
+                    });
+                    // Save savingsno as hidden input
+                    const hiddenInput = form.querySelector('input[name="savingsno"]');
+                    if (hiddenInput) hiddenInput.value = data.savingsno;
+                });
+
+                // Show modal
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            });
         });
+
+        // Cancel button
+        document.querySelectorAll(".cancelBtn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const modal = document.getElementById(this.dataset.target);
+                if (!modal) return;
+
+                modal.querySelectorAll("form").forEach(form => form.reset());
+
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            });
+        });
+    });
+</script>
+
+<!-- DELETE BUTTON FOR SAVINGS -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        /* ================= OPEN MODAL ================= */
+        document.querySelectorAll(".openModalBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const modal = document.getElementById(btn.dataset.target);
+                if (!modal) return;
+
+                const data = {
+                    bank: btn.dataset.bank || "",
+                    description: btn.dataset.description || "",
+                    interest_rate: btn.dataset.interest || "",
+                    date_of_save: btn.dataset.date || "",
+                    savings_amount: btn.dataset.amount || "",
+                    savingsno: btn.dataset.savingsno || ""
+                };
+
+                const form = modal.querySelector(".add-edit-form");
+                const deleteForm = modal.querySelector(".delete-form");
+
+                // Fill inputs
+                form.querySelectorAll("input").forEach(input => {
+                    if (data[input.name] !== undefined) {
+                        input.value = data[input.name];
+                    }
+                });
+
+                // Store original interest per modal
+                modal.dataset.originalInterest = data.interest_rate || "0";
+
+                // Set routes
+                form.action = `/savings/update/${data.savingsno}`;
+                deleteForm.action = `/savings/delete/${data.savingsno}`;
+
+                // Reset UI state
+                resetEditUI(modal);
+
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            });
+        });
+
+        /* ================= DECIMAL INPUT FIX ================= */
+        document.querySelectorAll("input[name='interest_rate']").forEach(input => {
+            input.setAttribute("step", "any");
+            input.setAttribute("inputmode", "decimal");
+
+            input.addEventListener("input", (e) => {
+                let value = e.target.value;
+
+                // Remove invalid chars except first dot
+                value = value.replace(/[^0-9.]/g, '');
+                const firstDotIndex = value.indexOf('.');
+
+                // Handle multiple dots (allow only one)
+                if (firstDotIndex !== -1) {
+                    const beforeDot = value.slice(0, firstDotIndex + 1);
+                    const afterDot = value.slice(firstDotIndex + 1).replace(/\./g, '');
+                    value = beforeDot + afterDot;
+                }
+
+                // Update input value only if it's different
+                if (value !== e.target.value) {
+                    e.target.value = value;
+                }
+            });
+        });
+
+        /* ================= CHANGE MODE ================= */
+        document.addEventListener("click", e => {
+            if (!e.target.classList.contains("changeBtn")) return;
+
+            const modal = e.target.closest(".modal");
+            const interest = modal.querySelector("input[name='interest_rate']");
+
+            interest.removeAttribute("readonly");
+            interest.classList.remove("bg-gray-200", "cursor-not-allowed");
+            interest.focus();
+
+            modal.querySelector(".saveSection").classList.remove("hidden");
+            modal.querySelector(".deleteSection").classList.add("hidden");
+
+            e.target.classList.add("hidden");
+        });
+
+        /* ================= CANCEL EDIT ================= */
+        document.addEventListener("click", e => {
+            if (!e.target.classList.contains("cancelEditBtn")) return;
+
+            const modal = e.target.closest(".modal");
+            const interest = modal.querySelector("input[name='interest_rate']");
+            const changeBtn = modal.querySelector(".changeBtn");
+
+            // Restore original value
+            interest.value = modal.dataset.originalInterest;
+            interest.setAttribute("readonly", true);
+            interest.classList.add("bg-gray-200", "cursor-not-allowed");
+
+            modal.querySelector(".saveSection").classList.add("hidden");
+            modal.querySelector(".deleteSection").classList.remove("hidden");
+
+            changeBtn.classList.remove("hidden");
+        });
+
+        /* ================= CLOSE MODAL ================= */
+        document.querySelectorAll(".cancelBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const modal = btn.closest(".modal");
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            });
+        });
+
+        /* ================= RESET UI ================= */
+        function resetEditUI(modal) {
+            modal.querySelector(".saveSection").classList.add("hidden");
+            modal.querySelector(".deleteSection").classList.remove("hidden");
+
+            const interest = modal.querySelector("input[name='interest_rate']");
+            const changeBtn = modal.querySelector(".changeBtn");
+
+            interest.setAttribute("readonly", true);
+            interest.classList.add("bg-gray-200", "cursor-not-allowed");
+            changeBtn.classList.remove("hidden");
+        }
+
     });
 </script>
 

@@ -66,11 +66,11 @@
                 <div id="saveBtn" class="hidden">
                     <div class="flex items-center gap-2">
                         <button type="button" id="cancelBtn" class="flex items-center text-sm text-white px-6 py-1.5 rounded-lg bg-[#6B7C99] cursor-pointer">
-                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/save-as.svg');"></span>
+                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/cancel.svg');"></span>
                             Cancel
                         </button>
                         <button type="submit" class="flex items-center text-sm text-white px-7 py-1.5 rounded-lg bg-[#488c42] cursor-pointer">
-                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/cancel.svg');"></span>
+                            <span class="icons bg-white mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/save-as.svg');"></span>
                             Save
                         </button>
                     </div>
@@ -96,7 +96,7 @@
                     <label for="" class="text-sm font-bold ml-1.5">Password</label>
                     <div class="flex items-center gap-3.5">
                         <input type="password" id="" name="" placeholder="" value="********" class="w-full h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none" required readonly>
-                        <button type="submit" class="text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer">Change</button>
+                        <button type="submit" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePassword">Change</button>
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@
                     <label for="" class="text-sm font-bold ml-1.5">Savings pin</label>
                     <div class="flex items-center gap-3.5">
                         <input type="password" id="" name="" placeholder="" value="****" class="w-full h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none" required readonly>
-                        <button type="submit" class="text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer">Change</button>
+                        <button type="submit" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePin">Change</button>
                     </div>
                 </div>
             </div>
@@ -123,4 +123,26 @@
         </form>
     </div>
 </div>
+
+@include('component.forgotpasspin', [
+'title' => 'Change password',
+'routesName' => 'expenses.store',
+'targetBtn' => 'modalChangePassword',
+'fields' => [
+['label' => 'Current password', 'type' => 'password', 'name' => '', 'value' => ''],
+['label' => 'New password', 'type' => 'password', 'name' => '', 'value' => ''],
+['label' => 'Confirm new password', 'type' => 'password', 'name' => '', 'value' => ''],
+]
+])
+
+@include('component.forgotpasspin', [
+'title' => 'Change savings pin',
+'routesName' => 'expenses.store',
+'targetBtn' => 'modalChangePin',
+'fields' => [
+['label' => 'Current pin', 'type' => 'password', 'name' => '', 'value' => ''],
+['label' => 'New pin', 'type' => 'password', 'name' => '', 'value' => ''],
+['label' => 'Confirm new pin', 'type' => 'password', 'name' => '', 'value' => ''],
+]
+])
 @endsection

@@ -2,41 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class DashboardController extends Controller
+class HistoryController extends Controller
 {
     public function index()
     {
-        $navtitle = 'Dashboard';
+        $navtitle = 'Wallet History';
         $userId = Session::get('user_id');
 
         $user = $this->getUserInfo($userId);
-        $activeCycle = $this->getActiveBudgetCycle($userId);
-
-        $totalEarnings = $activeCycle->total_income ?? 0;
-        $totalExpenses = $activeCycle->total_expense ?? 0;
-        $totalSavings = $activeCycle->total_savings ?? 0;
-        $remainingBudget = $activeCycle->remaining_budget ?? 0;
-        $budgetRemarks   = $activeCycle->budget_remarks ?? null;
-
         $monthList = $this->currentMonth();
-        $currentMonth = date('F');
-
         $chartData = $this->getChartData($userId);
 
-        return view('pages.dashboard', compact(
+        return view('pages.history', compact(
             'navtitle',
             'user',
-            'totalEarnings',
-            'totalExpenses',
-            'totalSavings',
-            'remainingBudget',
             'monthList',
-            'currentMonth',
             'chartData',
-            'budgetRemarks'
         ));
     }
 
@@ -66,27 +51,6 @@ class DashboardController extends Controller
             : $nameParts[0];
     }
 
-
-
-    private function getActiveBudgetCycle($userId)
-    {
-        $sql = "
-            SELECT 
-                cycle_id,
-                cycle_name,
-                total_income,
-                total_expense,
-                total_savings,
-                remaining_budget,
-                budget_remarks
-            FROM budget_cycles
-            WHERE userid = ? AND is_active = 1
-            LIMIT 1
-        ";
-
-        return DB::select($sql, [$userId])[0] ?? null;
-    }
-    
     // FOR CHART.JS
     private function getChartData($userId)
     {

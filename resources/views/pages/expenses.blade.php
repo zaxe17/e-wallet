@@ -2,17 +2,17 @@
 @section('title', 'Expenses')
 @section('user_content')
 <div class="flex flex-col gap-6">
-    @include('component.boxes', [
+    @include('component.boxdropdown', [
     'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',
     'boxName' => 'Expenses',
-    'amount' => number_format($totalExpenses, 0),
+    'amount' => number_format($totalExpenses, 2),
     'addButtonIcon' => 'https://api.iconify.design/lets-icons/add-duotone.svg',
     'dataTarget' => 'modalNewExpenses'
     ])
 
     @include('component.table', [
     'title' => 'Expenses',
-    'expenses' => $expenses
+    'rows' => $expensesTable
     ])
 </div>
 
