@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animateOnScroll(".show", { opacity: [0, 1] }, { duration: 0.5 });
 
     animateOnScroll(".openModal", { opacity: [0, 1] }, { duration: 0.3 });
+    animateOnScroll(".openModalBtn", { opacity: [0, 1] }, { duration: 0.3 });
 
     animateOnScroll(".card", { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EarningsController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\SettingsController;
@@ -47,10 +48,16 @@ Route::group(['prefix' => 'expenses'], function () {
 Route::group(['prefix' => 'savings'], function () {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
     Route::post('/store', [SavingsController::class, 'store'])->name('savings.store');
+    Route::put('/update/{savingsno}', [SavingsController::class, 'updateSavings'])->name('savings.update');
+    Route::delete('/delete/{savingsno}', [SavingsController::class, 'deleteSavings'])->name('savings.delete');
 
     Route::get('/check-passkey', [SavingsController::class, 'checkPasskey']);
     Route::post('/save-passkey', [SavingsController::class, 'savePasskey']);
     Route::post('/validate-passkey', [SavingsController::class, 'validatePasskey']);
+});
+
+Route::group(['prefix' => 'history'], function () {
+    Route::get('/', [HistoryController::class, 'index'])->name('history.index');
 });
 
 Route::group(['prefix' => 'settings'], function () {

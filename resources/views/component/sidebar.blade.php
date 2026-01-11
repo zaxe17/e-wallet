@@ -49,6 +49,15 @@
                     <span>Expenses</span>
                 </a>
             </li>
+            <li class="">
+                <!-- nav-link -->
+                <a href="{{ route('history.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                    <!-- nav-icon -->
+                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/icon-park/history.svg'); --size: 20px; --icon-color: white;"></span>
+                    <!-- nav-label -->
+                    <span>History</span>
+                </a>
+            </li>
         </ul>
 
         <!-- nav-list secondary-nav -->

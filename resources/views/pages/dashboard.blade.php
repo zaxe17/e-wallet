@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex flex-col gap-4">
-        <div class="show input-shadow opacity-0 bg-transparent flex flex-col rounded-lg p-4">
+        <div class="show input-shadow opacity-0 bg-transparent flex flex-col rounded-lg p-4" data-delay="0.6">
             <div class="flex justify-start items-center gap-3">
                 <span class="icon bg-[#ffa93f] transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/streamline-ultimate/presentation-projector-screen-budget-analytics-bold.svg'); --size: 18px; --icon-color: black;"></span>
                 <p class="font-extrabold text-xl lato-normal">Remaining Budget</p>
@@ -33,7 +33,7 @@
         {{-- 3 BOXES --}}
         <div class="grid grid-cols-3 gap-4">
             {{-- EARNINGS --}}
-            <div class="up opacity-0" data-delay="0.6">
+            <div class="up opacity-0" data-delay="0.9">
                 <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('earnings.index') }}">
                     @include('component.boxes', [
                     'iconUrl' => 'https://api.iconify.design/clarity/coin-bag-solid.svg',
@@ -45,7 +45,7 @@
                 </a>
             </div>
             {{-- SAVINGS --}}
-            <div class="up opacity-0" data-delay="0.9">
+            <div class="up opacity-0" data-delay="1.2">
                 <a class="openPinModalBtn block transition-all duration-300 ease-in-out hover:scale-105">
                     @include('component.boxes', [
                     'iconUrl' => 'https://api.iconify.design/tdesign/saving-pot-filled.svg',
@@ -58,7 +58,7 @@
                 </a>
             </div>
             {{-- EXPENSES --}}
-            <div class="up opacity-0" data-delay="1.2">
+            <div class="up opacity-0" data-delay="1.5">
                 <a class="block transition-all duration-300 ease-in-out hover:scale-105" href="{{ route('expenses.index') }}">
                     @include('component.boxes', [
                     'iconUrl' => 'https://api.iconify.design/icon-park-outline/expenses.svg',

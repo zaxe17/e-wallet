@@ -118,6 +118,65 @@ class SavingsController extends Controller
         }
     }
 
+    public function updateSavings(Request $request, $savingsno)
+    {
+        $request->validate([
+            'interest_rate' => 'required|numeric|min:0',
+            'date_of_save' => 'required|date',
+        ]);
+
+        $userId = Session::get('user_id');
+
+        try {
+            // Fetch existing record
+            $existing = DB::table('savings')
+                ->where('savingsno', $savingsno)
+                ->where('userid', $userId)
+                ->first();
+
+            if (!$existing) {
+                return redirect()->route('savings.index')->with('error', 'Savings record not found.');
+            }
+
+            // Update the interest rate and date
+            DB::table('savings')
+                ->where('savingsno', $savingsno)
+                ->where('userid', $userId)
+                ->update([
+                    'interest_rate' => $request->interest_rate,
+                    'date_of_save' => $request->date_of_save
+                ]);
+
+            return redirect()->route('savings.index')
+                ->with('success', 'Savings updated successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Savings update error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update savings.');
+        }
+    }
+
+    public function deleteSavings($savingsno)
+    {
+        $userId = Session::get('user_id');
+
+        $existing = DB::selectOne(
+            "SELECT savingsno FROM savings WHERE savingsno = ? AND userid = ?",
+            [$savingsno, $userId]
+        );
+
+        if (!$existing) {
+            return redirect()->route('savings.index')->with('error', 'Savings record not found.');
+        }
+
+        // Delete the savings record 
+        DB::delete(
+            "DELETE FROM savings WHERE savingsno = ? AND userid = ?",
+            [$savingsno, $userId]
+        );
+
+        return redirect()->route('savings.index')->with('success', 'Savings deleted successfully.');
+    }
+
     public function validatePasskey(Request $request)
     {
         $enteredPasskey = trim($request->input('passkey'));

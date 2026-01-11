@@ -53,7 +53,7 @@
                 <div class="bg-fuchsia-100 card-border overflow-hidden card-shadow card" data-delay="0.9">
                     <div class="w-full h-64 overflow-hidden">
                         <img
-                            src="/assets/DSC_1504.jpg"
+                            src="/assets/4c54d3bf-1ab1-46ec-8bf3-b6451e96dd53.jpg"
                             alt="profile"
                             class="w-full object-cover">
                     </div>
