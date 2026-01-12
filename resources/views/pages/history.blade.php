@@ -18,8 +18,8 @@
     </div>
 
     @include('component.table', [
-    'title' => 'History',
-    'earnings' => ''
+        'title' => 'History',
+        'rows' => $rows
     ])
 </div>
 @endsection

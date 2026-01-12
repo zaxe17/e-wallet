@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class SettingsController extends Controller
@@ -73,5 +74,83 @@ class SettingsController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        $userId = Session::get('user_id');
+
+        try {
+            // Get current password from database
+            $user = DB::selectOne("
+                SELECT password FROM user WHERE userid = ?
+            ", [$userId]);
+
+            // Verify current password
+            if (!password_verify($request->current_password, $user->password)) {
+                return back()->with('error', 'Current password is incorrect.');
+            }
+
+            // Update with new password
+            DB::update("
+                UPDATE user 
+                SET password = ? 
+                WHERE userid = ?
+            ", [
+                password_hash($request->new_password, PASSWORD_DEFAULT),
+                $userId
+            ]);
+
+            return redirect()->route('settings.index')
+                ->with('success', 'Password changed successfully!');
+        } catch (\Throwable $e) {
+            Log::error('Change password error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to change password.');
+        }
+    }
+
+    public function changePasskey(Request $request)
+    {
+        $request->validate([
+            'current_pin' => 'required|digits:4',
+            'new_pin' => 'required|digits:4',
+            'confirm_pin' => 'required|digits:4|same:new_pin',
+        ]);
+
+        $userId = Session::get('user_id');
+
+        try {
+            // Get current passkey from database
+            $user = DB::selectOne("
+                SELECT passkey FROM user WHERE userid = ?
+            ", [$userId]);
+
+            // Verify current passkey (only if it exists)
+            if ($user->passkey !== null && $user->passkey !== $request->current_pin) {
+                return back()->with('error', 'Current PIN is incorrect.');
+            }
+
+            // Update with new passkey
+            DB::update("
+                UPDATE user 
+                SET passkey = ? 
+                WHERE userid = ?
+            ", [
+                $request->new_pin,
+                $userId
+            ]);
+
+            return redirect()->route('settings.index')
+                ->with('success', 'Savings PIN changed successfully!');
+        } catch (\Throwable $e) {
+            Log::error('Change passkey error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to change PIN.');
+        }
     }
 }

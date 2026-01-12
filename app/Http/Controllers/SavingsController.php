@@ -27,14 +27,14 @@ class SavingsController extends Controller
             SELECT 
                 MIN(savingsno) AS savingsno,
                 bank,
-                GROUP_CONCAT(description SEPARATOR ', ') AS description,
+                GROUP_CONCAT(DISTINCT TRIM(description) ORDER BY description SEPARATOR ', ') AS description,
                 SUM(savings_amount) AS savings_amount,
                 MAX(date_of_save) AS date_of_save,
                 ROUND(SUM(interest_earned), 2) AS interest_earned,
                 ROUND(AVG(interest_rate), 2) AS interest_rate,
                 ROUND(SUM(savings_amount + interest_earned), 2) AS total_with_interest
             FROM savings
-            WHERE userid = ?
+            WHERE userid = ? AND TRIM(IFNULL(description, '')) != ''
             GROUP BY bank
             ORDER BY date_of_save DESC
         ";
@@ -60,61 +60,52 @@ class SavingsController extends Controller
         $userId = Session::get('user_id');
 
         try {
-            $existing = DB::selectOne("
-                SELECT savingsno, savings_amount, interest_rate, description
-                FROM savings
-                WHERE userid = ? AND bank = ?
-                LIMIT 1
-            ", [$userId, $request->bank ?? '']);
-
-            if ($existing) {
-                $newAmount = $existing->savings_amount + $request->savings_amount;
-
-                $newDescription = $existing->description;
-                if ($request->description && $request->description !== $existing->description) {
-                    $newDescription .= ', ' . $request->description;
-                }
-
-                DB::update("
-                    UPDATE savings
-                    SET savings_amount = ?,
-                        date_of_save = ?,
-                        interest_rate = ?,
-                        description = ?
-                    WHERE savingsno = ? AND userid = ?
-                ", [
-                    $newAmount,
-                    $request->date_of_save,
-                    $request->interest_rate ?? $existing->interest_rate,
-                    $newDescription,
-                    $existing->savingsno,
-                    $userId
-                ]);
-
-                return redirect()
-                    ->route('savings.index')
-                    ->with('success', 'Savings updated. New amount: ₱' . number_format($newAmount, 2));
-            }
-
-            DB::insert("
-                INSERT INTO savings
-                (userid, bank, description, savings_amount, date_of_save, interest_rate)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ", [
+            // Use stored procedure to add savings transaction
+            // This will handle both new savings and deposits to existing savings
+            DB::statement("CALL AddSavingsTransaction(?, ?, ?, 'DEPOSIT', ?, ?)", [
                 $userId,
                 $request->bank,
-                $request->description,
                 $request->savings_amount,
-                $request->date_of_save,
-                $request->interest_rate ?? 0
+                $request->interest_rate ?? 0,
+                $request->description
             ]);
 
             return redirect()
                 ->route('savings.index')
-                ->with('success', 'Added successfully.');
+                ->with('success', 'Savings added successfully.');
         } catch (\Throwable $e) {
             Log::error('Savings error: ' . $e->getMessage());
             return back()->with('error', 'Failed to save savings.');
+        }
+    }
+
+    public function deposit(Request $request)
+    {
+        $request->validate([
+            'bank' => 'required|string|max:20',
+            'description' => 'nullable|string|max:30',
+            'savings_amount' => 'required|numeric|min:0',
+            'interest_rate' => 'nullable|numeric|min:0',
+        ]);
+
+        $userId = Session::get('user_id');
+
+        try {
+            // Use stored procedure to add deposit transaction
+            DB::statement("CALL AddSavingsTransaction(?, ?, ?, 'DEPOSIT', ?, ?)", [
+                $userId,
+                $request->bank,
+                $request->savings_amount,
+                $request->interest_rate ?? 0,
+                $request->description
+            ]);
+
+            return redirect()
+                ->route('savings.index')
+                ->with('success', 'Deposit added successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Deposit error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to add deposit.');
         }
     }
 
@@ -129,23 +120,27 @@ class SavingsController extends Controller
 
         try {
             // Fetch existing record
-            $existing = DB::table('savings')
-                ->where('savingsno', $savingsno)
-                ->where('userid', $userId)
-                ->first();
+            $existing = DB::selectOne("
+                SELECT savingsno FROM savings 
+                WHERE savingsno = ? AND userid = ?
+            ", [$savingsno, $userId]);
 
             if (!$existing) {
                 return redirect()->route('savings.index')->with('error', 'Savings record not found.');
             }
 
             // Update the interest rate and date
-            DB::table('savings')
-                ->where('savingsno', $savingsno)
-                ->where('userid', $userId)
-                ->update([
-                    'interest_rate' => $request->interest_rate,
-                    'date_of_save' => $request->date_of_save
-                ]);
+            DB::update("
+                UPDATE savings
+                SET interest_rate = ?,
+                    date_of_save = ?
+                WHERE savingsno = ? AND userid = ?
+            ", [
+                $request->interest_rate,
+                $request->date_of_save,
+                $savingsno,
+                $userId
+            ]);
 
             return redirect()->route('savings.index')
                 ->with('success', 'Savings updated successfully.');
@@ -159,22 +154,30 @@ class SavingsController extends Controller
     {
         $userId = Session::get('user_id');
 
-        $existing = DB::selectOne(
-            "SELECT savingsno FROM savings WHERE savingsno = ? AND userid = ?",
-            [$savingsno, $userId]
-        );
+        try {
+            $existing = DB::selectOne(
+                "SELECT savingsno FROM savings WHERE savingsno = ? AND userid = ?",
+                [$savingsno, $userId]
+            );
 
-        if (!$existing) {
-            return redirect()->route('savings.index')->with('error', 'Savings record not found.');
+            if (!$existing) {
+                return redirect()->route('savings.index')->with('error', 'Savings record not found.');
+            }
+
+            // Delete the savings record
+            // Trigger trg_delete_savings_convert_to_expense will automatically:
+            // 1. Update budget_cycles.total_savings
+            // 2. Insert into expenses with category 'Deleted: {bank}'
+            DB::delete(
+                "DELETE FROM savings WHERE savingsno = ? AND userid = ?",
+                [$savingsno, $userId]
+            );
+
+            return redirect()->route('savings.index')->with('success', 'Savings deleted successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Delete savings error: ' . $e->getMessage());
+            return redirect()->route('savings.index')->with('error', 'Failed to delete savings.');
         }
-
-        // Delete the savings record 
-        DB::delete(
-            "DELETE FROM savings WHERE savingsno = ? AND userid = ?",
-            [$savingsno, $userId]
-        );
-
-        return redirect()->route('savings.index')->with('success', 'Savings deleted successfully.');
     }
 
     public function validatePasskey(Request $request)
@@ -204,6 +207,34 @@ class SavingsController extends Controller
         return response()->json([
             'is_null' => is_null($user?->passkey)
         ]);
+    }
+
+    public function withdraw(Request $request)
+    {
+        $request->validate([
+            'bank' => 'required|string|max:20',
+            'savings_amount' => 'required|numeric|min:0',
+        ]);
+
+        $userId = Session::get('user_id');
+
+        try {
+            // Use stored procedure to add withdrawal transaction
+            DB::statement("CALL AddSavingsTransaction(?, ?, ?, 'WITHDRAWAL', ?, ?)", [
+                $userId,
+                $request->bank,
+                $request->savings_amount,
+                0, // interest_rate not needed for withdrawal
+                null // description not needed for withdrawal
+            ]);
+
+            return redirect()
+                ->route('savings.index')
+                ->with('success', 'Withdrawal processed successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Withdrawal error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to process withdrawal.');
+        }
     }
 
     public function savePasskey(Request $request)

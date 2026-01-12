@@ -96,7 +96,7 @@
                     <label for="" class="text-sm font-bold ml-1.5">Password</label>
                     <div class="flex items-center gap-3.5">
                         <input type="password" id="" name="" placeholder="" value="********" class="w-full h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none" required readonly>
-                        <button type="submit" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePassword">Change</button>
+                        <button type="button" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePassword">Change</button>
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@
                     <label for="" class="text-sm font-bold ml-1.5">Savings pin</label>
                     <div class="flex items-center gap-3.5">
                         <input type="password" id="" name="" placeholder="" value="****" class="w-full h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none" required readonly>
-                        <button type="submit" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePin">Change</button>
+                        <button type="button" class="openModalBtn text-sm px-5 py-1.5 rounded-lg border-2 border-[#b4b4b4] cursor-pointer" data-target="modalChangePin">Change</button>
                     </div>
                 </div>
             </div>
@@ -125,24 +125,26 @@
 </div>
 
 @include('component.forgotpasspin', [
-'title' => 'Change password',
-'routesName' => 'expenses.store',
-'targetBtn' => 'modalChangePassword',
-'fields' => [
-['label' => 'Current password', 'type' => 'password', 'name' => '', 'value' => ''],
-['label' => 'New password', 'type' => 'password', 'name' => '', 'value' => ''],
-['label' => 'Confirm new password', 'type' => 'password', 'name' => '', 'value' => ''],
-]
+    'title' => 'Change password',
+    'routesName' => 'settings.changePassword',
+    'targetBtn' => 'modalChangePassword',
+    'buttonText' => 'Change',
+    'fields' => [
+        ['label' => 'Current password', 'type' => 'password', 'name' => 'current_password', 'value' => ''],
+        ['label' => 'New password', 'type' => 'password', 'name' => 'new_password', 'value' => ''],
+        ['label' => 'Confirm new password', 'type' => 'password', 'name' => 'confirm_password', 'value' => ''],
+    ]
 ])
 
 @include('component.forgotpasspin', [
-'title' => 'Change savings pin',
-'routesName' => 'expenses.store',
-'targetBtn' => 'modalChangePin',
-'fields' => [
-['label' => 'Current pin', 'type' => 'password', 'name' => '', 'value' => ''],
-['label' => 'New pin', 'type' => 'password', 'name' => '', 'value' => ''],
-['label' => 'Confirm new pin', 'type' => 'password', 'name' => '', 'value' => ''],
-]
+    'title' => 'Change savings pin',
+    'routesName' => 'settings.changePasskey',
+    'targetBtn' => 'modalChangePin',
+    'buttonText' => 'Change',
+    'fields' => [
+        ['label' => 'Current pin', 'type' => 'password', 'name' => 'current_pin', 'value' => ''],
+        ['label' => 'New pin', 'type' => 'password', 'name' => 'new_pin', 'value' => ''],
+        ['label' => 'Confirm new pin', 'type' => 'password', 'name' => 'confirm_pin', 'value' => ''],
+    ]
 ])
 @endsection

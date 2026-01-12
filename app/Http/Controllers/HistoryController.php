@@ -15,13 +15,17 @@ class HistoryController extends Controller
 
         $user = $this->getUserInfo($userId);
         $monthList = $this->currentMonth();
-        $chartData = $this->getChartData($userId);
+        $chartData = $this->getChartDataByMonth($userId);
+        
+        // Get all transactions for history table
+        $rows = $this->getAllTransactions($userId);
 
         return view('pages.history', compact(
             'navtitle',
             'user',
             'monthList',
             'chartData',
+            'rows'
         ));
     }
 
@@ -51,20 +55,21 @@ class HistoryController extends Controller
             : $nameParts[0];
     }
 
-    // FOR CHART.JS
-    private function getChartData($userId)
+    // FOR CHART.JS - BY MONTH
+    private function getChartDataByMonth($userId)
     {
         $sql = "
             SELECT 
-                cycle_name,
-                total_income,
-                total_expense,
-                total_savings,
-                remaining_budget
+                MONTH(start_date) as month,
+                MONTHNAME(start_date) as month_name,
+                SUM(total_income) as total_income,
+                SUM(total_expense) as total_expense,
+                SUM(total_savings) as total_savings,
+                SUM(remaining_budget) as remaining_budget
             FROM budget_cycles
-            WHERE userid = ?
-            ORDER BY start_date ASC
-            LIMIT 12
+            WHERE userid = ? AND YEAR(start_date) = YEAR(CURDATE())
+            GROUP BY MONTH(start_date), MONTHNAME(start_date)
+            ORDER BY MONTH(start_date) ASC
         ";
 
         return DB::select($sql, [$userId]);
@@ -73,5 +78,90 @@ class HistoryController extends Controller
     private function currentMonth()
     {
         return date('F');
+    }
+
+    private function getAllTransactions($userId)
+    {
+        $transactions = [];
+
+        // Get earnings
+        $earnings = DB::select(
+            "SELECT e.in_id, e.income_source, e.amount, e.date_received
+         FROM earnings e
+         JOIN budget_cycles bc ON e.cycle_id = bc.cycle_id
+         WHERE bc.userid = ?
+         ORDER BY e.date_received DESC",
+            [$userId]
+        );
+
+        foreach ($earnings as $earning) {
+            $transactions[] = [
+                'id'      => $earning->in_id,
+                'date'    => $earning->date_received,
+                'label'   => $earning->income_source,
+                'amount'  => $earning->amount,
+                'type'    => 'income',
+                'section' => 'EARNINGS',
+                'update'  => route('earnings.update', $earning->in_id),
+                'delete'  => route('earnings.delete', $earning->in_id),
+            ];
+        }
+
+        // Get expenses
+        $expenses = DB::select(
+            "SELECT e.out_id, e.category, e.date_spent, e.amount
+         FROM expenses e
+         JOIN budget_cycles bc ON bc.cycle_id = e.cycle_id
+         WHERE bc.userid = ?
+         ORDER BY e.date_spent DESC",
+            [$userId]
+        );
+
+        foreach ($expenses as $expense) {
+            $transactions[] = [
+                'id'      => $expense->out_id,
+                'date'    => $expense->date_spent,
+                'label'   => $expense->category,
+                'amount'  => $expense->amount,
+                'type'    => 'expense',
+                'section' => 'EXPENSES',
+                'update'  => route('expenses.update', $expense->out_id),
+                'delete'  => route('expenses.delete', $expense->out_id),
+            ];
+        }
+
+        // Get savings
+        $savings = DB::select(
+            "SELECT savingsno, bank, description, savings_amount, date_of_save, interest_earned
+         FROM savings
+         WHERE userid = ?
+         ORDER BY date_of_save DESC",
+            [$userId]
+        );
+
+        foreach ($savings as $saving) {
+            $label = $saving->bank;
+            if (!empty($saving->description)) {
+                $label .= ' - ' . $saving->description;
+            }
+            
+            $transactions[] = [
+                'id'      => $saving->savingsno,
+                'date'    => $saving->date_of_save,
+                'label'   => $label,
+                'amount'  => $saving->savings_amount + $saving->interest_earned,
+                'type'    => 'savings',
+                'section' => 'SAVINGS',
+                'update'  => route('savings.update', $saving->savingsno),
+                'delete'  => route('savings.delete', $saving->savingsno),
+            ];
+        }
+
+        // Sort all transactions by date (newest first)
+        usort($transactions, function ($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+
+        return $transactions;
     }
 }

@@ -21,12 +21,21 @@
                         @if($field['name']==='interest_rate' )
                         inputmode="decimal"
                         pattern="^[0-9]+(\.[0-9]{1,2})?$"
-                        @else
+                        @elseif($field['type'] !== 'password' && $field['type'] !== 'date')
                         oninput="capitalizeInput(this)"
                         @endif
                         class="w-3xs h-8 rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none {{ !empty($field['readonly']) ? 'bg-gray-200 cursor-not-allowed' : 'bg-white/30 backdrop-blur-[15px]' }}"
                         {{ isset($field['required']) && $field['required'] ? 'required' : '' }}
-                        {{ isset($field['step']) ? 'step=' . $field['step'] : '' }}>
+                        {{ !isset($field['required']) || $field['required'] !== false ? 'required' : '' }}
+                        {{ isset($field['step']) ? 'step=' . $field['step'] : '' }}
+                        @if($field['type'] === 'password' && (strpos($field['name'], 'new_pin') !== false || strpos($field['name'], 'current_pin') !== false || strpos($field['name'], 'confirm_pin') !== false))
+                        maxlength="4"
+                        pattern="\d{4}"
+                        inputmode="numeric"
+                        @elseif($field['type'] === 'password' && strpos($field['name'], 'password') !== false)
+                        minlength="8"
+                        @endif
+                        >
                 </div>
                 
                 @if ($index === 0)
@@ -36,7 +45,7 @@
 
                 <div class="flex justify-center items-center gap-9 mt-5">
                     <button type="button" data-target="{{ $targetBtn }}" class="cancelBtn bg-white/20 border-2 border-[#485349] border-solid text-[#485349] w-22 h-9 rounded-lg cursor-pointer lato-normal">Cancel</button>
-                    <button type="submit" class="bg-[#485349] text-white w-22 h-9 rounded-lg cursor-pointer lato-normal">Add</button>
+                    <button type="submit" class="bg-[#485349] text-white w-22 h-9 rounded-lg cursor-pointer lato-normal">{{ $buttonText ?? 'Add' }}</button>
                 </div>
             </form>
         </div>
