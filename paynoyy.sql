@@ -251,12 +251,13 @@ CREATE PROCEDURE AddSavingsTransaction (
 )
 BEGIN
     DECLARE v_savingsno VARCHAR(12);
-
-    SELECT savingsno INTO v_savingsno
+    DECLARE v_existing_description TEXT;
+ 
+    SELECT savingsno, description INTO v_savingsno, v_existing_description
     FROM savings
     WHERE userid = p_userid AND bank = p_bank_name
     LIMIT 1;
-
+    
     IF v_savingsno IS NULL THEN
         INSERT INTO savings (userid, bank, savings_amount, interest_rate, description)
         VALUES (
@@ -271,12 +272,31 @@ BEGIN
         FROM savings
         WHERE userid = p_userid AND bank = p_bank_name
         ORDER BY savingsno DESC LIMIT 1;
+    ELSE
+        IF p_description IS NOT NULL AND p_description != '' THEN
+            IF v_existing_description IS NULL OR v_existing_description = '' THEN
+                UPDATE savings
+                SET description = p_description,
+                    interest_rate = p_interest
+                WHERE savingsno = v_savingsno;
+            ELSEIF FIND_IN_SET(TRIM(p_description), REPLACE(v_existing_description, ', ', ',')) = 0 THEN
+                UPDATE savings
+                SET description = CONCAT(v_existing_description, ', ', TRIM(p_description)),
+                    interest_rate = p_interest
+                WHERE savingsno = v_savingsno;
+            ELSE
+                UPDATE savings
+                SET interest_rate = p_interest
+                WHERE savingsno = v_savingsno;
+            END IF;
+        END IF;
     END IF;
-
+    
     INSERT INTO savings_transactions (savingsno, trans_type, amount)
     VALUES (v_savingsno, p_trans_type, p_amount);
     
 END $$
+
 
 CREATE PROCEDURE CloseAndStartNewCycle (
     IN p_userid VARCHAR(12),

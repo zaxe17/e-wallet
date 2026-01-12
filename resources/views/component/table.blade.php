@@ -22,6 +22,10 @@
 
                 @foreach($rows as $row)
                 <tr class="table-row opacity-0 text-sm" data-delay="{{ $loop->iteration * 0.3 }}">
+                    @if($title === 'History')
+                    <td class="px-4 py-2 font-semibold">{{ $row['section'] ?? '' }}</td>
+                    @endif
+                    
                     <td class="px-4 py-2">{{ date('F j, Y', strtotime($row['date'])) }}</td>
 
                     <!-- FOR EDIT -->
@@ -34,8 +38,8 @@
                             <input type="text" name="{{ $row['type'] === 'income' ? 'income_source' : 'category' }}" class="text-center input hidden focus:outline-none rounded" value="{{ $row['label'] }}" required>
                         </td>
                         <td class="px-4 py-2 font-semibold">
-                            <span class="text {{ $row['type'] === 'income' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $row['type'] === 'income' ? '+' : '-' }}
+                            <span class="text {{ $row['type'] === 'income' ? 'text-green-600' : ($row['type'] === 'savings' ? 'text-blue-600' : 'text-red-600') }}">
+                                {{ $row['type'] === 'income' ? '+' : ($row['type'] === 'savings' ? '+' : '-') }}
                                 ₱{{ number_format($row['amount'], 0) }}
                             </span>
                             <input type="number" name="amount" class="text-center input hidden focus:outline-none rounded text-black" value="{{ $row['amount'] }}" required>
@@ -80,7 +84,7 @@
 
                 @else
                 <tr>
-                    <td colspan="5" class="px-4 py-6 text-gray-500">
+                    <td colspan="{{ $title === 'History' ? '6' : '5' }}" class="px-4 py-6 text-gray-500">
                         No records yet.
                     </td>
                 </tr>

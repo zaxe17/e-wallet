@@ -48,6 +48,8 @@ Route::group(['prefix' => 'expenses'], function () {
 Route::group(['prefix' => 'savings'], function () {
     Route::get('/', [SavingsController::class, 'index'])->name('savings.index');
     Route::post('/store', [SavingsController::class, 'store'])->name('savings.store');
+    Route::post('/deposit', [SavingsController::class, 'deposit'])->name('savings.deposit');
+    Route::post('/withdraw', [SavingsController::class, 'withdraw'])->name('savings.withdraw');
     Route::put('/update/{savingsno}', [SavingsController::class, 'updateSavings'])->name('savings.update');
     Route::delete('/delete/{savingsno}', [SavingsController::class, 'deleteSavings'])->name('savings.delete');
 
@@ -63,6 +65,8 @@ Route::group(['prefix' => 'history'], function () {
 Route::group(['prefix' => 'settings'], function () {
     Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/', [SettingsController::class, 'save'])->name('settings.save');
+    Route::post('/change-password', [SettingsController::class, 'changePassword'])->name('settings.changePassword');
+    Route::post('/change-passkey', [SettingsController::class, 'changePasskey'])->name('settings.changePasskey');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
