@@ -15,45 +15,45 @@
         <ul class="list-none flex flex-col gap-1 px-0 py-3.5">
             <li class="">
                 <!-- nav-link -->
-                <a href="{{ route('dashboard.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('dashboard.index') }}" class="group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'dashboard.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/tdesign/dashboard-1.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'dashboard.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/tdesign/dashboard-1.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="">
                 <!-- nav-link -->
-                <a href="{{ route('earnings.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('earnings.index') }}" class="group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'earnings.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/clarity/coin-bag-line.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'earnings.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/clarity/coin-bag-line.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>Earnings</span>
                 </a>
             </li>
             <li class="">
                 <!-- nav-link -->
-                <a class="{{ trim($__env->yieldContent('title')) !== 'Savings' ? 'openPinModalBtn' : '' }} group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a class="{{ trim($__env->yieldContent('title')) !== 'Savings' ? 'openPinModalBtn' : '' }} group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'savings.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/tdesign/saving-pot.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'savings.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/tdesign/saving-pot.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>Savings</span>
                 </a>
             </li>
             <li class="">
                 <!-- nav-link -->
-                <a href="{{ route('expenses.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('expenses.index') }}" class="group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'expenses.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/icon-park/expenses.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'expenses.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/icon-park/expenses.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>Expenses</span>
                 </a>
             </li>
             <li class="">
                 <!-- nav-link -->
-                <a href="{{ route('history.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('history.index') }}" class="group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'history.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/icon-park/history.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'history.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/icon-park/history.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>History</span>
                 </a>
@@ -65,9 +65,9 @@
             <!-- nav-item -->
             <li class="">
                 <!-- nav-link -->
-                <a href="{{ route('settings.index') }}" class="group text-white no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out hover:bg-white hover:text-[#485349]">
+                <a href="{{ route('settings.index') }}" class="group no-underline px-3 py-3.5 flex items-center gap-3 rounded-l-lg transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'settings.index' ? 'bg-white text-[#485349]' : 'hover:bg-white hover:text-[#485349] text-white' }}">
                     <!-- nav-icon -->
-                    <span class="icon bg-white transition-all duration-300 ease-in-out group-hover:bg-[#485349]" style="--svg: url('https://api.iconify.design/lucide/settings.svg'); --size: 20px; --icon-color: white;"></span>
+                    <span class="icon transition-all duration-300 ease-in-out {{ Route::currentRouteName() == 'settings.index' ? 'bg-[#485349]' : 'group-hover:bg-[#485349] bg-white' }}" style="--svg: url('https://api.iconify.design/lucide/settings.svg'); --size: 20px; --icon-color: white;"></span>
                     <!-- nav-label -->
                     <span>Settings</span>
                 </a>

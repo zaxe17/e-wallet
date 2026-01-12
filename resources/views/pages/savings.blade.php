@@ -70,7 +70,7 @@
 ['label' => 'Bank', 'type' => 'text', 'name' => 'bank', 'value' => '', 'readonly' => false],
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => date('Y-m-d')],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => false],
-['label' => 'Category', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => false],
+['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => false],
 ['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => false],
 ]
 ])
@@ -83,7 +83,7 @@
 ['label' => 'Bank', 'type' => 'text', 'name' => 'bank', 'value' => '', 'readonly' => true],
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => '', 'readonly' => true],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => true],
-['label' => 'Category', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => true],
+['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => true],
 ['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => true],
 ]
 ])

@@ -42,7 +42,7 @@
                         <img
                             src="/assets/DSC_1504.jpg"
                             alt="profile"
-                            class="w-full object-cover">
+                            class="w-full h-full object-cover">
                     </div>
                     <div class="px-4 pt-3 pb-20">
                         <p class="font-bold text-[#2F3E34] leading-tight">Jan Marc Jacolbia</p>
@@ -55,7 +55,7 @@
                         <img
                             src="/assets/4c54d3bf-1ab1-46ec-8bf3-b6451e96dd53.jpg"
                             alt="profile"
-                            class="w-full object-cover">
+                            class="w-full h-full object-cover">
                     </div>
                     <div class="px-4 pt-3 pb-20">
                         <p class="font-bold text-[#2F3E34]">Krysten Daphne Damicog</p>
@@ -67,7 +67,7 @@
                         <img
                             src="/assets/IMG_20250916_155011.jpg"
                             alt="profile"
-                            class="w-full object-cover">
+                            class="w-full h-full object-cover">
                     </div>
                     <div class="px-4 pt-3 pb-20">
                         <p class="font-bold text-[#2F3E34]">John Evans Gutierrez</p>
@@ -79,7 +79,7 @@
                         <img
                             src="/assets/IMG_20250916_155011.jpg"
                             alt="profile"
-                            class="w-full object-cover">
+                            class="w-full h-full object-cover">
                     </div>
                     <div class="px-4 pt-3 pb-20">
                         <p class="font-bold text-[#2F3E34]">Micka Soriano</p>
@@ -89,9 +89,9 @@
                 <div class="bg-fuchsia-100 card-border overflow-hidden card-shadow card" data-delay="1.8">
                     <div class="w-full h-64 overflow-hidden">
                         <img
-                            src="/assets/IMG_20250916_155011.jpg"
+                            src="/assets/gamayo.jpg"
                             alt="profile"
-                            class="w-full object-cover">
+                            class="w-full h-full object-cover">
                     </div>
                     <div class="px-4 pt-3 pb-20">
                         <p class="font-bold text-[#2F3E34]">Kelia Audrey Gamayo</p>

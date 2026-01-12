@@ -440,7 +440,7 @@
                     bank: this.dataset.bank || "",
                     description: this.dataset.description || "",
                     interest_rate: this.dataset.interest || "",
-                    date_of_save: this.dataset.date || "",
+                    // date_of_save: this.dataset.date || "",
                     savings_amount: this.dataset.amount || "",
                     savingsno: this.dataset.savingsno || ""
                 };
