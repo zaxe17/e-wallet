@@ -14,50 +14,48 @@
                 @csrf
                 <div class="flex justify-between items-center gap-16">
                     <label for="" class="text-xl lato-normal font-semibold">Bank</label>
-                    <input oninput="capitalizeInput(this)" type="text" name="bank" value="" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
+                    <input oninput="capitalizeInput(this)" type="text" name="bank" value="" required class="w-3xs h-8 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none bg-gray-200 cursor-not-allowed" readonly>
                 </div>
                 <div class="flex justify-between items-center gap-16">
                     <label for="" class="text-xl lato-normal font-semibold">Date</label>
-                    <input type="date" name="date_of_save" value="{{ date('Y-m-d') }}" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
+                    <input type="date" name="date_of_save" value="{{ date('Y-m-d') }}" required class="w-3xs h-8 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none bg-gray-200 cursor-not-allowed" readonly>
                 </div>
                 <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Savings amount</label>
+                    <label for="" class="text-xl lato-normal font-semibold">Deposit amount</label>
                     <input type="number" step="0.01" name="savings_amount" value="" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
                 </div>
                 <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Category</label>
+                    <label for="" class="text-xl lato-normal font-semibold">Description</label>
                     <input oninput="capitalizeInput(this)" type="text" name="description" value="" class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
                 </div>
-                <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Interest rate</label>
-                    <input type="number" step="0.01" name="interest_rate" value="" class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
-                </div>
 
-                <div class="flex justify-center items-center gap-9 mt-5">
-                    <button type="button" data-target="{{ $targetBtn }}" class="cancelBtn bg-white/20 border-2 border-[#485349] border-solid text-[#485349] w-22 h-9 rounded-lg cursor-pointer lato-normal">Cancel</button>
-                    <button type="submit" class="bg-[#485349] text-white w-22 h-9 rounded-lg cursor-pointer lato-normal">Add</button>
+                <div class="flex justify-center items-center gap-5 mt-5">
+                    <button type="button" data-target="{{ $targetBtn }}" class="cancelBtn bg-white/20 border-2 border-[#485349] border-solid text-[#485349] w-30 h-9 rounded-lg cursor-pointer lato-normal">Cancel</button>
+                    <button type="submit" class="bg-[#485349] text-white w-30 h-9 rounded-lg cursor-pointer lato-normal">Deposit</button>
                 </div>
             </form>
 
             <!-- WITHDRAWAL Form -->
-            <form id="withdrawalForm" method="POST" action="{{ route('savings.withdraw') }}" class="hidden flex-col gap-5">
+            <form id="withdrawalForm" method="POST" action="{{ route('savings.withdraw') }}" class="hidden">
                 @csrf
-                <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Bank</label>
-                    <input oninput="capitalizeInput(this)" type="text" name="bank" value="" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
-                </div>
-                <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Date</label>
-                    <input type="date" name="date_of_save" value="{{ date('Y-m-d') }}" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
-                </div>
-                <div class="flex justify-between items-center gap-16">
-                    <label for="" class="text-xl lato-normal font-semibold">Savings amount</label>
-                    <input type="number" step="0.01" name="savings_amount" value="" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
-                </div>
+                <div class="flex flex-col gap-5">
+                    <div class="flex justify-between items-center gap-16">
+                        <label for="" class="text-xl lato-normal font-semibold">Bank</label>
+                        <input oninput="capitalizeInput(this)" type="text" name="bank" value="" required class="w-3xs h-8 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none bg-gray-200 cursor-not-allowed" readonly>
+                    </div>
+                    <div class="flex justify-between items-center gap-16">
+                        <label for="" class="text-xl lato-normal font-semibold">Date</label>
+                        <input type="date" name="date_of_save" value="{{ date('Y-m-d') }}" required class="w-3xs h-8 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none bg-gray-200 cursor-not-allowed" readonly>
+                    </div>
+                    <div class="flex justify-between items-center gap-16">
+                        <label for="" class="text-xl lato-normal font-semibold">Withdraw amount</label>
+                        <input type="number" step="0.01" name="savings_amount" value="" required class="w-3xs h-8 bg-white/30 backdrop-blur-[15px] rounded-md font-medium input-shadow px-2 py-1 text-sm focus:outline-none">
+                    </div>
 
-                <div class="flex justify-center items-center gap-9 mt-5">
-                    <button type="button" data-target="{{ $targetBtn }}" class="cancelBtn bg-white/20 border-2 border-[#485349] border-solid text-[#485349] w-22 h-9 rounded-lg cursor-pointer lato-normal">Cancel</button>
-                    <button type="submit" class="bg-[#485349] text-white w-22 h-9 rounded-lg cursor-pointer lato-normal">Withdraw</button>
+                    <div class="flex justify-center items-center gap-5 mt-5">
+                        <button type="button" data-target="{{ $targetBtn }}" class="cancelBtn bg-white/20 border-2 border-[#485349] border-solid text-[#485349] w-30 h-9 rounded-lg cursor-pointer lato-normal">Cancel</button>
+                        <button type="submit" class="bg-[#485349] text-white w-30 h-9 rounded-lg cursor-pointer lato-normal">Withdraw</button>
+                    </div>
                 </div>
             </form>
         </div>
