@@ -13,7 +13,7 @@ CREATE TABLE user (
     phone_number VARCHAR(15) NOT NULL,
     email_address VARCHAR(30) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    passkey INT NULL,
+    passkey CHAR(4) NULL,
     sex CHAR(1) NOT NULL CHECK (sex IN ('M','F')),
     date_registered DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
