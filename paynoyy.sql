@@ -77,6 +77,8 @@ CREATE TABLE savings (
     FOREIGN KEY (userid) REFERENCES user(userid) ON DELETE CASCADE
 );
 
+ALTER TABLE savings MODIFY COLUMN description VARCHAR(255);
+
 CREATE TABLE savings_transactions (
     trans_id VARCHAR(12) NOT NULL PRIMARY KEY,
     savingsno VARCHAR(12) NOT NULL,

@@ -130,30 +130,42 @@ class HistoryController extends Controller
             ];
         }
 
-        // Get savings
-        $savings = DB::select(
-            "SELECT savingsno, bank, description, savings_amount, date_of_save, interest_earned
-         FROM savings
-         WHERE userid = ?
-         ORDER BY date_of_save DESC",
+        // Get savings transactions (deposits and withdrawals)
+        $savingsTransactions = DB::select(
+            "SELECT 
+                st.trans_id,
+                st.trans_type,
+                st.trans_date,
+                st.amount,
+                s.bank,
+                s.description,
+                s.savingsno
+            FROM savings_transactions st
+            JOIN savings s ON st.savingsno = s.savingsno
+            WHERE s.userid = ?
+            ORDER BY st.trans_date DESC",
             [$userId]
         );
 
-        foreach ($savings as $saving) {
-            $label = $saving->bank;
-            if (!empty($saving->description)) {
-                $label .= ' - ' . $saving->description;
+        foreach ($savingsTransactions as $trans) {
+            $label = $trans->bank;
+            if (!empty($trans->description)) {
+                $label .= ' - ' . $trans->description;
             }
             
+            // Add transaction type to label
+            $transLabel = $trans->trans_type === 'DEPOSIT' ? 'Deposit: ' : 'Withdrawal: ';
+            $label = $transLabel . $label;
+            
             $transactions[] = [
-                'id'      => $saving->savingsno,
-                'date'    => $saving->date_of_save,
+                'id'      => $trans->trans_id,
+                'date'    => $trans->trans_date,
                 'label'   => $label,
-                'amount'  => $saving->savings_amount + $saving->interest_earned,
-                'type'    => 'savings',
+                'amount'  => $trans->amount,
+                'type'    => $trans->trans_type === 'DEPOSIT' ? 'savings' : 'withdrawal',
                 'section' => 'SAVINGS',
-                'update'  => route('savings.update', $saving->savingsno),
-                'delete'  => route('savings.delete', $saving->savingsno),
+                'update'  => null, // Transactions can't be updated individually
+                'delete'  => null, // Transactions can't be deleted individually
             ];
         }
 
