@@ -1,3 +1,48 @@
+// ========= SHARED OPTIONS =========
+function chartOptions(xTitle, isDay = false) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+            duration: 1600,
+            easing: 'easeOutQuart'
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: xTitle,
+                    font: { size: 14, weight: 'bold' }
+                }
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Budget (k)',
+                    font: { size: 14, weight: 'bold' }
+                },
+                ticks: {
+                    callback: value => value + 'k'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: !isDay // hide legend if day chart
+            },
+            tooltip: {
+                callbacks: {
+                    title: ctx =>
+                        isDay ? `Day ${ctx[0].dataIndex + 1}` : ctx[0].label,
+                    label: ctx =>
+                        `${ctx.dataset.label}: ${ctx.parsed.y}k`
+                }
+            }
+        }
+    };
+}
+
 // ========= MONTH CHART (History Page) =========
 function initMonthChart() {
     const canvas = document.getElementById('monthChart');
@@ -11,27 +56,22 @@ function initMonthChart() {
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    // 🔹 Group data by year
+    // Group data by year
     const groupedByYear = {};
     rawData.forEach(item => {
         if (!groupedByYear[item.year]) {
             groupedByYear[item.year] = new Array(12).fill(null);
         }
-        groupedByYear[item.year][item.month - 1] =
-            parseFloat(item.remaining_budget) / 1000;
+        groupedByYear[item.year][item.month - 1] = parseFloat(item.remaining_budget) / 1000;
     });
 
-    // 🔹 Colors (auto-cycle)
-    const colors = [
-        '#22c55e', '#3b82f6', '#06b6d4',
-        '#f59e0b', '#a855f7', '#ef4444'
-    ];
-
+    // Colors (auto-cycle)
+    const colors = ['#22c55e', '#3b82f6', '#06b6d4', '#f59e0b', '#a855f7', '#ef4444'];
     let colorIndex = 0;
 
-    // 🔹 Create datasets (one line per year)
+    // Create datasets (one line per year)
     const datasets = Object.keys(groupedByYear)
-        .sort((a, b) => b - a) // latest year first
+        .sort((a, b) => b - a)
         .map(year => {
             const data = groupedByYear[year];
             const color = colors[colorIndex++ % colors.length];
@@ -54,18 +94,9 @@ function initMonthChart() {
             labels: months,
             datasets
         },
-        options: {
-            ...chartOptions('Months'),
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                }
-            }
-        }
+        options: chartOptions('Months', false) // legend stays visible
     });
 }
-
 
 // ========= DAY CHART (Dashboard Page) =========
 function initDayChart() {
@@ -76,11 +107,7 @@ function initDayChart() {
     const ctx = canvas.getContext('2d');
 
     const now = new Date();
-    const daysInMonth = new Date(
-        now.getFullYear(),
-        now.getMonth() + 1,
-        0
-    ).getDate();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
 
     const labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
     const values = new Array(daysInMonth).fill(null);
@@ -88,7 +115,7 @@ function initDayChart() {
     chartData.forEach(item => {
         const date = new Date(item.day);
         const dayIndex = date.getDate() - 1;
-        values[dayIndex] = parseFloat(item.net_total);
+        values[dayIndex] = parseFloat(item.net_total) / 1000; // convert to k
     });
 
     const initialValues = values.map(v => v !== null ? 0 : null);
@@ -100,78 +127,23 @@ function initDayChart() {
             datasets: [{
                 label: 'Net Amount',
                 data: initialValues,
+                borderColor: '#22c55e', // medium green line
+                backgroundColor: '#22c55e33', // semi-transparent green fill (optional)
                 borderWidth: 2,
                 tension: 0.3,
                 fill: false,
                 spanGaps: true
             }]
         },
-        options: {
-            ...chartOptions('Days', true),
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 10000,
-                        callback: function (value) {
-                            return (value / 1000) + 'k';
-                        }
-                    }
-                }
-            }
-        }
+        options: chartOptions('Days', true) // legend hidden
     });
 
+    // Animate after load
     setTimeout(() => {
         chart.data.datasets[0].data = values;
         chart.update();
     }, 300);
 }
-
-
-// ========= SHARED OPTIONS =========
-function chartOptions(xTitle, isDay = false) {
-    return {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-            duration: 1600,
-            easing: 'easeOutQuart'
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: xTitle,
-                    font: { size: 14, weight: 'bold' }
-                }
-            },
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Budget (in thousands)',
-                    font: { size: 14, weight: 'bold' }
-                },
-                ticks: {
-                    callback: value => value + 'k'
-                }
-            }
-        },
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    title: ctx =>
-                        isDay ? `Day ${ctx[0].dataIndex + 1}` : ctx[0].label,
-                    label: ctx =>
-                        `${ctx.dataset.label} ${ctx.parsed.y}k`
-                }
-            }
-        }
-    };
-}
-
 
 // ========= INITIALIZE =========
 document.addEventListener('DOMContentLoaded', () => {
