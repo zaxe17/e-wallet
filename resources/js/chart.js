@@ -112,7 +112,7 @@ function initDayChart() {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 5000,
+                        stepSize: 10000,
                         callback: function (value) {
                             return (value / 1000) + 'k';
                         }
