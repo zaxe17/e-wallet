@@ -1,8 +1,8 @@
-<div class="show opacity-0 flex flex-col gap-3" data-delay="0.3">
+<div class="show opacity-0 flex flex-col flex-1 min-h-0" data-delay="0.3">
     <p class="text-xl font-bold lato-normal">Transaction History</p>
 
     <!-- HISTORY TABLE -->
-    <div id="tableWrapper" class="h-[50vh] overflow-y-auto rounded-xl p-3">
+    <div id="tableWrapper" class="flex-1 min-h-0 overflow-y-auto rounded-xl px-3 pb-3">
         <table class="table-auto w-full text-center border-collapse">
             <thead id="tableHead" class="sticky top-0 z-10 transition-all duration-300 ease-in-out">
                 <tr class="text-xl">
@@ -21,7 +21,7 @@
                 @if(!empty($rows) && count($rows))
 
                 @foreach($rows as $row)
-                <tr class="table-row opacity-0 text-sm" data-delay="{{ $loop->iteration * 0.3 }}">
+                <tr class="table-row opacity-0 text-sm" data-delay="{{ $loop->iteration * 0.2 }}">
                     @if($title === 'History')
                     <td class="px-4 py-2 font-semibold">{{ $row['section'] ?? '' }}</td>
                     @endif

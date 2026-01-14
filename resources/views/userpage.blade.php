@@ -9,11 +9,12 @@
             <div class="absolute top-[70%] left-[72%] w-[35%] h-[35%] -translate-y-1/2 -translate-x-1/2 bg-[#f7eaa2] rounded-full blur-[120px] opacity-0 ball-yellow"></div>
         </div>
 
-        @include('component.dashboardnav')
 
-        <div class="relative container h-screen mx-auto px-14">
+        <div class="relative container h-full mx-auto px-14 pb-5 flex flex-col">
+            @include('component.dashboardnav')
             @yield('user_content')
         </div>
+
 
         @include('component.pin')
     </div>

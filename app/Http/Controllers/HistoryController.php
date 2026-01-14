@@ -15,8 +15,8 @@ class HistoryController extends Controller
 
         $user = $this->getUserInfo($userId);
         $monthList = $this->currentMonth();
-        $chartData = $this->getChartDataByMonth($userId);
-        
+        $monthlyBudget = $this->getMonthlyBudget($userId);
+
         // Get all transactions for history table
         $rows = $this->getAllTransactions($userId);
 
@@ -24,7 +24,7 @@ class HistoryController extends Controller
             'navtitle',
             'user',
             'monthList',
-            'chartData',
+            'monthlyBudget',
             'rows'
         ));
     }
@@ -56,23 +56,19 @@ class HistoryController extends Controller
     }
 
     // FOR CHART.JS - BY MONTH
-    private function getChartDataByMonth($userId)
+    private function getMonthlyBudget($userId)
     {
-        $sql = "
+        return DB::select("
             SELECT 
-                MONTH(start_date) as month,
-                MONTHNAME(start_date) as month_name,
-                SUM(total_income) as total_income,
-                SUM(total_expense) as total_expense,
-                SUM(total_savings) as total_savings,
-                SUM(remaining_budget) as remaining_budget
+                YEAR(start_date) AS year,
+                MONTH(start_date) AS month,
+                MONTHNAME(start_date) AS month_name,
+                SUM(remaining_budget) AS remaining_budget
             FROM budget_cycles
-            WHERE userid = ? AND YEAR(start_date) = YEAR(CURDATE())
-            GROUP BY MONTH(start_date), MONTHNAME(start_date)
-            ORDER BY MONTH(start_date) ASC
-        ";
-
-        return DB::select($sql, [$userId]);
+            WHERE userid = ?
+            GROUP BY YEAR(start_date), MONTH(start_date), MONTHNAME(start_date)
+            ORDER BY YEAR(start_date), MONTH(start_date)
+        ", [$userId]);
     }
 
     private function currentMonth()
@@ -152,11 +148,11 @@ class HistoryController extends Controller
             if (!empty($trans->description)) {
                 $label .= ' - ' . $trans->description;
             }
-            
+
             // Add transaction type to label
             $transLabel = $trans->trans_type === 'DEPOSIT' ? 'Deposit: ' : 'Withdrawal: ';
             $label = $transLabel . $label;
-            
+
             $transactions[] = [
                 'id'      => $trans->trans_id,
                 'date'    => $trans->trans_date,

@@ -70,20 +70,20 @@ function closeMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    animateOnScroll(".left", { opacity: [0, 1], x: [-50, 0] }, { duration: 0.5 });
+    animateOnScroll(".left", { opacity: [0, 1], x: [-50, 0] }, { duration: 0.3 });
 
-    animateOnScroll(".right", { opacity: [0, 1], x: [50, 0] }, { duration: 0.5 });
+    animateOnScroll(".right", { opacity: [0, 1], x: [50, 0] }, { duration: 0.3 });
 
-    animateOnScroll(".up", { opacity: [0, 1], y: [50, 0] }, { duration: 0.5 });
+    animateOnScroll(".up", { opacity: [0, 1], y: [50, 0] }, { duration: 0.3 });
 
-    animateOnScroll(".show", { opacity: [0, 1] }, { duration: 0.5 });
+    animateOnScroll(".show", { opacity: [0, 1] }, { duration: 0.3 });
 
     animateOnScroll(".openModal", { opacity: [0, 1] }, { duration: 0.3 });
     animateOnScroll(".openModalBtn", { opacity: [0, 1] }, { duration: 0.3 });
 
     animateOnScroll(".card", { opacity: [0, 1], y: [50, 0] }, { duration: 0.6 });
 
-    animateOnScroll(".form-animation", { opacity: [0, 1] }, { duration: 1, delay: 0.5 });
+    animateOnScroll(".form-animation", { opacity: [0, 1] }, { duration: 1, delay: 0.3 });
 
     animateOnScroll(".ball-green", { opacity: [0, 1] }, { duration: 1 });
     animateOnScroll(".ball-yellow", { opacity: [0, 1] }, { duration: 1, delay: 0.6 });
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateOnScroll(".boxes", { opacity: [0, 1], y: [25, 0] }, { duration: 0.3 });
 
-    animateOnScroll(".table-row", { opacity: [0, 1] }, { duration: 0.5 });
+    animateOnceOnScroll(".table-row", { opacity: [0, 1] }, { duration: 0.3 });
 
     animateOnScroll(".line", { opacity: [0, 1], width: ['0%', '100%'] }, { duration: 1 });
 

@@ -2,7 +2,7 @@
 @section('title', 'Settings')
 @section('user_content')
 <div class="container mx-auto px-5">
-    <div class="flex flex-col">
+    <div class="flex flex-col flex-1 min-h-0">
         <div class="flex justify-start items-center mb-10">
             <p class="show opacity-0 text-xl text-[#323d33]" data-delay="1.5">Profile</p>
             <div class="line w-0 h-px bg-[#485349]/80 mx-8" data-delay="1.8"></div>
