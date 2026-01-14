@@ -127,13 +127,15 @@ function initDayChart() {
             datasets: [{
                 label: 'Net Amount',
                 data: initialValues,
+                borderColor: '#22c55e', // medium green line
+                backgroundColor: '#22c55e33', // semi-transparent green fill (optional)
                 borderWidth: 2,
                 tension: 0.3,
                 fill: false,
                 spanGaps: true
             }]
         },
-        options: chartOptions('Days', true) // legend hidden for day chart
+        options: chartOptions('Days', true) // legend hidden
     });
 
     // Animate after load

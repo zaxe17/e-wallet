@@ -9,7 +9,8 @@
         <h2 class="text-9xl text-[#2F3E34] mb-5 lato opacity-0 left" data-delay="0.3">PayNoy</h2>
         <p class="opacity-0 text-[#5F6F64] left" data-delay="0.9">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
-    <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-sm p-10 opacity-0 form-shadow form-animation">
+
+    <div class="w-1/3 bg-[rgba(255, 255, 255, 0.18)] rounded-2xl form-shadow backdrop-blur-sm p-10 opacity-0 form-shadow form-animation" data-delay="0.6">
         <h1 class="text-4xl text-[#4A5A4D] mb-5 lato-bold font-semibold">Sign in</h1>
 
         @if(session('error'))
