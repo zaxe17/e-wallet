@@ -47,15 +47,16 @@
             input.value = input.value.replace(/\b\w/g, char => char.toUpperCase());
         };
 
+        /* TABLE ROW ANIMATION */
         const wrapper = document.getElementById('tableWrapper');
         const thead = document.getElementById('tableHead');
 
         if (wrapper && thead) {
             wrapper.addEventListener('scroll', () => {
                 if (wrapper.scrollTop > 0) {
-                    thead.classList.add('bg-white', 'shadow-md');
+                    thead.classList.add('bg-white/40', 'shadow-md', 'card-shadow', 'backdrop-blur-sm');
                 } else {
-                    thead.classList.remove('bg-white', 'shadow-md');
+                    thead.classList.remove('bg-white/40', 'shadow-md', 'card-shadow', 'backdrop-blur-sm');
                 }
             });
         }

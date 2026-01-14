@@ -8,7 +8,7 @@
         <h1 class="text-xl lato-bold border border-b-[#485349] border-transparent border-solid w-full">This {{ $monthList }}</h1>
         <div class="w-full flex flex-col items-center">
             <div class="w-full">
-                <canvas id="lineChart" class="w-full h-64" data-chart='@json($chartData)'></canvas>
+                <canvas id="dayChart" class="w-full h-64" data-chart='@json($dailyEarnings)'></canvas>
             </div>
         </div>
     </div>

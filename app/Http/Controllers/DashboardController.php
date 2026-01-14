@@ -15,10 +15,9 @@ class DashboardController extends Controller
 
         $user = $this->getUserInfo($userId);
         $monthList = $this->currentMonth();
-        
-        // Get chart data by days for current month
-        $chartData = $this->getChartDataByDays($userId);
-        
+
+        $dailyEarnings = $this->getDailyNetAmount($userId);
+
         // Get totals
         $remainingBudget = $this->getRemainingBudget($userId);
         $budgetRemarks = $this->getBudgetRemarks($remainingBudget);
@@ -30,7 +29,7 @@ class DashboardController extends Controller
             'navtitle',
             'user',
             'monthList',
-            'chartData',
+            'dailyEarnings',
             'remainingBudget',
             'budgetRemarks',
             'totalEarnings',
@@ -59,13 +58,110 @@ class DashboardController extends Controller
             : $nameParts[0];
     }
 
+    /* get user budget per day */
+    private function getDailyNetAmount($userId)
+    {
+        // get active cycle
+        $cycle = DB::selectOne("
+        SELECT cycle_id 
+        FROM budget_cycles 
+        WHERE userid = ?
+        ORDER BY is_active DESC, start_date DESC
+        LIMIT 1
+    ", [$userId]);
+
+        if (!$cycle) return [];
+
+        $cycleId = $cycle->cycle_id;
+
+        $earnings = $this->getDailyEarningsRaw($cycleId);
+        $expenses = $this->getDailyExpensesRaw($cycleId);
+        $savings  = $this->getDailySavingsRaw($userId);
+
+        $daily = [];
+
+        // earnings
+        foreach ($earnings as $e) {
+            $daily[$e->day]['earnings'] = $e->total;
+        }
+
+        // expenses
+        foreach ($expenses as $x) {
+            $daily[$x->day]['expenses'] = $x->total;
+        }
+
+        // savings
+        foreach ($savings as $s) {
+            $daily[$s->day]['savings'] = $s->total;
+        }
+
+        // compute net
+        $result = [];
+
+        foreach ($daily as $day => $data) {
+            $earn = $data['earnings'] ?? 0;
+            $save = $data['savings'] ?? 0;
+            $exp  = $data['expenses'] ?? 0;
+
+            $result[] = (object)[
+                'day' => $day,
+                'net_total' => $earn - ($save + $exp)
+            ];
+        }
+
+        // sort by date
+        usort($result, fn($a, $b) => strcmp($a->day, $b->day));
+
+        return $result;
+    }
+
+    /* get daily savings */
+    private function getDailySavingsRaw($userId)
+    {
+        return DB::select("
+            SELECT 
+                DATE(date_of_save) AS day,
+                SUM(savings_amount) AS total
+            FROM savings
+            WHERE userid = ?
+            GROUP BY DATE(date_of_save)
+        ", [$userId]);
+    }
+
+    /* get daily expense */
+    private function getDailyExpensesRaw($cycleId)
+    {
+        return DB::select("
+            SELECT 
+                DATE(date_spent) AS day,
+                SUM(amount) AS total
+            FROM expenses
+            WHERE cycle_id = ?
+            GROUP BY DATE(date_spent)
+        ", [$cycleId]);
+    }
+
+    /* get daily earnings */
+    private function getDailyEarningsRaw($cycleId)
+    {
+        return DB::select("
+            SELECT 
+                DATE(date_received) AS day,
+                SUM(amount) AS total
+            FROM earnings
+            WHERE cycle_id = ?
+            GROUP BY DATE(date_received)
+        ", [$cycleId]);
+    }
+
+
     private function currentMonth()
     {
         return date('F');
     }
 
     // Get chart data by days for current month
-    private function getChartDataByDays($userId)
+    /* private function getChartDataByDays($userId)
     {
         $currentMonth = date('m');
         $currentYear = date('Y');
@@ -137,9 +233,9 @@ class DashboardController extends Controller
         }
 
         return $chartData;
-    }
+    } */
 
-    private function getTotalExpensesForCycle($cycleId)
+    /* private function getTotalExpensesForCycle($cycleId)
     {
         $result = DB::selectOne(
             "SELECT IFNULL(SUM(amount), 0) as total
@@ -149,7 +245,7 @@ class DashboardController extends Controller
         );
 
         return $result ? $result->total : 0;
-    }
+    } */
 
     private function getRemainingBudget($userId)
     {
