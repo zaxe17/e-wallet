@@ -65,8 +65,7 @@ class DashboardController extends Controller
         $cycle = DB::selectOne("
         SELECT cycle_id 
         FROM budget_cycles 
-        WHERE userid = ?
-        ORDER BY is_active DESC, start_date DESC
+        WHERE userid = ? AND is_active = 1
         LIMIT 1
     ", [$userId]);
 
@@ -115,7 +114,7 @@ class DashboardController extends Controller
         return $result;
     }
 
-    /* get daily savings */
+    /* get daily savings for current month */
     private function getDailySavingsRaw($userId)
     {
         return DB::select("
@@ -124,11 +123,13 @@ class DashboardController extends Controller
                 SUM(savings_amount) AS total
             FROM savings
             WHERE userid = ?
+            AND MONTH(date_of_save) = MONTH(CURRENT_DATE())
+            AND YEAR(date_of_save) = YEAR(CURRENT_DATE())
             GROUP BY DATE(date_of_save)
         ", [$userId]);
     }
 
-    /* get daily expense */
+    /* get daily expense for current month */
     private function getDailyExpensesRaw($cycleId)
     {
         return DB::select("
@@ -137,11 +138,13 @@ class DashboardController extends Controller
                 SUM(amount) AS total
             FROM expenses
             WHERE cycle_id = ?
+            AND MONTH(date_spent) = MONTH(CURRENT_DATE())
+            AND YEAR(date_spent) = YEAR(CURRENT_DATE())
             GROUP BY DATE(date_spent)
         ", [$cycleId]);
     }
 
-    /* get daily earnings */
+    /* get daily earnings for current month */
     private function getDailyEarningsRaw($cycleId)
     {
         return DB::select("
@@ -150,10 +153,11 @@ class DashboardController extends Controller
                 SUM(amount) AS total
             FROM earnings
             WHERE cycle_id = ?
+            AND MONTH(date_received) = MONTH(CURRENT_DATE())
+            AND YEAR(date_received) = YEAR(CURRENT_DATE())
             GROUP BY DATE(date_received)
         ", [$cycleId]);
     }
-
 
     private function currentMonth()
     {
