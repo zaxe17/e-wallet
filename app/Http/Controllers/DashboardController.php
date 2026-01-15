@@ -71,33 +71,59 @@ class DashboardController extends Controller
             ->exists();
     }
 
+    // NEGATIVE / ZERO: Close old cycle only
+    public function closeCycleOnly()
+    {
+        $userId = Session::get('user_id');
+
+        $cycle = DB::table('budget_cycles')
+            ->where('userid', $userId)
+            ->where('is_active', 1)
+            ->first();
+
+        if (!$cycle) {
+            return redirect()->route('dashboard.index');
+        }
+
+        DB::table('budget_cycles')
+            ->where('cycle_id', $cycle->cycle_id)
+            ->update([
+                'is_active' => 0,
+                'rollover_status' => 'NONE',
+                'rollover_amount' => 0
+            ]);
+
+
+        // Start new cycle
+        $this->createMonthlyCycleIfNeeded($userId);
+
+        return redirect()->route('dashboard.index')->with('success', 'Previous cycle closed. New cycle started.');
+    }
+
+    // POSITIVE: Process rollover into savings or expense
     public function processRollover(Request $request)
     {
-        $userId   = Session::get('user_id');
-        $decision = $request->input('decision');
+        $userId    = Session::get('user_id');
+        $decision  = $request->input('decision');
         $savingsNo = $request->input('savingsno');
 
-        // LOG INPUTS
         Log::info('Rollover Input:', [
-            'user_id'   => $userId,
-            'decision'  => $decision,
+            'user_id'    => $userId,
+            'decision'   => $decision,
             'savings_no' => $savingsNo
         ]);
 
-        // VALIDATION
         if ($decision === 'SAVED' && empty($savingsNo)) {
-            // Auto-generate savings number if none provided
             $savingsNo = $this->generateSavingsNo();
             Log::info("Auto-generated savings number for rollover: {$savingsNo}");
         }
 
+        // CALL PROCEDURE ONLY FOR POSITIVE ROLLOVER
         DB::statement("CALL CloseAndStartNewCycle(?, ?, ?)", [
             $userId,
             $decision,
             $savingsNo
         ]);
-
-        Log::info("Rollover processed successfully for user_id {$userId} with decision {$decision}.");
 
         return redirect()->route('dashboard.index')->with('success', 'Rollover processed successfully.');
     }
@@ -181,10 +207,9 @@ class DashboardController extends Controller
         $sql = "
         SELECT budget_remarks
         FROM budget_cycles
-        WHERE userid = ?
-          AND is_active = 1
+        WHERE userid = ? AND is_active = 1
         LIMIT 1
-    ";
+        ";
 
         return DB::selectOne($sql, [$userid])->budget_remarks ?? null;
     }
@@ -269,7 +294,6 @@ class DashboardController extends Controller
             return 'SAVE-000001';
         }
 
-        // Extract number after 'SAVE-' and increment
         $num = intval(substr($last->savingsno, 5)) + 1;
         return 'SAVE-' . str_pad($num, 6, '0', STR_PAD_LEFT);
     }

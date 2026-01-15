@@ -9,11 +9,9 @@
             <p class="font-bold text-red-600 mb-6">
                 Aww 😢 you overspent last month.
             </p>
-
-            <form method="POST" action="{{ route('dashboard.rollover') }}">
+            <form method="POST" action="{{ route('dashboard.closeCycleOnly') }}">
                 @csrf
-                <button name="decision" value="CLOSE_ONLY"
-                    class="bg-gray-700 text-white px-6 py-3 rounded-lg">
+                <button class="bg-gray-700 text-white px-6 py-3 rounded-lg">
                     Continue
                 </button>
             </form>
@@ -23,11 +21,9 @@
             <p class="font-bold text-green-600 mb-6">
                 Congrats 🎉 you allocated your money efficiently.
             </p>
-
-            <form method="POST" action="{{ route('dashboard.rollover') }}">
+            <form method="POST" action="{{ route('dashboard.closeCycleOnly') }}">
                 @csrf
-                <button name="decision" value="CLOSE_ONLY"
-                    class="bg-gray-700 text-white px-6 py-3 rounded-lg">
+                <button class="bg-gray-700 text-white px-6 py-3 rounded-lg">
                     Continue
                 </button>
             </form>
@@ -38,7 +34,6 @@
                 You have {{ number_format($remainingBudget, 2) }} remaining.<br>
                 Where should it go?
             </p>
-
             <form method="POST" action="{{ route('dashboard.rollover') }}">
                 @csrf
                 <div class="flex gap-3">
