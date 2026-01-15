@@ -72,4 +72,7 @@
         </div>
     </div>
 </div>
+
+
+@include('component.rollover')
 @endsection

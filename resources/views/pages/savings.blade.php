@@ -41,7 +41,7 @@
                         </div>
                         <div class="h-full flex justify-center flex-col bg-[#e7e7e7] px-6 py-3 rounded-lg overflow-y-auto text-sm">
                             <p>Principal: <span class="font-medium">₱{{ number_format($saving->savings_amount, 2) }}</span></p>
-                            <p>Interest rate (in decimals): <span class="font-medium">₱{{ number_format($saving->interest_earned, 2) }} ({{ $saving->interest_rate }})</span></p>
+                            <p>Interest rate: <span class="font-medium">₱{{ number_format($saving->interest_earned, 2) }} ({{ $saving->interest_rate }})</span></p>
                             <p>Bank: <span class="font-medium">{{ $saving->bank ?? 'N/A' }}</span></p>
                             <p>Description: <span class="font-medium">{{ $saving->description ?? 'N/A' }}</span></p>
                             <p class="text-xs text-gray-600 mt-2">Date: {{ date('M j, Y', strtotime($saving->date_of_save)) }}</p>

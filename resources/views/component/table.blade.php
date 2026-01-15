@@ -45,7 +45,7 @@
                             <input type="number" name="amount" class="text-center input hidden focus:outline-none rounded text-black" value="{{ $row['amount'] }}" required>
                         </td>
 
-                        <td class="py-2 cursor-pointer">
+                        <td class="py-2 cursor-pointer {{ $title === 'History' ? 'hidden' : ''}}">
                             <!-- EDIT -->
                             <button type="button" class="edit-btn cursor-pointer">
                                 <span class="icon bg-[#3a3a3a]"
@@ -70,7 +70,7 @@
                     </form>
 
                     <!-- DELETE -->
-                    <td class="pr-4 py-2">
+                    <td class="pr-4 py-2 {{ $title === 'History' ? 'hidden' : ''}}">
                         <form action="{{ $row['delete'] }}" method="POST" class="inline-block delete-form">
                             @csrf
                             @method('DELETE')

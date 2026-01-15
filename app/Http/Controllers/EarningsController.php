@@ -33,7 +33,7 @@ class EarningsController extends Controller
          FROM earnings e
          JOIN budget_cycles bc ON e.cycle_id = bc.cycle_id
          WHERE bc.userid = ?
-         ORDER BY e.date_received DESC",
+         ORDER BY e.date_received DESC, e.in_id DESC",
             [$userId]
         );
 

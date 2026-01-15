@@ -27,6 +27,9 @@ Route::group(['prefix' => 'login'], function () {
 
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/rollover',
+        [DashboardController::class, 'processRollover']
+    )->name('dashboard.rollover');
 });
 
 Route::group(['prefix' => 'earnings'], function () {
