@@ -6,7 +6,7 @@
 <section class="container mx-auto h-screen p-15 flex items-center justify-center gap-20 relative">
     <div class="w-1/2 text-center">
         <h1 class="text-xl text-[#4A5A4D] leading-15 opacity-0 left" data-delay="0.6">Welcome Back to</h1>
-        <h2 class="text-9xl text-[#2F3E34] mb-5 lato opacity-0 left" data-delay="0.3">PayNoy</h2>
+        <h2 class="text-9xl text-[#2F3E34] mb-5 lato opacity-0 left" data-delay="0.3">Ban<span class="text-[#5F6F64]">KO</span></h2>
         <p class="opacity-0 text-[#5F6F64] left" data-delay="0.9">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     </div>
 

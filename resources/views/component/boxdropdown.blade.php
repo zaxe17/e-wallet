@@ -7,7 +7,7 @@
 
             <form method="GET" action="{{ request()->routeIs('expenses.*') ? route ('expenses.index') : route('earnings.index') }}">
                 <select name="month" id="month"
-                    class="text-2xl lato-normal"
+                    class="text-2xl lato-normal focus:outline-none"
                     onchange="this.form.submit()">
 
                     @foreach ($months as $num => $name)

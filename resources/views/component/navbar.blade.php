@@ -1,6 +1,6 @@
 <header class="fixed top-0 left-0 w-full bg-[#4A5A4D] nav-shadow z-50 text-sm flex justify-center">
     <div class="container flex justify-between items-center px-20 py-3 text-[#FFFFFF]">
-        <p>PayNoy</p>
+        <p class="text-white font-bold text-xl lato">Ban<span class="text-[#0F2F1F]">KO</span></p>
         <nav>
             <ul class="flex flex-row gap-5">
                 <li><a href="/#">Home</a></li>

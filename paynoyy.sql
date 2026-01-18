@@ -300,38 +300,77 @@ BEGIN
 END $$
 
 
-CREATE PROCEDURE CloseAndStartNewCycle (
+CREATE PROCEDURE CloseAndStartNewCycle(
     IN p_userid VARCHAR(12),
-    IN p_rollover_decision VARCHAR(10),
+    IN p_rollover_decision VARCHAR(10), 
     IN p_target_savingsno VARCHAR(12)
 )
 BEGIN
     DECLARE v_old_cycle_id VARCHAR(12);
-    DECLARE v_old_cycle_name VARCHAR(20);
     DECLARE v_end_date DATE;
     DECLARE v_leftover DECIMAL(10,2);
-    
-    SELECT cycle_id, cycle_name, end_date, (total_income - total_expense - total_savings)
-    INTO v_old_cycle_id, v_old_cycle_name, v_end_date, v_leftover
+    DECLARE v_new_cycle_id VARCHAR(12);
+    DECLARE v_savingsno VARCHAR(12);
+
+    SELECT cycle_id, end_date, remaining_budget
+    INTO v_old_cycle_id, v_end_date, v_leftover
     FROM budget_cycles
     WHERE userid = p_userid AND is_active = 1
     LIMIT 1;
 
     IF v_leftover > 0 THEN
-        IF p_rollover_decision = 'SAVED' AND p_target_savingsno IS NOT NULL THEN
-            INSERT INTO savings_transactions (savingsno, trans_type, amount)
-            VALUES (p_target_savingsno, 'DEPOSIT', v_leftover);
+        
+        IF p_rollover_decision = 'SAVED' THEN
+
+            IF p_target_savingsno IS NULL THEN
+                SET v_savingsno = CONCAT('SAVE-', LPAD((SELECT COUNT(*) + 1 FROM savings), 6, '0'));
+            ELSE
+                SET v_savingsno = p_target_savingsno;
+            END IF;
+
+            INSERT INTO savings
+            (savingsno, userid, bank, description, savings_amount, date_of_save, interest_rate)
+            VALUES
+            (v_savingsno, p_userid, 'Rollover Account', 'Rollover from previous cycle', v_leftover, CURDATE(), 0);
+
+        ELSEIF p_rollover_decision = 'EXPENSE' THEN
+            INSERT INTO expenses
+            (cycle_id, category, amount, date_spent)
+            VALUES
+            (v_old_cycle_id, 'Rollover Spending', v_leftover, CURDATE());
         END IF;
     END IF;
 
     UPDATE budget_cycles
-    SET is_active = 0,
-        rollover_status = p_rollover_decision,
-        rollover_amount = IF(v_leftover > 0, v_leftover, 0)
-    WHERE cycle_id = v_old_cycle_id;
+	SET is_active = 0,
+		rollover_status = p_rollover_decision,
+		rollover_amount = IF(v_leftover > 0, v_leftover, 0)
+	WHERE cycle_id = v_old_cycle_id;
 
-    INSERT INTO budget_cycles (userid, start_date, end_date, is_active)
-    VALUES (p_userid, DATE_ADD(v_end_date, INTERVAL 1 DAY), DATE_ADD(v_end_date, INTERVAL 30 DAY), 1);
+    SET v_new_cycle_id = CONCAT('CYC-', LPAD((SELECT COUNT(*) + 1 FROM budget_cycles), 6, '0'));
+
+    INSERT INTO budget_cycles (
+		cycle_id,
+		userid,
+		start_date,
+		end_date,
+		cycle_name,
+		total_income,
+		total_expense,
+		total_savings,
+		is_active,
+		rollover_amount
+	)
+	VALUES (
+		v_new_cycle_id,
+		p_userid,
+		DATE_ADD(v_end_date, INTERVAL 1 DAY),
+		LAST_DAY(DATE_ADD(v_end_date, INTERVAL 1 DAY)),
+		DATE_FORMAT(DATE_ADD(v_end_date, INTERVAL 1 DAY), '%M %Y'),
+		0, 0, 0,
+		1,
+		0
+	);
 
 END $$
 

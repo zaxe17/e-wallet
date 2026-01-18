@@ -16,7 +16,7 @@
         <div class="h-full overflow-y-auto p-3">
             <div class="grid grid-cols-3 gap-6">
                 @foreach($savings as $saving)
-                <div class="openModalBtn savings opacity-0" data-delay="{{ $loop->iteration * 0.3 }}"
+                <div class="openModalBtn opacity-0" data-delay="0.3"
                     data-target="modalEditRate" 
                     data-bank="{{ $saving->bank }}"
                     data-description="{{ $saving->description }}"
@@ -71,7 +71,7 @@
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => date('Y-m-d')],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => false],
 ['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => false],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => false],
+['label' => 'Interest Rate (0.00)', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => false],
 ]
 ])
 
@@ -84,7 +84,7 @@
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => '', 'readonly' => true],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => true],
 ['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => true],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => true],
+['label' => 'Interest Rate (0.00)', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => true],
 ]
 ])
 

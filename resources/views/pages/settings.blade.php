@@ -11,26 +11,6 @@
         <form action="{{ route('settings.save') }}" method="POST" id="settingsForm" class="flex flex-col gap-6 mb-5 px-20" novalidate>
             @csrf
 
-            <!-- PROFILE -->
-            <div class="show opacity-0 flex justify-center items-center gap-8" data-delay="">
-                <div class="flex items-center justify-center gap-1">
-                    <img src="/assets/PAYNOY.png" alt="user_profile" class="w-17 object-contain rounded-full block">
-                </div>
-
-                <div class="flex flex-col justify-center text-sm">
-                    <p>Profile picture</p>
-                    <button class="flex items-center gap-2 cursor-pointer">
-                        <span class="icon bg-[#3a3a3a]" style="--svg: url('https://api.iconify.design/lucide/upload.svg'); --size: 20px;"></span>
-                        Upload photo
-                    </button>
-                </div>
-
-                <button class="flex items-center text-sm text-[#323d33] px-5 py-1.5 ml-10 rounded-lg border-2 border-[#b4b4b4] cursor-pointer">
-                    <span class="icons bg-[#323d33] mr-2 transition-all duration-300 ease-in-out" style="--svg: url('https://api.iconify.design/material-symbols/delete.svg');"></span>
-                    Delete
-                </button>
-            </div>
-
             <!-- INFORMATION FORM -->
             <div class="grid grid-cols-3 gap-8">
                 <div class="show opacity-0 flex flex-col" data-delay="0.3">
