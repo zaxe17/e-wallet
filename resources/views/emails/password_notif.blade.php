@@ -1,7 +1,7 @@
 @component('mail::message')
 # Hello {{ $mailData['name'] }}!
 
-Welcome to PayNoy! Your account has been successfully created.
+Welcome to BanKO! Your account has been successfully created.
 
 Here are your login credentials:
 
@@ -15,5 +15,5 @@ Login Now
 If you did not create this account, please contact our support team immediately.
 
 Thanks,<br>
-PayNoy
+BanKO
 @endcomponent

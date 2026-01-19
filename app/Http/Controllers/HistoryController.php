@@ -60,14 +60,14 @@ class HistoryController extends Controller
     {
         return DB::select("
             SELECT 
-                YEAR(start_date) AS year,
+                YEAR(start_date)  AS year,
                 MONTH(start_date) AS month,
                 MONTHNAME(start_date) AS month_name,
-                SUM(remaining_budget) AS remaining_budget
+                MAX(rollover_amount) AS remaining_budget
             FROM budget_cycles
             WHERE userid = ?
-            GROUP BY YEAR(start_date), MONTH(start_date), MONTHNAME(start_date)
-            ORDER BY YEAR(start_date), MONTH(start_date)
+            GROUP BY year, month, month_name
+            ORDER BY year, month
         ", [$userId]);
     }
 

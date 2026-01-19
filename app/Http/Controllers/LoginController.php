@@ -48,7 +48,7 @@ class LoginController extends Controller
             Session::put('email', $user->email_address);
 
             // Create budget cycle for this month if it doesn't exist
-            $this->createMonthlyCycleIfNeeded($user->userid);
+            // $this->createMonthlyCycleIfNeeded($user->userid);
 
             return redirect()->route('dashboard.index')
                 ->with('success', 'Welcome back, ' . $user->full_name . '!');
@@ -60,7 +60,7 @@ class LoginController extends Controller
     }
 
     // Generate new cycle ID
-    private function generateCycleId()
+    /* private function generateCycleId()
     {
         $last = DB::table('budget_cycles')->orderBy('cycle_id', 'desc')->first();
         if (!$last) return 'CYC-000001';
@@ -102,5 +102,5 @@ class LoginController extends Controller
                 now()->format('F Y')
             ]);
         }
-    }
+    } */
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayNoy - @yield('title')</title>
+    <title>BanKO - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -137,7 +137,7 @@
             const savingsAmount = document.getElementById('savings_amount');
 
             if (!savingsAmount.value) {
-                alert('Please enter the savings amount');
+                console.log('Please enter the savings amount');
                 savingsAmount.focus();
                 return;
             }
@@ -175,7 +175,8 @@
         boxes.forEach((box, index) => {
             if (index < pin.length) {
                 box.classList.add('bg-[#485349]', 'text-white');
-                box.textContent = pin[index]; // SHOW NUMBER
+                // box.textContent = pin[index]; // SHOW NUMBER
+                box.textContent = '*'; // 
             } else {
                 box.classList.remove('bg-[#485349]', 'text-white');
                 box.textContent = '';
@@ -222,24 +223,20 @@
             })
             .then(data => {
                 if (data.valid) {
+                    // ✅ Close modal ONLY when valid
+                    pinModal.classList.add("hidden");
                     window.location.href = '/savings';
                 } else {
-                    alert('Invalid PIN. Please try again.');
+                    // ❌ Stay open when invalid
+                    console.log('Invalid PIN. Please try again.');
                     pin = [];
                     updateBoxes();
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                console.log('An error occurred. Please try again.');
             });
-
-        // reset after a short delay
-        setTimeout(() => {
-            pin = [];
-            updateBoxes();
-            pinModal.classList.add("hidden");
-        }, 300);
     }
 
     // Open modal buttons
@@ -307,7 +304,7 @@
 
         // CONFIRMATION
         if (value !== firstSavePin) {
-            alert('Passkey does not match. Try again.');
+            console.log('Passkey does not match. Try again.');
             firstSavePin = null;
             isConfirmingSavePin = false;
             savePinInput.value = '';

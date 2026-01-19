@@ -4,8 +4,7 @@
     <header class="flex items-center justify-between px-3 py-5">
         <!-- header-logo -->
         <a href="" class="flex items-center gap-2">
-            <img src="/assets/logo.png" alt="" class="w-8 object-contain rounded-full block">
-            <p class="text-white text-xl lato">PayNoy</p>
+            <p class="text-white font-bold text-xl lato">Ban<span class="text-[#0F2F1F]">KO</span></p>
         </a>
     </header>
 

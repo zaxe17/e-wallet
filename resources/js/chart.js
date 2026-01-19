@@ -19,24 +19,26 @@ function chartOptions(xTitle, isDay = false) {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Budget (k)',
+                    text: 'Budget',
                     font: { size: 14, weight: 'bold' }
                 },
                 ticks: {
-                    callback: value => value + 'k'
+                    callback: value => value.toLocaleString()
                 }
             }
         },
         plugins: {
             legend: {
-                display: !isDay // hide legend if day chart
+                display: !isDay
             },
             tooltip: {
                 callbacks: {
                     title: ctx =>
                         isDay ? `Day ${ctx[0].dataIndex + 1}` : ctx[0].label,
-                    label: ctx =>
-                        `${ctx.dataset.label}: ${ctx.parsed.y}k`
+                    label: ctx => {
+                        const val = ctx.parsed.y;
+                        return `${ctx.dataset.label}: ${val.toLocaleString()}`;
+                    }
                 }
             }
         }
@@ -56,33 +58,30 @@ function initMonthChart() {
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    // Group data by year
+    // Group data by year (NO /1000)
     const groupedByYear = {};
     rawData.forEach(item => {
         if (!groupedByYear[item.year]) {
             groupedByYear[item.year] = new Array(12).fill(null);
         }
-        groupedByYear[item.year][item.month - 1] = parseFloat(item.remaining_budget) / 1000;
+        groupedByYear[item.year][item.month - 1] =
+            Number(item.remaining_budget);
     });
 
-    // Colors (auto-cycle)
     const colors = ['#22c55e', '#3b82f6', '#06b6d4', '#f59e0b', '#a855f7', '#ef4444'];
     let colorIndex = 0;
 
-    // Create datasets (one line per year)
     const datasets = Object.keys(groupedByYear)
         .sort((a, b) => b - a)
         .map(year => {
-            const data = groupedByYear[year];
             const color = colors[colorIndex++ % colors.length];
-
             return {
                 label: `Monthly Total - ${year}`,
-                data,
+                data: groupedByYear[year],
                 borderColor: color,
                 backgroundColor: color + '33',
-                borderWidth: 2,
-                tension: 0.3,
+                borderWidth: 1,
+                tension: 0,
                 fill: false,
                 spanGaps: true
             };
@@ -94,7 +93,7 @@ function initMonthChart() {
             labels: months,
             datasets
         },
-        options: chartOptions('Months', false) // legend stays visible
+        options: chartOptions('Months', false)
     });
 }
 
@@ -107,7 +106,11 @@ function initDayChart() {
     const ctx = canvas.getContext('2d');
 
     const now = new Date();
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const daysInMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0
+    ).getDate();
 
     const labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
     const values = new Array(daysInMonth).fill(null);
@@ -115,10 +118,10 @@ function initDayChart() {
     chartData.forEach(item => {
         const date = new Date(item.day);
         const dayIndex = date.getDate() - 1;
-        values[dayIndex] = parseFloat(item.net_total) / 1000; // convert to k
+        values[dayIndex] = Number(item.net_total); // NO /1000
     });
 
-    const initialValues = values.map(v => v !== null ? 0 : null);
+    const initialValues = values.map(v => (v !== null ? 0 : null));
 
     const chart = new Chart(ctx, {
         type: 'line',
@@ -127,15 +130,15 @@ function initDayChart() {
             datasets: [{
                 label: 'Net Amount',
                 data: initialValues,
-                borderColor: '#22c55e', // medium green line
-                backgroundColor: '#22c55e33', // semi-transparent green fill (optional)
-                borderWidth: 2,
-                tension: 0.3,
+                borderColor: '#22c55e',
+                backgroundColor: '#22c55e33',
+                borderWidth: 1,
+                tension: 0,
                 fill: false,
                 spanGaps: true
             }]
         },
-        options: chartOptions('Days', true) // legend hidden
+        options: chartOptions('Days', true)
     });
 
     // Animate after load

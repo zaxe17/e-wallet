@@ -16,7 +16,7 @@
         <div class="h-full overflow-y-auto p-3">
             <div class="grid grid-cols-3 gap-6">
                 @foreach($savings as $saving)
-                <div class="openModalBtn savings opacity-0" data-delay="{{ $loop->iteration * 0.3 }}"
+                <div class="openModalBtn opacity-0" data-delay="0.3"
                     data-target="modalEditRate" 
                     data-bank="{{ $saving->bank }}"
                     data-description="{{ $saving->description }}"
@@ -41,7 +41,7 @@
                         </div>
                         <div class="h-full flex justify-center flex-col bg-[#e7e7e7] px-6 py-3 rounded-lg overflow-y-auto text-sm">
                             <p>Principal: <span class="font-medium">₱{{ number_format($saving->savings_amount, 2) }}</span></p>
-                            <p>Interest rate (in decimals): <span class="font-medium">₱{{ number_format($saving->interest_earned, 2) }} ({{ $saving->interest_rate }})</span></p>
+                            <p>Interest rate: <span class="font-medium">₱{{ number_format($saving->interest_earned, 2) }} ({{ $saving->interest_rate }})</span></p>
                             <p>Bank: <span class="font-medium">{{ $saving->bank ?? 'N/A' }}</span></p>
                             <p>Description: <span class="font-medium">{{ $saving->description ?? 'N/A' }}</span></p>
                             <p class="text-xs text-gray-600 mt-2">Date: {{ date('M j, Y', strtotime($saving->date_of_save)) }}</p>
@@ -71,7 +71,7 @@
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => date('Y-m-d')],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => false],
 ['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => false],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => false],
+['label' => 'Interest Rate (0.00)', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => false],
 ]
 ])
 
@@ -84,7 +84,7 @@
 ['label' => 'Date', 'type' => 'date', 'name' => 'date_of_save', 'value' => '', 'readonly' => true],
 ['label' => 'Savings Amount', 'type' => 'number', 'name' => 'savings_amount', 'value' => '', 'readonly' => true],
 ['label' => 'Description', 'type' => 'text', 'name' => 'description', 'value' => '', 'readonly' => true],
-['label' => 'Interest Rate', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => true],
+['label' => 'Interest Rate (0.00)', 'type' => 'number', 'name' => 'interest_rate', 'step' => '0.01', 'value' => '', 'readonly' => true],
 ]
 ])
 
